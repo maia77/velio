@@ -277,7 +277,7 @@
 
     /* القسم الرئيسي (Hero) */
     .hero-section {
-      background: url("/static/images/456.jpg") center/cover;
+      background: url("/static/images/456.jpg") center bottom/100% auto no-repeat;
       min-height: 70vh;
       display: flex;
       align-items: center;
@@ -285,6 +285,8 @@
       text-align: center;
       position: relative;
       color: white;
+      padding-top: 60px;
+      margin-top: -20px;
     }
 
     .hero-content {
@@ -1307,8 +1309,6 @@
   <section id="home" class="page-section active">
     <div class="hero-section">
       <div class="hero-content">
-        <h1 class="hero-title">{{ _('Everything your home needs') }}</h1>
-        <p class="hero-subtitle">{{ _('From classic to modern designs') }}</p>
         <a href="#" class="cta-button" onclick="showSection('products')">
           <i class="fas fa-shopping-bag"></i>
           {{ _('Shop Now') }}
@@ -1393,66 +1393,7 @@
         </p>
         
         <div class="nature-category-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
-          <!-- منتجات زينة الطبيعة -->
-          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="نباتات طبيعية" style="width: 100%; height: 200px; object-fit: cover;">
-            <div style="padding: 20px;">
-              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">نباتات طبيعية</h3>
-              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">نباتات منزلية طبيعية تضيف الحياة والجمال</p>
-              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">150 $</div>
-              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
-            </div>
-          </div>
-          
-          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="أواني نباتات" style="width: 100%; height: 200px; object-fit: cover;">
-            <div style="padding: 20px;">
-              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">أواني نباتات</h3>
-              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">أواني أنيقة ومتينة لنباتاتك المنزلية</p>
-              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">80 $</div>
-              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
-            </div>
-          </div>
-          
-          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e72c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="ديكورات خشبية" style="width: 100%; height: 200px; object-fit: cover;">
-            <div style="padding: 20px;">
-              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">ديكورات خشبية</h3>
-              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">قطع خشبية طبيعية بأشكال فريدة</p>
-              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">120 $</div>
-              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
-            </div>
-          </div>
-          
-          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="شمعدانات طبيعية" style="width: 100%; height: 200px; object-fit: cover;">
-            <div style="padding: 20px;">
-              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">شمعدانات طبيعية</h3>
-              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">شمعدانات بتصاميم مستوحاة من الطبيعة</p>
-              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">95 $</div>
-              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
-            </div>
-          </div>
-          
-          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="سجاد طبيعي" style="width: 100%; height: 200px; object-fit: cover;">
-            <div style="padding: 20px;">
-              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">سجاد طبيعي</h3>
-              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">سجاد بألوان وتصاميم مستوحاة من الطبيعة</p>
-              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">180 $</div>
-              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
-            </div>
-          </div>
-          
-          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="إضاءة طبيعية" style="width: 100%; height: 200px; object-fit: cover;">
-            <div style="padding: 20px;">
-              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">إضاءة طبيعية</h3>
-              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">مصابيح بتصاميم مستوحاة من الطبيعة</p>
-              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">160 $</div>
-              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
-            </div>
-          </div>
+          <!-- المنتجات ستظهر هنا من قاعدة البيانات -->
         </div>
         
         <div style="text-align: center;">
@@ -1864,6 +1805,31 @@
     </div>
   </footer>
 
+  <!-- شريط التنقل السفلي للهواتف -->
+  <div class="mobile-bottom-nav">
+    <a href="#" onclick="showSection('home')" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </a>
+    <a href="#" onclick="showSection('products')" class="nav-item">
+      <i class="fas fa-shopping-bag"></i>
+      <span>المنتجات</span>
+    </a>
+    <a href="#" onclick="toggleCart()" class="nav-item">
+      <i class="fas fa-shopping-cart"></i>
+      <span>السلة</span>
+      <span class="cart-count" id="mobile-cart-count">0</span>
+    </a>
+    <a href="#" onclick="showSection('about-page')" class="nav-item">
+      <i class="fas fa-info-circle"></i>
+      <span>من نحن</span>
+    </a>
+    <a href="#" onclick="showSection('contact')" class="nav-item">
+      <i class="fas fa-phone"></i>
+      <span>اتصل بنا</span>
+    </a>
+  </div>
+
   <!-- نموذج الطلب -->
   <div id="order-modal" class="modal">
     <div class="modal-content">
@@ -2088,6 +2054,11 @@
     // وظيفة تحديث عرض السلة
     function updateCartDisplay() {
       document.getElementById('cart-count').textContent = cartCount;
+      // تحديث عداد السلة في الشريط السفلي للهواتف
+      const mobileCartCount = document.getElementById('mobile-cart-count');
+      if (mobileCartCount) {
+        mobileCartCount.textContent = cartCount;
+      }
     }
 
     // وظيفة إظهار الإشعارات (معطلة حسب الطلب)
@@ -2998,6 +2969,7 @@
 
     async function updateCartCount(optionalCount) {
       const el = document.getElementById('cart-count');
+      const mobileEl = document.getElementById('mobile-cart-count');
       if (!el) return;
       try {
         let count = optionalCount;
@@ -3007,8 +2979,15 @@
           count = data && data.success ? data.count : 0;
         }
         el.textContent = count;
+        // تحديث عداد السلة في الشريط السفلي للهواتف
+        if (mobileEl) {
+          mobileEl.textContent = count;
+        }
       } catch (e) {
         el.textContent = '0';
+        if (mobileEl) {
+          mobileEl.textContent = '0';
+        }
       }
     }
     // وظيفة إضافة منتج للسلة (محدثة)

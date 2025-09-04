@@ -227,7 +227,7 @@
 
     /* القسم الرئيسي (Hero) */
     .hero-section {
-      background: url("img_1.jpg") center/cover;
+      background: url("img_1.jpg") center top/cover;
       min-height: 70vh;
       display: flex;
       align-items: center;

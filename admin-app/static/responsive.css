@@ -17,7 +17,7 @@ body {
   /* الحفاظ على الخلفية الأصلية من style.css */
   background-image: url('img_1.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   background-attachment: fixed;
 }
 
