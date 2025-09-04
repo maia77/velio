@@ -1,0 +1,257 @@
+# Arabic translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-08-04 19:55+0300\n"
+"PO-Revision-Date: 2025-08-04 19:55+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ar\n"
+"Language-Team: ar <LL@li.org>\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : "
+"n%100>=3 && n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Velio - Modern Furniture and Decor with Elegant Designs"
+msgstr "Velio - الأثاث الحديث والتحف والديكور بأرقى التصاميم"
+
+msgid "Home"
+msgstr "الرئيسية"
+
+msgid "Products"
+msgstr "المنتجات"
+
+msgid "About Us"
+msgstr "من نحن"
+
+msgid "Contact Us"
+msgstr "اتصل بنا"
+
+msgid "Search products..."
+msgstr "ابحث عن المنتجات..."
+
+msgid "Cart"
+msgstr "السلة"
+
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+msgid "English"
+msgstr "English"
+
+msgid "Everything your home needs"
+msgstr "كل ما يحتاجه منزلك"
+
+msgid "From classic to modern designs"
+msgstr "من التصاميم الكلاسيكية إلى العصرية"
+
+msgid "Shop Now"
+msgstr "تسوق الآن"
+
+msgid "Latest Arrivals"
+msgstr "وصل حديثاً"
+
+msgid "Modern Design Chair"
+msgstr "كرسي بتصميم مودرن"
+
+msgid "Comfortable and modern chair that adds an aesthetic touch to your home."
+msgstr "كرسي مريح وعصري يضيف لمسة جمالية لمنزلك."
+
+msgid "SAR"
+msgstr "ريال"
+
+msgid "Order Now"
+msgstr "اطلب الآن"
+
+msgid "Wooden Coffee Table"
+msgstr "طاولة قهوة خشبية"
+
+msgid "Elegant and practical coffee table that suits all decorations."
+msgstr "طاولة قهوة أنيقة وعملية تناسب جميع الديكورات."
+
+msgid "Why Choose Us?"
+msgstr "لماذا تختارنا؟"
+
+msgid "Fast Shipping"
+msgstr "شحن سريع"
+
+msgid "We deliver your order as quickly as possible to your doorstep"
+msgstr "نوصل طلبك في أسرع وقت ممكن إلى باب منزلك"
+
+msgid "High Quality"
+msgstr "جودة عالية"
+
+msgid "Carefully selected products from the best international brands"
+msgstr "منتجات مختارة بعناية من أفضل الماركات العالمية"
+
+msgid "24/7 Support"
+msgstr "دعم 24/7"
+
+msgid "Customer service team is available to help you anytime"
+msgstr "فريق خدمة العملاء متاح لمساعدتك في أي وقت"
+
+msgid "Home Decor and Furniture"
+msgstr "الديكور والأثاث المنزلي"
+
+msgid "We at Classique Tempus believe that home is the place that reflects your personality and refined taste. Therefore, we offer you a carefully selected collection of the best furniture and decor pieces that combine high quality with modern design."
+msgstr "نحن في Classique Tempus نؤمن بأن المنزل هو المكان الذي يعكس شخصيتك وذوقك الرفيع. لذلك نقدم لك مجموعة مختارة من أفضل قطع الأثاث والديكور التي تجمع بين الجودة العالية والتصميم العصري."
+
+msgid "Since our establishment, we have been striving to provide an exceptional shopping experience for our customers through high-quality products, excellent customer service, and competitive prices."
+msgstr "منذ تأسيسنا، نسعى لتوفير تجربة تسوق استثنائية لعملائنا من خلال منتجات عالية الجودة وخدمة عملاء متميزة وأسعار تنافسية."
+
+msgid "We are here to help you with any inquiry or special request"
+msgstr "نحن هنا لمساعدتك في أي استفسار أو طلب خاص"
+
+msgid "Full Name"
+msgstr "الاسم الكامل"
+
+msgid "Enter your full name"
+msgstr "أدخل اسمك الكامل"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Enter your email"
+msgstr "أدخل بريدك الإلكتروني"
+
+msgid "Phone Number with Country Code"
+msgstr "رقم الهاتف مع كود الدولة"
+
+msgid "Select Country"
+msgstr "اختر الدولة"
+
+msgid "Country"
+msgstr "الدولة"
+
+msgid "Enter phone number"
+msgstr "أدخل رقم الهاتف"
+
+msgid "Subject"
+msgstr "الموضوع"
+
+msgid "Message subject"
+msgstr "موضوع الرسالة"
+
+msgid "Message"
+msgstr "الرسالة"
+
+msgid "Write your message here..."
+msgstr "اكتب رسالتك هنا..."
+
+msgid "Send Message"
+msgstr "إرسال الرسالة"
+
+msgid "Contact Information"
+msgstr "معلومات التواصل"
+
+msgid "Customer Service"
+msgstr "خدمة العملاء"
+
+msgid "Return Policy"
+msgstr "سياسة الإرجاع"
+
+msgid "Shipping and Delivery"
+msgstr "الشحن والتوصيل"
+
+msgid "FAQ"
+msgstr "الأسئلة الشائعة"
+
+msgid "Technical Support"
+msgstr "الدعم الفني"
+
+msgid "Quick Links"
+msgstr "روابط سريعة"
+
+msgid "Your first destination for distinguished furniture and decor in Saudi Arabia"
+msgstr "وجهتك الأولى للأثاث والديكور المميز في المملكة العربية السعودية"
+
+msgid "All rights reserved."
+msgstr "جميع الحقوق محفوظة."
+
+msgid "Discounts up to 50%% on all products!"
+msgstr "خصومات تصل إلى 50%% على جميع المنتجات!"
+
+msgid "Back to Home"
+msgstr "العودة للرئيسية"
+
+msgid "Loading products..."
+msgstr "جاري تحميل المنتجات..."
+
+msgid "Return and Shipping Policy"
+msgstr "سياسة الإرجاع والشحن"
+
+msgid "We at Velio care about the quality of our products and customer satisfaction, and we make sure to display each piece with accurate details and clear images."
+msgstr "نحن في Velio نهتم بجودة منتجاتنا ورضا عملائنا، ونحرص على عرض كل قطعة بتفاصيل دقيقة وصور واضحة."
+
+msgid "Return Policy:"
+msgstr "سياسة الإرجاع:"
+
+msgid "All sales are final."
+msgstr "جميع المبيعات نهائية."
+
+msgid "We do not accept returns or exchanges after purchase, except in case of a clear manufacturing defect or damage during shipping."
+msgstr "لا نقبل الإرجاع أو الاستبدال بعد إتمام الشراء، إلا في حال وجود عيب مصنعي واضح أو تلف أثناء الشحن."
+
+msgid "In case of receiving a damaged product:"
+msgstr "في حال استلام منتج تالف:"
+
+msgid "You must contact us within 24 hours of receiving the order."
+msgstr "يجب التواصل معنا خلال 24 ساعة من استلام الطلب."
+
+msgid "Photos showing the damage or error are required."
+msgstr "يُطلب إرسال صور توضح التلف أو الخطأ."
+
+msgid "We will review the case and inform you of the appropriate action (repair or partial replacement)."
+msgstr "سنتولى مراجعة الحالة وإبلاغك بالإجراء المناسب (إصلاح أو استبدال جزئي)."
+
+msgid "Shipping Policy:"
+msgstr "سياسة الشحن:"
+
+msgid "Free shipping for orders over 500 SAR"
+msgstr "شحن مجاني للطلبات التي تزيد عن 500 ريال"
+
+msgid "Delivery time: 3-7 business days"
+msgstr "مدة التوصيل: 3-7 أيام عمل"
+
+msgid "Safe and guaranteed packaging for all products"
+msgstr "تغليف آمن ومضمون لجميع المنتجات"
+
+msgid "Track order via phone or email"
+msgstr "تتبع الطلب عبر الهاتف أو البريد الإلكتروني"
+
+msgid "Frequently Asked Questions:"
+msgstr "الأسئلة الشائعة:"
+
+msgid "How can I track my order?"
+msgstr "كيف يمكنني تتبع طلبي؟"
+
+msgid "A tracking number will be sent via email or phone after the order is shipped."
+msgstr "سيتم إرسال رقم التتبع عبر البريد الإلكتروني أو الهاتف بعد شحن الطلب."
+
+msgid "Do you offer express delivery service?"
+msgstr "هل تقدمون خدمة التوصيل السريع؟"
+
+msgid "Yes, we offer express delivery service for an additional fee."
+msgstr "نعم، نقدم خدمة التوصيل السريع مقابل رسوم إضافية."
+
+msgid "What payment methods are available?"
+msgstr "ما هي طرق الدفع المتاحة؟"
+
+msgid "We accept cash on delivery, credit cards, and bank transfers."
+msgstr "نقبل الدفع عند الاستلام، والبطاقات الائتمانية، والتحويل البنكي."
+
+msgid "Language detected automatically"
+msgstr "تم اكتشاف اللغة تلقائياً"
+
+msgid "Switch to English"
+msgstr "التبديل إلى الإنجليزية"
+
+msgid "Switch to Arabic"
+msgstr "التبديل إلى العربية"

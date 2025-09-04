@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة منتج جديد - لوحة التحكم</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .form-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .form-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .help-text {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+        
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .preview-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .preview-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .preview-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .preview-description {
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .preview-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .preview-price {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #28a745;
+        }
+        
+        .preview-stock {
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #495057;
+        }
+        
+        .preview-category {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .display-options {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .option-item {
+            margin-bottom: 15px;
+        }
+        
+        .option-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-label:hover {
+            background: #e9ecef;
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+        
+        .checkbox-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .option-icon {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 15px;
+            }
+            
+            .form-header h1 {
+                font-size: 2em;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .display-options {
+                padding: 15px;
+            }
+            
+            .checkbox-label {
+                padding: 8px;
+            }
+            
+            .checkbox-text {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- رأس الصفحة -->
+        <div class="form-header">
+            <h1>➕ إضافة منتج جديد</h1>
+            <p>أدخل تفاصيل المنتج الجديد وسيتم ترجمته تلقائياً</p>
+        </div>
+        
+        <!-- نموذج إضافة المنتج -->
+        <div class="form-card">
+            <form method="POST" id="productForm" enctype="multipart/form-data">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name" class="form-label">
+                            اسم المنتج <span class="required">*</span>
+                        </label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                        <div class="help-text">أدخل اسم المنتج باللغة الإنجليزية</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price" class="form-label">
+                            السعر <span class="required">*</span>
+                        </label>
+                        <input type="number" id="price" name="price" class="form-input" step="0.01" min="0" required>
+                        <div class="help-text">أدخل السعر بال$ السعودي</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="form-label">
+                        وصف المنتج <span class="required">*</span>
+                    </label>
+                    <textarea id="description" name="description" class="form-input form-textarea" required></textarea>
+                    <div class="help-text">أدخل وصفاً مفصلاً للمنتج باللغة الإنجليزية</div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category" class="form-label">الفئة</label>
+                        <input type="text" id="category" name="category" class="form-input">
+                        <div class="help-text">مثال: أثاث، إلكترونيات، ملابس</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="brand" class="form-label">العلامة التجارية</label>
+                        <input type="text" id="brand" name="brand" class="form-input">
+                        <div class="help-text">اسم الشركة المصنعة</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="main_category" class="form-label">
+                        القسم الرئيسي <span class="required">*</span>
+                    </label>
+                    <select id="main_category" name="main_category" class="form-input" required>
+                        <option value="">اختر القسم الرئيسي</option>
+                        <option value="أصالة معاصرة">🏛️ أصالة معاصرة</option>
+                        <option value="تفاصيل مميزة">🎨 تفاصيل مميزة</option>
+                        <option value="لمسات فريدة">✨ لمسات فريدة</option>
+                        <option value="زينة الطبيعة" disabled>🌿 زينة الطبيعة (غير متاح حالياً)</option>
+                    </select>
+                    <div class="help-text">اختر القسم الذي سيظهر فيه المنتج في الصفحة الرئيسية</div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product_image" class="form-label">صورة المنتج <span class="required">*</span></label>
+                        <input type="file" id="product_image" name="product_image" class="form-input" accept="image/*" required>
+                        <div class="help-text">اختر صورة للمنتج (PNG, JPG, JPEG, GIF, WEBP)</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">إعدادات العرض</label>
+                    <div class="display-options">
+                        <div class="option-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="is_home_essentials" checked>
+                                <span class="checkbox-text">
+                                    <span class="option-icon">🏠</span>
+                                    عرض في قسم "كل ما يحتاجه منزلك"
+                                </span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="is_new_arrival">
+                                <span class="checkbox-text">
+                                    <span class="option-icon">🆕</span>
+                                    إضافة إلى قسم "وصل حديثاً"
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="help-text">يمكنك التحكم في ظهور المنتج في الأقسام الرئيسية</div>
+                </div>
+                
+                <!-- معاينة المنتج -->
+                <div class="preview-section">
+                    <div class="preview-title">👁️ معاينة المنتج</div>
+                    <div class="preview-card">
+                        <div class="preview-name" id="previewName">اسم المنتج</div>
+                        <div class="preview-description" id="previewDescription">وصف المنتج سيظهر هنا...</div>
+                        <div class="preview-meta">
+                            <div class="preview-price" id="previewPrice">0.00 $</div>
+                            <div class="preview-category" id="previewCategory" style="display: none;">الفئة</div>
+                            <div class="preview-category" id="previewMainCategory" style="display: none;">القسم الرئيسي</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        💾 حفظ المنتج
+                    </button>
+                    <a href="{{ url_for('admin_products') }}" class="btn-secondary">
+                        ↩️ إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // تحديث المعاينة في الوقت الفعلي
+        function updatePreview() {
+            const name = document.getElementById('name').value || 'اسم المنتج';
+            const description = document.getElementById('description').value || 'وصف المنتج سيظهر هنا...';
+            const price = document.getElementById('price').value || '0.00';
+            const category = document.getElementById('category').value;
+            const mainCategory = document.getElementById('main_category').value;
+            
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewDescription').textContent = description;
+            document.getElementById('previewPrice').textContent = parseFloat(price).toFixed(2) + ' $';
+            
+            const categoryElement = document.getElementById('previewCategory');
+            if (category) {
+                categoryElement.textContent = category;
+                categoryElement.style.display = 'inline-block';
+            } else {
+                categoryElement.style.display = 'none';
+            }
+            
+            // إضافة معاينة القسم الرئيسي
+            const mainCategoryElement = document.getElementById('previewMainCategory');
+            if (mainCategory) {
+                mainCategoryElement.textContent = mainCategory;
+                mainCategoryElement.style.display = 'inline-block';
+            } else {
+                mainCategoryElement.style.display = 'none';
+            }
+        }
+        
+        // إضافة مستمعي الأحداث
+        document.getElementById('name').addEventListener('input', updatePreview);
+        document.getElementById('description').addEventListener('input', updatePreview);
+        document.getElementById('price').addEventListener('input', updatePreview);
+        document.getElementById('category').addEventListener('input', updatePreview);
+        document.getElementById('main_category').addEventListener('change', updatePreview);
+        
+        // التحقق من صحة النموذج
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            const name = document.getElementById('name').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const price = document.getElementById('price').value;
+            const mainCategory = document.getElementById('main_category').value;
+            
+            if (!name || !description || !price || !mainCategory) {
+                e.preventDefault();
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return false;
+            }
+            
+            if (parseFloat(price) <= 0) {
+                e.preventDefault();
+                alert('يجب أن يكون السعر أكبر من صفر');
+                return false;
+            }
+        });
+        
+        // تحديث المعاينة عند تحميل الصفحة
+        updatePreview();
+    </script>
+</body>
+</html> 

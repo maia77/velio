@@ -1,0 +1,256 @@
+# English translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-08-04 19:55+0300\n"
+"PO-Revision-Date: 2025-08-04 19:55+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Velio - Modern Furniture and Decor with Elegant Designs"
+msgstr "Velio - Modern Furniture and Decor with Elegant Designs"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Products"
+msgstr "Products"
+
+msgid "About Us"
+msgstr "About Us"
+
+msgid "Contact Us"
+msgstr "Contact Us"
+
+msgid "Search products..."
+msgstr "Search products..."
+
+msgid "Cart"
+msgstr "Cart"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "English"
+msgstr "English"
+
+msgid "Everything your home needs"
+msgstr "Everything your home needs"
+
+msgid "From classic to modern designs"
+msgstr "From classic to modern designs"
+
+msgid "Shop Now"
+msgstr "Shop Now"
+
+msgid "Latest Arrivals"
+msgstr "Latest Arrivals"
+
+msgid "Modern Design Chair"
+msgstr "Modern Design Chair"
+
+msgid "Comfortable and modern chair that adds an aesthetic touch to your home."
+msgstr "Comfortable and modern chair that adds an aesthetic touch to your home."
+
+msgid "SAR"
+msgstr "SAR"
+
+msgid "Order Now"
+msgstr "Order Now"
+
+msgid "Wooden Coffee Table"
+msgstr "Wooden Coffee Table"
+
+msgid "Elegant and practical coffee table that suits all decorations."
+msgstr "Elegant and practical coffee table that suits all decorations."
+
+msgid "Why Choose Us?"
+msgstr "Why Choose Us?"
+
+msgid "Fast Shipping"
+msgstr "Fast Shipping"
+
+msgid "We deliver your order as quickly as possible to your doorstep"
+msgstr "We deliver your order as quickly as possible to your doorstep"
+
+msgid "High Quality"
+msgstr "High Quality"
+
+msgid "Carefully selected products from the best international brands"
+msgstr "Carefully selected products from the best international brands"
+
+msgid "24/7 Support"
+msgstr "24/7 Support"
+
+msgid "Customer service team is available to help you anytime"
+msgstr "Customer service team is available to help you anytime"
+
+msgid "Home Decor and Furniture"
+msgstr "Home Decor and Furniture"
+
+msgid "We at Classique Tempus believe that home is the place that reflects your personality and refined taste. Therefore, we offer you a carefully selected collection of the best furniture and decor pieces that combine high quality with modern design."
+msgstr "We at Classique Tempus believe that home is the place that reflects your personality and refined taste. Therefore, we offer you a carefully selected collection of the best furniture and decor pieces that combine high quality with modern design."
+
+msgid "Since our establishment, we have been striving to provide an exceptional shopping experience for our customers through high-quality products, excellent customer service, and competitive prices."
+msgstr "Since our establishment, we have been striving to provide an exceptional shopping experience for our customers through high-quality products, excellent customer service, and competitive prices."
+
+msgid "We are here to help you with any inquiry or special request"
+msgstr "We are here to help you with any inquiry or special request"
+
+msgid "Full Name"
+msgstr "Full Name"
+
+msgid "Enter your full name"
+msgstr "Enter your full name"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Enter your email"
+msgstr "Enter your email"
+
+msgid "Phone Number with Country Code"
+msgstr "Phone Number with Country Code"
+
+msgid "Select Country"
+msgstr "Select Country"
+
+msgid "Country"
+msgstr "Country"
+
+msgid "Enter phone number"
+msgstr "Enter phone number"
+
+msgid "Subject"
+msgstr "Subject"
+
+msgid "Message subject"
+msgstr "Message subject"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Write your message here..."
+msgstr "Write your message here..."
+
+msgid "Send Message"
+msgstr "Send Message"
+
+msgid "Contact Information"
+msgstr "Contact Information"
+
+msgid "Customer Service"
+msgstr "Customer Service"
+
+msgid "Return Policy"
+msgstr "Return Policy"
+
+msgid "Shipping and Delivery"
+msgstr "Shipping and Delivery"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Technical Support"
+msgstr "Technical Support"
+
+msgid "Quick Links"
+msgstr "Quick Links"
+
+msgid "Your first destination for distinguished furniture and decor in Saudi Arabia"
+msgstr "Your first destination for distinguished furniture and decor in Saudi Arabia"
+
+msgid "All rights reserved."
+msgstr "All rights reserved."
+
+msgid "Discounts up to 50% on all products!"
+msgstr "Discounts up to 50% on all products!"
+
+msgid "Back to Home"
+msgstr "Back to Home"
+
+msgid "Loading products..."
+msgstr "Loading products..."
+
+msgid "Return and Shipping Policy"
+msgstr "Return and Shipping Policy"
+
+msgid "We at Velio care about the quality of our products and customer satisfaction, and we make sure to display each piece with accurate details and clear images."
+msgstr "We at Velio care about the quality of our products and customer satisfaction, and we make sure to display each piece with accurate details and clear images."
+
+msgid "Return Policy:"
+msgstr "Return Policy:"
+
+msgid "All sales are final."
+msgstr "All sales are final."
+
+msgid "We do not accept returns or exchanges after purchase, except in case of a clear manufacturing defect or damage during shipping."
+msgstr "We do not accept returns or exchanges after purchase, except in case of a clear manufacturing defect or damage during shipping."
+
+msgid "In case of receiving a damaged product:"
+msgstr "In case of receiving a damaged product:"
+
+msgid "You must contact us within 24 hours of receiving the order."
+msgstr "You must contact us within 24 hours of receiving the order."
+
+msgid "Photos showing the damage or error are required."
+msgstr "Photos showing the damage or error are required."
+
+msgid "We will review the case and inform you of the appropriate action (repair or partial replacement)."
+msgstr "We will review the case and inform you of the appropriate action (repair or partial replacement)."
+
+msgid "Shipping Policy:"
+msgstr "Shipping Policy:"
+
+msgid "Free shipping for orders over 500 SAR"
+msgstr "Free shipping for orders over 500 SAR"
+
+msgid "Delivery time: 3-7 business days"
+msgstr "Delivery time: 3-7 business days"
+
+msgid "Safe and guaranteed packaging for all products"
+msgstr "Safe and guaranteed packaging for all products"
+
+msgid "Track order via phone or email"
+msgstr "Track order via phone or email"
+
+msgid "Frequently Asked Questions:"
+msgstr "Frequently Asked Questions:"
+
+msgid "How can I track my order?"
+msgstr "How can I track my order?"
+
+msgid "A tracking number will be sent via email or phone after the order is shipped."
+msgstr "A tracking number will be sent via email or phone after the order is shipped."
+
+msgid "Do you offer express delivery service?"
+msgstr "Do you offer express delivery service?"
+
+msgid "Yes, we offer express delivery service for an additional fee."
+msgstr "Yes, we offer express delivery service for an additional fee."
+
+msgid "What payment methods are available?"
+msgstr "What payment methods are available?"
+
+msgid "We accept cash on delivery, credit cards, and bank transfers."
+msgstr "We accept cash on delivery, credit cards, and bank transfers."
+
+msgid "Language detected automatically"
+msgstr "Language detected automatically"
+
+msgid "Switch to English"
+msgstr "Switch to English"
+
+msgid "Switch to Arabic"
+msgstr "Switch to Arabic"

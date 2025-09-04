@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الترجمة التلقائية - Velio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #DCD5B9, #CBBAB3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .section h2 {
+            color: #DCD5B9;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Cairo', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #DCD5B9;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #DCD5B9, #CBBAB3);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 213, 185, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+
+        .product-card h3 {
+            color: #DCD5B9;
+            margin-bottom: 10px;
+        }
+
+        .translation-result {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: #DCD5B9;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        .notification.info {
+            background: #17a2b8;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: #DCD5B9;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .custom-translation-form {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .batch-translation {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #DCD5B9, #CBBAB3);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 213, 185, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        العودة للرئيسية
+    </a>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-language"></i> إدارة الترجمة التلقائية</h1>
+            <p>نظام الترجمة الذكي للمنتجات - Velio</p>
+        </div>
+
+        <div class="content">
+            <!-- إحصائيات الترجمة -->
+            <div class="section">
+                <h2><i class="fas fa-chart-bar"></i> إحصائيات الترجمة</h2>
+                <div class="loading" id="statsLoading">
+                    <i class="fas fa-spinner"></i>
+                    <p>جاري تحميل الإحصائيات...</p>
+                </div>
+                <div class="stats-grid" id="statsGrid"></div>
+            </div>
+
+            <!-- ترجمة منتج واحد -->
+            <div class="section">
+                <h2><i class="fas fa-edit"></i> ترجمة منتج واحد</h2>
+                <div class="product-card">
+                    <div class="form-group">
+                        <label for="productName">اسم المنتج (إنجليزي)</label>
+                        <input type="text" id="productName" placeholder="مثال: Modern Wooden Chair">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">وصف المنتج (إنجليزي)</label>
+                        <textarea id="productDescription" rows="3" placeholder="مثال: Comfortable and elegant chair for living room"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">فئة المنتج (إنجليزي)</label>
+                        <input type="text" id="productCategory" placeholder="مثال: Furniture">
+                    </div>
+                    <div class="form-group">
+                        <label for="productBrand">العلامة التجارية (إنجليزي)</label>
+                        <input type="text" id="productBrand" placeholder="مثال: IKEA">
+                    </div>
+                    <button class="btn" onclick="translateSingleProduct()">
+                        <i class="fas fa-language"></i> ترجمة المنتج
+                    </button>
+                    <div id="singleTranslationResult"></div>
+                </div>
+            </div>
+
+            <!-- إضافة ترجمة مخصصة -->
+            <div class="section">
+                <h2><i class="fas fa-plus-circle"></i> إضافة ترجمة مخصصة</h2>
+                <div class="custom-translation-form">
+                    <div class="form-group">
+                        <label for="englishWord">الكلمة الإنجليزية</label>
+                        <input type="text" id="englishWord" placeholder="مثال: chair">
+                    </div>
+                    <div class="form-group">
+                        <label for="arabicWord">الكلمة العربية</label>
+                        <input type="text" id="arabicWord" placeholder="مثال: كرسي">
+                    </div>
+                    <button class="btn btn-success" onclick="addCustomTranslation()">
+                        <i class="fas fa-plus"></i> إضافة الترجمة
+                    </button>
+                </div>
+            </div>
+
+            <!-- ترجمة مجموعة منتجات -->
+            <div class="section">
+                <h2><i class="fas fa-list"></i> ترجمة مجموعة منتجات</h2>
+                <div class="batch-translation">
+                    <div class="form-group">
+                        <label for="batchProducts">قائمة المنتجات (JSON)</label>
+                        <textarea id="batchProducts" rows="10" placeholder='[
+  {
+    "name": "Modern Chair",
+    "description": "Comfortable chair",
+    "category": "Furniture",
+    "brand": "IKEA"
+  },
+  {
+    "name": "Leather Sofa",
+    "description": "Luxury sofa",
+    "category": "Living Room",
+    "brand": "Ashley"
+  }
+]'></textarea>
+                    </div>
+                    <button class="btn btn-info" onclick="translateBatchProducts()">
+                        <i class="fas fa-language"></i> ترجمة المجموعة
+                    </button>
+                    <div id="batchTranslationResult"></div>
+                </div>
+            </div>
+
+            <!-- اختبار الترجمة -->
+            <div class="section">
+                <h2><i class="fas fa-vial"></i> اختبار الترجمة</h2>
+                <div class="product-card">
+                    <h3>منتجات تجريبية</h3>
+                    <div class="product-list" id="testProducts">
+                        <!-- سيتم تحميل المنتجات هنا -->
+                    </div>
+                    <button class="btn btn-secondary" onclick="loadTestProducts()">
+                        <i class="fas fa-sync"></i> تحميل المنتجات التجريبية
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- منطقة الإشعارات -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // تحميل الإحصائيات عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTranslationStats();
+            loadTestProducts();
+        });
+
+        // دالة تحميل إحصائيات الترجمة
+        function loadTranslationStats() {
+            const statsLoading = document.getElementById('statsLoading');
+            const statsGrid = document.getElementById('statsGrid');
+            
+            statsLoading.style.display = 'block';
+            statsGrid.innerHTML = '';
+
+            fetch('/api/translate/stats')
+                .then(response => response.json())
+                .then(data => {
+                    statsLoading.style.display = 'none';
+                    if (data.success) {
+                        const stats = data.stats;
+                        statsGrid.innerHTML = `
+                            <div class="stat-card">
+                                <h3>${stats.total_translations}</h3>
+                                <p>إجمالي الترجمات</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>${stats.dictionary_size}</h3>
+                                <p>حجم القاموس</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>${stats.function_words_size}</h3>
+                                <p>الكلمات الوظيفية</p>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    statsLoading.style.display = 'none';
+                    showNotification('خطأ في تحميل الإحصائيات', 'error');
+                });
+        }
+
+        // دالة ترجمة منتج واحد
+        function translateSingleProduct() {
+            const productData = {
+                name: document.getElementById('productName').value,
+                description: document.getElementById('productDescription').value,
+                category: document.getElementById('productCategory').value,
+                brand: document.getElementById('productBrand').value
+            };
+
+            if (!productData.name) {
+                showNotification('يرجى إدخال اسم المنتج', 'error');
+                return;
+            }
+
+            fetch('/api/translate/product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ product_data: productData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const result = data.translated_product;
+                    document.getElementById('singleTranslationResult').innerHTML = `
+                        <div class="translation-result">
+                            <h4>الترجمة:</h4>
+                            <p><strong>الاسم:</strong> ${result.name_ar || 'غير متوفر'}</p>
+                            <p><strong>الوصف:</strong> ${result.description_ar || 'غير متوفر'}</p>
+                            <p><strong>الفئة:</strong> ${result.category_ar || 'غير متوفر'}</p>
+                            <p><strong>العلامة التجارية:</strong> ${result.brand_ar || 'غير متوفر'}</p>
+                        </div>
+                    `;
+                    showNotification('تم ترجمة المنتج بنجاح', 'success');
+                } else {
+                    showNotification(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('خطأ في الترجمة', 'error');
+            });
+        }
+
+        // دالة إضافة ترجمة مخصصة
+        function addCustomTranslation() {
+            const englishWord = document.getElementById('englishWord').value;
+            const arabicWord = document.getElementById('arabicWord').value;
+
+            if (!englishWord || !arabicWord) {
+                showNotification('يرجى إدخال الكلمتين', 'error');
+                return;
+            }
+
+            fetch('/api/translate/custom', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ english: englishWord, arabic: arabicWord })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    document.getElementById('englishWord').value = '';
+                    document.getElementById('arabicWord').value = '';
+                    loadTranslationStats(); // تحديث الإحصائيات
+                } else {
+                    showNotification(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showNotification('خطأ في إضافة الترجمة', 'error');
+            });
+        }
+
+        // دالة ترجمة مجموعة منتجات
+        function translateBatchProducts() {
+            const batchText = document.getElementById('batchProducts').value;
+            
+            if (!batchText) {
+                showNotification('يرجى إدخال قائمة المنتجات', 'error');
+                return;
+            }
+
+            try {
+                const products = JSON.parse(batchText);
+                
+                fetch('/api/translate/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ products: products })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        let resultHTML = '<div class="translation-result">';
+                        resultHTML += `<h4>تم ترجمة ${data.total_translated} منتج:</h4>`;
+                        
+                        data.translated_products.forEach((product, index) => {
+                            resultHTML += `
+                                <div style="margin: 15px 0; padding: 10px; background: white; border-radius: 8px;">
+                                    <h5>المنتج ${index + 1}:</h5>
+                                    <p><strong>الاسم:</strong> ${product.name_ar || 'غير متوفر'}</p>
+                                    <p><strong>الوصف:</strong> ${product.description_ar || 'غير متوفر'}</p>
+                                    <p><strong>الفئة:</strong> ${product.category_ar || 'غير متوفر'}</p>
+                                    <p><strong>العلامة التجارية:</strong> ${product.brand_ar || 'غير متوفر'}</p>
+                                </div>
+                            `;
+                        });
+                        
+                        resultHTML += '</div>';
+                        document.getElementById('batchTranslationResult').innerHTML = resultHTML;
+                        showNotification(data.message, 'success');
+                    } else {
+                        showNotification(data.error, 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('خطأ في ترجمة المنتجات', 'error');
+                });
+            } catch (error) {
+                showNotification('خطأ في تنسيق JSON', 'error');
+            }
+        }
+
+        // دالة تحميل المنتجات التجريبية
+        function loadTestProducts() {
+            const testProducts = [
+                {
+                    name: "Modern Wooden Chair",
+                    description: "Comfortable and elegant chair for living room",
+                    category: "Furniture",
+                    brand: "IKEA"
+                },
+                {
+                    name: "Leather Sofa",
+                    description: "Luxury black leather sofa for family room",
+                    category: "Living Room",
+                    brand: "Ashley"
+                },
+                {
+                    name: "Glass Coffee Table",
+                    description: "Modern glass coffee table with metal legs",
+                    category: "Living Room",
+                    brand: "West Elm"
+                },
+                {
+                    name: "Bedroom Lamp",
+                    description: "Elegant bedside lamp with fabric shade",
+                    category: "Lighting",
+                    brand: "Target"
+                }
+            ];
+
+            let productsHTML = '';
+            testProducts.forEach((product, index) => {
+                productsHTML += `
+                    <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 5px;">
+                        <h4>المنتج ${index + 1}:</h4>
+                        <p><strong>الاسم:</strong> ${product.name}</p>
+                        <p><strong>الوصف:</strong> ${product.description}</p>
+                        <p><strong>الفئة:</strong> ${product.category}</p>
+                        <p><strong>العلامة التجارية:</strong> ${product.brand}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById('testProducts').innerHTML = productsHTML;
+        }
+
+        // دالة عرض الإشعارات
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 

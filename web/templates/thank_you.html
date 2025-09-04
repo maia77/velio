@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>شكراً على طلبك</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    body { font-family: Arial, sans-serif; background:#f7f7f7; margin:0; }
+    .container { max-width: 720px; margin: 40px auto; background:#fff; padding: 28px; border-radius: 12px; box-shadow: 0 10px 24px rgba(0,0,0,0.08); text-align:center; }
+    h1 { margin-top:0; color:#28a745; }
+    .box { margin-top: 14px; background:#fafafa; border:1px solid #eee; border-radius: 12px; padding: 16px; text-align: right; }
+    .row { display:flex; justify-content: space-between; margin: 6px 0; }
+    .btn { display:inline-block; padding: 12px 18px; border-radius: 10px; background:#0d6efd; color:#fff; text-decoration:none; margin-top: 14px; }
+  </style>
+  <link rel="icon" href="/static/images/folder.ico" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0d6efd" />
+</head>
+<body>
+  <div class="container">
+    <h1 style="font-size: 24px; color: #000;">شكراً لك على ثقتك بنا! لقد أستلمنا طلبك بنجاح.</h1>
+    {% if order %}
+      <div class="box">
+        <div class="row"><span>الإجمالي:</span><strong>{{ '%.2f'|format(order.total_price) }} $</strong></div>
+        <div class="row"><span>المدفوع الآن (50%):</span><strong>{{ '%.2f'|format(order.deposit_paid_now) }} $</strong></div>
+        <div class="row"><span>الباقي عند الاستلام:</span><strong>{{ '%.2f'|format(order.remaining_on_delivery) }} $</strong></div>
+      </div>
+      <p style="margin-top:12px; color:#555;">سنقوم بالتواصل معك قريباً لتأكيد تفاصيل الطلب والتسليم.</p>
+    {% else %}
+      <p>تم استلام طلبك. سنقوم بالتواصل معك قريباً.</p>
+    {% endif %}
+    <a class="btn" href="/" style="background: #28a745;">متابعة التسوق</a>
+  </div>
+</body>
+</html>
+
+

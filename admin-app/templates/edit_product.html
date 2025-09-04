@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل المنتج - لوحة التحكم</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .form-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .form-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .help-text {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+        
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .preview-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .preview-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .preview-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .preview-description {
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .preview-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .preview-price {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #28a745;
+        }
+        
+        .preview-stock {
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #495057;
+        }
+        
+        .preview-category {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .translation-info {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .translation-info h4 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+            font-size: 1.1em;
+        }
+        
+        .translation-info p {
+            margin: 0;
+            color: #424242;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 15px;
+            }
+            
+            .form-header h1 {
+                font-size: 2em;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- رأس الصفحة -->
+        <div class="form-header">
+            <h1>✏️ تعديل المنتج</h1>
+            <p>تعديل تفاصيل المنتج "{{ product.name }}"</p>
+        </div>
+        
+        <!-- معلومات الترجمة -->
+        <div class="translation-info">
+            <h4>🔄 معلومات الترجمة التلقائية</h4>
+            <p>سيتم تحديث الترجمة العربية تلقائياً عند حفظ التغييرات</p>
+        </div>
+        
+        <!-- نموذج تعديل المنتج -->
+        <div class="form-card">
+            <form method="POST" id="productForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name" class="form-label">
+                            اسم المنتج <span class="required">*</span>
+                        </label>
+                        <input type="text" id="name" name="name" class="form-input" value="{{ product.name }}" required>
+                        <div class="help-text">أدخل اسم المنتج باللغة الإنجليزية</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price" class="form-label">
+                            السعر <span class="required">*</span>
+                        </label>
+                        <input type="number" id="price" name="price" class="form-input" step="0.01" min="0" value="{{ product.price }}" required>
+                        <div class="help-text">أدخل السعر بال$ السعودي</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="form-label">
+                        وصف المنتج <span class="required">*</span>
+                    </label>
+                    <textarea id="description" name="description" class="form-input form-textarea" required>{{ product.description }}</textarea>
+                    <div class="help-text">أدخل وصفاً مفصلاً للمنتج باللغة الإنجليزية</div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category" class="form-label">الفئة</label>
+                        <input type="text" id="category" name="category" class="form-input" value="{{ product.category or '' }}">
+                        <div class="help-text">مثال: أثاث، إلكترونيات، ملابس</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="brand" class="form-label">العلامة التجارية</label>
+                        <input type="text" id="brand" name="brand" class="form-input" value="{{ product.brand or '' }}">
+                        <div class="help-text">اسم الشركة المصنعة</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="image_url" class="form-label">رابط الصورة</label>
+                        <input type="url" id="image_url" name="image_url" class="form-input" value="{{ product.image_url or '' }}">
+                        <div class="help-text">رابط صورة المنتج (اختياري)</div>
+                    </div>
+                </div>
+                
+                <!-- معاينة المنتج -->
+                <div class="preview-section">
+                    <div class="preview-title">👁️ معاينة المنتج</div>
+                    <div class="preview-card">
+                        <div class="preview-name" id="previewName">{{ product.name }}</div>
+                        <div class="preview-description" id="previewDescription">{{ product.description }}</div>
+                        <div class="preview-meta">
+                            <div class="preview-price" id="previewPrice">{{ "%.2f"|format(product.price) }} $</div>
+                            {% if product.category %}
+                                <div class="preview-category" id="previewCategory">{{ product.category }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        💾 حفظ التغييرات
+                    </button>
+                    <a href="{{ url_for('admin_products') }}" class="btn-secondary">
+                        ↩️ إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // تحديث المعاينة في الوقت الفعلي
+        function updatePreview() {
+            const name = document.getElementById('name').value || 'اسم المنتج';
+            const description = document.getElementById('description').value || 'وصف المنتج سيظهر هنا...';
+            const price = document.getElementById('price').value || '0.00';
+            const category = document.getElementById('category').value;
+            
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewDescription').textContent = description;
+            document.getElementById('previewPrice').textContent = parseFloat(price).toFixed(2) + ' $';
+            
+            const categoryElement = document.getElementById('previewCategory');
+            if (category) {
+                categoryElement.textContent = category;
+                categoryElement.style.display = 'inline-block';
+            } else {
+                categoryElement.style.display = 'none';
+            }
+        }
+        
+        // إضافة مستمعي الأحداث
+        document.getElementById('name').addEventListener('input', updatePreview);
+        document.getElementById('description').addEventListener('input', updatePreview);
+        document.getElementById('price').addEventListener('input', updatePreview);
+        document.getElementById('category').addEventListener('input', updatePreview);
+        
+        // التحقق من صحة النموذج
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            const name = document.getElementById('name').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const price = document.getElementById('price').value;
+            
+            if (!name || !description || !price) {
+                e.preventDefault();
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return false;
+            }
+            
+            if (parseFloat(price) <= 0) {
+                e.preventDefault();
+                alert('يجب أن يكون السعر أكبر من صفر');
+                return false;
+            }
+        });
+        
+        // تحديث المعاينة عند تحميل الصفحة
+        updatePreview();
+    </script>
+</body>
+</html> 

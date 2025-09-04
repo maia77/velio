@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category_title }} - Velio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}">
+    <style>
+        .category-header {
+            background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat;
+            color: white;
+            padding: 0;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            min-height: 500px;
+            display: block;
+        }
+        
+        .category-header > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .category-title {
+            font-size: 4.5em;
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+        }
+        
+        .category-description {
+            font-size: 1.6em;
+            opacity: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), 0 0 15px rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+        }
+        
+        /* تخصيص خاص لقسم زينة الطبيعة */
+        .nature-category .category-header {
+            background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat;
+            min-height: 550px;
+            padding: 0;
+        }
+        
+        /* تخصيص خاص لقسم تفاصيل مميزة */
+        .details-category .category-header {
+            background: url('/static/images/IMG_968.jpg') center center/cover no-repeat;
+            min-height: 550px;
+            padding: 0;
+        }
+        
+        /* تخصيص خاص لقسم أصالة معاصرة */
+        .authenticity-category .category-header {
+            background: url('/static/images/IMG_9726.JPG') center center/cover no-repeat;
+            min-height: 550px;
+            padding: 0;
+        }
+        
+        /* تخصيص خاص لقسم لمسات فريدة */
+        .unique-touches-category .category-header {
+            background: url('/static/images/IMG_97.JPG') center center/cover no-repeat;
+            min-height: 550px;
+            padding: 0;
+        }
+        
+
+        
+        .nature-category .category-title {
+            color: #ffffff;
+            font-size: 5em;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.9);
+        }
+        
+        .nature-category .category-description {
+            color: #f0f8f0;
+            font-size: 1.8em;
+            max-width: 800px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+        }
+        
+        .breadcrumb {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 0 20px 30px;
+            text-align: center;
+        }
+        
+        .breadcrumb a {
+            color: #D1D5DB;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .products-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 25px;
+        }
+        
+        .product-name {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .product-description {
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .product-price {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #000000;
+            font-family: 'Blood', cursive;
+        }
+        
+        .product-category {
+            background: #e9ecef;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            color: #495057;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #374151;
+            border: 2px solid #374151;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(55, 65, 81, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .no-products {
+            text-align: center;
+            padding: 80px 20px;
+            color: #6c757d;
+        }
+        
+        .no-products h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #495057;
+        }
+        
+        .no-products p {
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        
+        .stats-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #D1D5DB;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 1em;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .category-header {
+                min-height: 400px;
+                padding: 0;
+            }
+            
+            .nature-category .category-header {
+                min-height: 450px;
+                padding: 0;
+            }
+            
+            .details-category .category-header {
+                min-height: 450px;
+                padding: 0;
+            }
+            
+            .authenticity-category .category-header {
+                min-height: 450px;
+                padding: 0;
+            }
+            
+            .unique-touches-category .category-header {
+                min-height: 450px;
+                padding: 0;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 15px;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+        
+        /* تنسيق الإشعارات */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+        }
+        
+        .success {
+            background: #28a745;
+        }
+        
+        .error {
+            background: #dc3545;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="{% if 'زينة الطبيعة' in category_title %}nature-category{% elif 'تفاصيل مميزة' in category_title %}details-category{% elif 'أصالة معاصرة' in category_title %}authenticity-category{% elif 'لمسات فريدة' in category_title %}unique-touches-category{% endif %}">
+    <div class="category-header">
+        <!-- تم إخفاء النص لعرض الصورة فقط -->
+    </div>
+    
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}" style="color: #000000;">🏠 الرئيسية</a> 
+        <span style="margin: 0 10px;">›</span>
+        <span>{{ category_title }}</span>
+    </div>
+    
+    <div class="products-container">
+        {% if products %}
+            <!-- قائمة المنتجات -->
+            <div class="products-grid">
+                {% for product in products %}
+                    <div class="product-card">
+                        <img src="{{ product.image_url or url_for('static', filename='images/product1.jpg') }}" 
+                             alt="{{ product.name_ar or product.name }}" 
+                             class="product-image"
+                             onerror="this.src='{{ url_for('static', filename='images/product1.jpg') }}'">
+                        
+                        <div class="product-info">
+                            <h3 class="product-name">{{ product.name_ar or product.name }}</h3>
+                            <p class="product-description">{{ product.description_ar or product.description }}</p>
+                            
+                            <div class="product-meta">
+                                <div class="product-price">{{ "%.2f"|format(product.price) }} $</div>
+                                {% if product.category %}
+                                    <div class="product-category">{{ product.category_ar or product.category }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="product-actions">
+                                <button class="btn-primary" onclick="addToCart({{ product.id }})">
+                                    🛒 أضف للسلة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-products">
+        
+                <p>سيتم إضافة منتجات جديدة قريباً</p>
+                <a href="{{ url_for('index') }}" class="btn-primary">
+                    ↩️ العودة للرئيسية
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- إشعارات -->
+    <div id="notification" class="notification" style="display: none;"></div>
+    
+    <script>
+        // إضافة للسلة
+        async function addToCart(productId) {
+            try {
+                const response = await fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: 1
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('تم إضافة المنتج إلى السلة بنجاح! 🛒', 'success');
+                    // تحديث عداد السلة إذا كان موجوداً
+                    updateCartCount(data.cart_count);
+                } else {
+                    showNotification('فشل في إضافة المنتج إلى السلة', 'error');
+                }
+            } catch (error) {
+                console.error('خطأ في إضافة المنتج:', error);
+                showNotification('خطأ في الاتصال بالخادم', 'error');
+            }
+        }
+        
+        // عرض الإشعارات
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            // إخفاء الإشعار بعد 3 ثواني
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // تحديث عداد السلة
+        function updateCartCount(count) {
+            // يمكن إضافة منطق تحديث عداد السلة هنا
+            console.log('عدد العناصر في السلة:', count);
+        }
+        
+        // تحميل الصور بشكل أفضل
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.product-image');
+            images.forEach(img => {
+                img.addEventListener('error', function() {
+                    this.src = '/static/images/product1.jpg';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

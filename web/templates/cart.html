@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سلة المشتريات</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    body { font-family: Arial, sans-serif; background:#f7f7f7; margin:0; }
+    .container { max-width: 1000px; margin: 20px auto; background:#fff; padding: 24px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+    h1 { margin-top: 0; color: #222; }
+    .cart-table { width:100%; border-collapse: collapse; margin-top: 16px; }
+    .cart-table th, .cart-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: right; }
+    .cart-table th { background:#fafafa; color:#444; font-weight:700; }
+    .quantity-input { width: 70px; padding: 6px 8px; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
+    .qty-group { display: inline-flex; align-items: center; gap: 6px; }
+    .qty-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #ddd; background: #f8f9fa; border-radius: 8px; cursor: pointer; }
+    .qty-btn:hover { background: #eef2f7; }
+    .actions { display:flex; gap:10px; align-items:center; }
+    .btn { display:inline-block; padding: 10px 16px; border-radius: 8px; text-decoration:none; border:none; cursor:pointer; }
+    .btn-update { background:#0d6efd; color:#fff; }
+    .btn-remove { background:#dc3545; color:#fff; }
+    .btn-continue { background:#28a745; color:#fff; font-weight:700; padding: 14px 18px; width: 100%; text-align:center; }
+    .summary { margin-top: 20px; background:#fafafa; border:1px solid #eee; border-radius: 12px; padding: 16px; }
+    .summary-row { display:flex; justify-content: space-between; margin: 8px 0; font-size: 16px; color:#333; }
+    .note { margin-top: 14px; color:#555; line-height: 1.8; }
+    .empty { text-align:center; padding: 40px 10px; color:#777; }
+    @media (max-width: 640px) { .actions { flex-direction: column; align-items: stretch; } .btn-continue { font-size: 16px; } }
+  </style>
+  <script>
+    function confirmRemove(){ return confirm('هل تريد إزالة هذا المنتج من السلة؟'); }
+    async function updateCartAjax(productId, quantity){
+      try {
+        if (quantity < 1) quantity = 1;
+        const body = new URLSearchParams({ product_id: String(productId), quantity: String(quantity) });
+        const res = await fetch('/cart/update', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        if (!res.ok) throw new Error('فشل تحديث السلة');
+        // تحديث عداد السلة إن وُجد
+        try {
+          const countRes = await fetch('/api/cart/count');
+          const data = await countRes.json();
+          const el = document.getElementById('cart-count');
+          if (el && data && data.success) el.textContent = data.count;
+        } catch (e) {}
+        // إعادة تحميل بسيطة لضمان دقة الإجماليات
+        location.reload();
+      } catch (e) {
+        alert('تعذر تحديث السلة: ' + e.message);
+      }
+    }
+  </script>
+  <link rel="icon" href="/static/images/folder.ico" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0d6efd" />
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align: center; font-size: 2.5em; color: #333333; margin: 30px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); border-bottom: 3px solid #333333; padding-bottom: 15px;">🛒 سلة المشتريات</h1>
+    
+
+    
+    <!-- زر العودة للصفحة الرئيسية -->
+    <div style="margin-bottom: 20px; text-align: center;">
+      <a href="/" style="color: #000000; text-decoration: none; font-size: 1.1em;">
+        العودة للصفحة الرئيسية
+      </a>
+    </div>
+
+    {% if cart_items and cart_items|length > 0 %}
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>المنتج</th>
+          <th>السعر (لكل قطعة)</th>
+          <th>الكمية</th>
+          <th>الإجمالي</th>
+          <th>إجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ '%.2f'|format(item.price) }} $</td>
+          <td>
+            <div class="actions">
+              <div class="qty-group" data-product-id="{{ item.product_id }}">
+                <button type="button" class="qty-btn qty-dec" aria-label="تقليل">−</button>
+                <input class="quantity-input qty-input" type="number" min="1" value="{{ item.quantity }}" />
+                <button type="button" class="qty-btn qty-inc" aria-label="زيادة">+</button>
+              </div>
+              <form method="POST" action="/cart/update" class="actions" style="display:none;">
+                <input type="hidden" name="product_id" value="{{ item.product_id }}" />
+                <input type="hidden" name="quantity" value="{{ item.quantity }}" />
+                <button class="btn btn-update" type="submit">تحديث</button>
+              </form>
+            </div>
+          </td>
+          <td>{{ '%.2f'|format(item.price * item.quantity) }} $</td>
+          <td>
+            <form method="POST" action="/cart/remove" onsubmit="return confirmRemove()">
+              <input type="hidden" name="product_id" value="{{ item.product_id }}" />
+              <button class="btn btn-remove" type="submit">حذف</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="summary">
+      <div class="summary-row">
+        <div>الإجمالي:</div>
+        <div><strong>{{ '%.2f'|format(total) }} $</strong></div>
+      </div>
+      <div class="note">
+        <div><strong>طريقة الدفع:</strong> الدفع الجزئي</div>
+        <div>ادفع 50% الآن: <strong>{{ '%.2f'|format(deposit) }} $</strong></div>
+        <div>ادفع 50% عند الاستلام: <strong>{{ '%.2f'|format(total - deposit) }} $</strong></div>
+      </div>
+      <div style="margin-top: 16px;">
+        <a href="/checkout" class="btn btn-continue">تابع إلى الدفع</a>
+      </div>
+    </div>
+    {% else %}
+      <div class="empty">سلتك فارغة حالياً. قم بإضافة بعض المنتجات.</div>
+    {% endif %}
+  </div>
+  <script>
+    // ربط أحداث +/- وتغيير الإدخال
+    document.querySelectorAll('.qty-group').forEach(group => {
+      const productId = parseInt(group.getAttribute('data-product-id'), 10);
+      const input = group.querySelector('.qty-input');
+      const dec = group.querySelector('.qty-dec');
+      const inc = group.querySelector('.qty-inc');
+      dec.addEventListener('click', () => {
+        let v = parseInt(input.value || '1', 10); if (isNaN(v)) v = 1; v = Math.max(1, v - 1); input.value = v; updateCartAjax(productId, v);
+      });
+      inc.addEventListener('click', () => {
+        let v = parseInt(input.value || '1', 10); if (isNaN(v)) v = 1; v = v + 1; input.value = v; updateCartAjax(productId, v);
+      });
+      input.addEventListener('change', () => {
+        let v = parseInt(input.value || '1', 10); if (isNaN(v) || v < 1) v = 1; input.value = v; updateCartAjax(productId, v);
+      });
+    });
+  </script>
+</body>
+</html>
+
+

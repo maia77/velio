@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أقسام المنتجات - Velio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Cairo', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            direction: rtl;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .category-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .category-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+            opacity: 0.8;
+        }
+        
+        .category-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: white;
+            z-index: 2;
+        }
+        
+        .category-info {
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .category-description {
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .category-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .view-category-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .view-category-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .navigation-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background: #f8f9fa;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .category-card {
+                margin: 0 10px;
+            }
+            
+            .nav-btn {
+                display: block;
+                margin: 10px auto;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- رأس الصفحة -->
+        <div class="header">
+            <h1>🏷️ أقسام المنتجات</h1>
+            <p>تصفح مجموعتنا المميزة من المنتجات المصنفة في أقسام منظمة</p>
+        </div>
+        
+        <!-- شريط التنقل -->
+        <div class="navigation-bar">
+            <a href="/" class="nav-btn">🏠 الرئيسية</a>
+            <a href="/products" class="nav-btn">🛍️ جميع المنتجات</a>
+            <a href="#" class="nav-btn active">🏷️ الأقسام</a>
+            <a href="/contact" class="nav-btn">📞 اتصل بنا</a>
+        </div>
+        
+        <!-- شبكة الأقسام -->
+        <div class="categories-grid">
+            <!-- قسم أصالة معاصرة -->
+            <div class="category-card" onclick="window.location.href='/category/اصالة-معاصرة'">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="category-icon">🏛️</div>
+                </div>
+                <div class="category-info">
+                    <h3 class="category-title">أصالة معاصرة</h3>
+                    <p class="category-description">جمع بين الأصالة والحداثة في تصميم منزلك</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ heritage_count }}</span>
+                            <span class="stat-label">منتج</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ heritage_value }} $</span>
+                            <span class="stat-label">القيمة</span>
+                        </div>
+                    </div>
+                    <button class="view-category-btn">عرض القسم</button>
+                </div>
+            </div>
+            
+            <!-- قسم تفاصيل مميزة -->
+            <div class="category-card" onclick="window.location.href='/category/تفاصيل-مميزة'">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e72c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="category-icon">🎨</div>
+                </div>
+                <div class="category-info">
+                    <h3 class="category-title">تفاصيل مميزة</h3>
+                    <p class="category-description">اهتم بالتفاصيل الصغيرة التي تحدث فرقاً كبيراً</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ details_count }}</span>
+                            <span class="stat-label">منتج</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ details_value }} $</span>
+                            <span class="stat-label">القيمة</span>
+                        </div>
+                    </div>
+                    <button class="view-category-btn">عرض القسم</button>
+                </div>
+            </div>
+            
+            <!-- قسم لمسات فريدة -->
+            <div class="category-card" onclick="window.location.href='/category/لمسات-فريدة'">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="category-icon">✨</div>
+                </div>
+                <div class="category-info">
+                    <h3 class="category-title">لمسات فريدة</h3>
+                    <p class="category-description">قطع مميزة تضيف لمسة خاصة لمنزلك</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ unique_count }}</span>
+                            <span class="stat-label">منتج</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ unique_value }} $</span>
+                            <span class="stat-label">القيمة</span>
+                        </div>
+                    </div>
+                    <button class="view-category-btn">عرض القسم</button>
+                </div>
+            </div>
+            
+            <!-- قسم زينة الطبيعة -->
+            <div class="category-card" onclick="window.location.href='/category/زينة-الطبيعة'">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="category-icon">🌿</div>
+                </div>
+                <div class="category-info">
+                    <h3 class="category-title">زينة الطبيعة</h3>
+                    <p class="category-description">أضف لمسة من الطبيعة إلى منزلك مع مجموعتنا المميزة</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ nature_count }}</span>
+                            <span class="stat-label">منتج</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ nature_value }} $</span>
+                            <span class="stat-label">القيمة</span>
+                        </div>
+                    </div>
+                    <button class="view-category-btn">عرض القسم</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- معلومات إضافية -->
+        <div class="navigation-bar">
+            <h3 style="margin-bottom: 15px; color: #333;">📊 إحصائيات شاملة</h3>
+            <p style="color: #666; margin-bottom: 10px;">
+                <strong>إجمالي المنتجات:</strong> {{ total_products }} منتج
+            </p>
+            <p style="color: #666; margin-bottom: 10px;">
+                <strong>إجمالي القيمة:</strong> {{ total_value }} $
+            </p>
+            <p style="color: #666;">
+                <strong>الأقسام المتاحة:</strong> 4 أقسام رئيسية
+            </p>
+        </div>
+        
+        <!-- تذييل الصفحة -->
+        <div class="footer">
+            <p>© 2024 Velio - جميع الحقوق محفوظة</p>
+            <p>تصميم وتطوير متجر الأثاث والديكور الأنيق</p>
+        </div>
+    </div>
+    
+    <script>
+        // إضافة تأثيرات تفاعلية
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.category-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                card.addEventListener('click', function() {
+                    // إضافة تأثير النقر
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+            
+            // تحديث الأزرار النشطة
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

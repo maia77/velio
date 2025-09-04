@@ -1,0 +1,533 @@
+/* ===== التصميم المتجاوب الشامل ===== */
+
+/* ===== إعدادات عامة للتصميم المتجاوب ===== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  line-height: 1.6;
+  direction: rtl;
+  overflow-x: hidden;
+  /* الحفاظ على الخلفية الأصلية من style.css */
+  background-image: url('img_1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* ===== نقاط التوقف للشاشات المختلفة ===== */
+/* الهواتف الصغيرة جداً */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+  
+  .hero-title {
+    font-size: 1.8rem !important;
+    line-height: 1.2;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem !important;
+  }
+  
+  .section-title {
+    font-size: 1.5rem !important;
+  }
+  
+  .cta-button {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+  
+  .header-container {
+    padding: 10px 15px;
+  }
+  
+  .logo {
+    font-size: 1.5rem !important;
+  }
+  
+  .search-input {
+    width: 150px !important;
+    font-size: 12px;
+  }
+  
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  
+  .product-card {
+    margin: 10px 0;
+  }
+  
+  .product-image {
+    height: 180px !important;
+  }
+  
+  .modal-content {
+    padding: 20px 15px;
+    margin: 10px;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* الهواتف المتوسطة */
+@media (max-width: 768px) {
+  /* الهيدر */
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+  
+  .main-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .search-box {
+    width: 100%;
+  }
+  
+  .search-input {
+    width: 100% !important;
+    max-width: 300px;
+  }
+  
+  .cart-btn, .login-btn, .lang-btn {
+    width: 100%;
+    justify-content: center;
+    max-width: 200px;
+  }
+  
+  /* القسم الرئيسي */
+  .hero-section {
+    min-height: 60vh;
+    padding: 40px 20px;
+  }
+  
+  .hero-title {
+    font-size: 2.2rem !important;
+    margin-bottom: 15px;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem !important;
+    margin-bottom: 25px;
+  }
+  
+  .hero-content {
+    padding: 20px 15px;
+  }
+  
+  /* أقسام المحتوى */
+  .content-section {
+    padding: 50px 20px;
+  }
+  
+  .section-title {
+    font-size: 2rem !important;
+    margin-bottom: 30px;
+  }
+  
+  /* شبكة المنتجات */
+  .products-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+  
+  .product-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .product-image {
+    height: 220px !important;
+  }
+  
+  .product-info {
+    padding: 15px;
+  }
+  
+  .product-name {
+    font-size: 1.2rem;
+  }
+  
+  .product-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-primary, .btn-outline {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* قسم المميزات */
+  .features-section {
+    padding: 50px 20px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 25px;
+  }
+  
+  .feature-card {
+    padding: 25px 20px;
+  }
+  
+  /* الفوتر */
+  .footer-content {
+    grid-template-columns: 1fr !important;
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .main-footer {
+    padding: 40px 20px 20px;
+  }
+  
+  /* النماذج */
+  .modal-content {
+    width: 95% !important;
+    max-width: 400px;
+    padding: 25px 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 12px;
+    font-size: 16px; /* لمنع التكبير في iOS */
+  }
+  
+  /* صفحة الاتصال */
+  .contact-hero-section {
+    min-height: 80vh;
+    padding: 40px 20px;
+  }
+  
+  .contact-main-title {
+    font-size: 2rem !important;
+  }
+  
+  .contact-form-wrapper {
+    padding: 30px 20px;
+  }
+  
+  /* السلة */
+  .cart-content {
+    width: 95% !important;
+    padding: 20px;
+  }
+  
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .quantity-controls {
+    align-self: center;
+  }
+}
+
+/* الأجهزة اللوحية */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .header-container {
+    padding: 20px 30px;
+  }
+  
+  .hero-title {
+    font-size: 3rem !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem !important;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 25px;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .modal-content {
+    max-width: 600px;
+  }
+}
+
+/* الشاشات الكبيرة */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+  }
+}
+
+/* ===== تحسينات خاصة بالهواتف ===== */
+
+/* تحسين اللمس على الهواتف */
+@media (max-width: 768px) {
+  .nav-link,
+  .btn-primary,
+  .btn-outline,
+  .cta-button,
+  .cart-btn,
+  .login-btn,
+  .lang-btn {
+    min-height: 44px; /* الحد الأدنى لحجم اللمس */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .search-input {
+    min-height: 44px;
+  }
+  
+  /* تحسين المسافات لللمس */
+  .product-actions {
+    gap: 15px;
+  }
+  
+  .quantity-controls {
+    gap: 15px;
+  }
+  
+  .quantity-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ===== تحسينات الأداء ===== */
+
+/* تحسين التمرير */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll; /* تحسين الأداء على الهواتف */
+  }
+  
+  .hero-section {
+    background-attachment: scroll; /* تحسين الأداء على الهواتف */
+  }
+  
+  .product-card:hover {
+    transform: none; /* إزالة التأثيرات على الهواتف */
+  }
+  
+  .feature-card:hover {
+    transform: none;
+  }
+}
+
+/* ===== تحسينات إضافية ===== */
+
+/* إخفاء عناصر غير ضرورية على الهواتف */
+@media (max-width: 480px) {
+  .announcement-bar {
+    font-size: 12px;
+    padding: 6px 0;
+  }
+  
+  .header-actions {
+    gap: 8px;
+  }
+  
+  .product-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+/* تحسين النصوص للقراءة على الهواتف */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px; /* منع التكبير التلقائي في iOS */
+  }
+  
+  .hero-subtitle,
+  .product-description,
+  .feature-description {
+    line-height: 1.6;
+  }
+}
+
+/* ===== تحسينات للشاشات الكبيرة جداً ===== */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+  }
+  
+  .hero-title {
+    font-size: 4rem !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.4rem !important;
+  }
+  
+  .section-title {
+    font-size: 3rem !important;
+  }
+}
+
+/* ===== تحسينات للطباعة ===== */
+@media print {
+  .main-header,
+  .announcement-bar,
+  .main-footer,
+  .cart-modal,
+  .modal {
+    display: none !important;
+  }
+  
+  .hero-section {
+    min-height: auto;
+    padding: 20px;
+  }
+  
+  .product-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
+
+/* ===== تحسينات إمكانية الوصول ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* تحسين التباين للقراءة */
+@media (prefers-contrast: high) {
+  .product-card {
+    border: 2px solid #333;
+  }
+  
+  .btn-primary {
+    background: #000;
+    color: #fff;
+  }
+  
+  .btn-outline {
+    border: 2px solid #000;
+    color: #000;
+  }
+}
+
+/* ===== تحسينات للوضع المظلم ===== */
+/* تم تعطيل الوضع المظلم تلقائياً للحفاظ على التصميم الأصلي */
+/*
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+  
+  .product-card {
+    background: #2d2d2d;
+    color: #fff;
+  }
+  
+  .modal-content {
+    background: #2d2d2d;
+    color: #fff;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: #3d3d3d;
+    color: #fff;
+    border-color: #555;
+  }
+}
+*/
+
+/* ===== تحسينات نهائية ===== */
+
+/* ضمان عدم ظهور شريط التمرير الأفقي */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* تحسين عرض الصور */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* تحسين الجداول على الهواتف */
+@media (max-width: 768px) {
+  table {
+    font-size: 14px;
+  }
+  
+  th, td {
+    padding: 8px 4px;
+  }
+}
+
+/* تحسين القوائم على الهواتف */
+@media (max-width: 768px) {
+  ul, ol {
+    padding-right: 20px;
+  }
+  
+  li {
+    margin-bottom: 8px;
+  }
+}
