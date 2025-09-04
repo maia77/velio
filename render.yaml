@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: web-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PORT
+        value: 10000
+    healthCheckPath: /
+    plan: free
+
+  - type: web
+    name: admin-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd admin-app && python admin_app_fixed.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PORT
+        value: 10001
+    healthCheckPath: /admin
+    plan: free
+
+databases:
+  - name: web-db
+    plan: free
+  - name: admin-db
+    plan: free
