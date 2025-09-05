@@ -47,9 +47,9 @@ class AmazonTranslateService:
         self.preload_common_translations = True
         self.connection_pool_size = 5
         
-        # تهيئة الترجمات الشائعة مسبقاً
-        if self.preload_common_translations:
-            self._preload_common_translations()
+        # تهيئة الترجمات الشائعة مسبقاً - معطل مؤقتاً
+        # if self.preload_common_translations:
+        #     self._preload_common_translations()
     
     def _preload_common_translations(self):
         """تحميل الترجمات الشائعة مسبقاً"""

@@ -548,6 +548,13 @@ def index():
     
     return render_template('index.html')
 
+@app.route('/track-order')
+def track_order_page():
+    """
+    صفحة متابعة الطلبات للعملاء
+    """
+    return render_template('track_order.html')
+
 @app.route('/product')
 def product_detail():
     """صفحة تفاصيل المنتج"""
@@ -1487,6 +1494,7 @@ def order_status_page():
     صفحة استعلام حالة الطلب للعملاء
     """
     return render_template('order_status.html')
+
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
