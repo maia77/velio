@@ -1,0 +1,18 @@
+⚠️ فشل الاتصال بـ PostgreSQL: فشل الاتصال بقاعدة البيانات PostgreSQL: could not translate host name "dpg-d2r155je5dus73cn11fg-a.render.com" to address: nodename nor servname provided, or not known
+
+💾 استخدام قاعدة البيانات المحلية SQLite كاحتياطي
+✅ تم التأكد من إنشاء جداول قاعدة البيانات لتطبيق الإدارة (الإصدار المحسن)
+✅ الحقول الجديدة موجودة بالفعل
+🚀 بدء تشغيل تطبيق إدارة المنتجات...
+📍 السيرفر سيكون متاحًا على: http://127.0.0.1:5007
+📱 للوصول من الهاتف: http://192.168.0.72:5007
+ * Serving Flask app 'admin_app_fixed'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5007
+ * Running on http://192.168.0.240:5007
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 112-817-262

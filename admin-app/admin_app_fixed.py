@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, render_template_string, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template_string, render_template, redirect, url_for, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
 import os
 from datetime import datetime
 import uuid
@@ -17,12 +18,25 @@ app = Flask(__name__)
 # إعداد مفتاح سري للجلسة (مطلوب لنظام السلة)
 app.secret_key = os.environ.get('SECRET_KEY', 'change-this-secret-key-in-production')
 
+# إعدادات الجلسة
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = os.path.join(basedir, 'instance', 'flask_session')
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # ساعة واحدة
+app.config['SESSION_FILE_THRESHOLD'] = 500
+
 # إعداد قاعدة البيانات - مع نظام احتياطي
 # استخدام قاعدة بيانات مشتركة (PostgreSQL أو SQLite)
 db_config, is_postgresql = get_database_config()
 app.config.update(db_config)
 use_remote = is_postgresql
 db = SQLAlchemy(app)
+
+# تهيئة الجلسة
+Session(app)
+
+# إنشاء مجلد الجلسة إذا لم يكن موجوداً
+os.makedirs(os.path.join(basedir, 'instance', 'flask_session'), exist_ok=True)
 
 # إعدادات رفع الملفات
 UPLOAD_FOLDER = 'static/uploads'
@@ -49,44 +63,6 @@ with app.app_context():
         db.create_all()
         print("✅ تم التأكد من إنشاء جداول قاعدة البيانات لتطبيق الإدارة (الإصدار المحسن)")
         
-        # التحقق من وجود الحقول الجديدة وإضافتها إذا لزم الأمر (متوافق مع PostgreSQL و SQLite)
-        try:
-            # محاولة الوصول للحقول الجديدة (بعد تعريف النماذج)
-            test_product = Product.query.first()
-            if test_product:
-                # التحقق من وجود الحقول الجديدة
-                if not hasattr(test_product, 'main_category'):
-                    print("🔄 إضافة الحقول الجديدة للقسم الرئيسي...")
-                    # إضافة الحقول الجديدة (متوافق مع كلا النوعين)
-                    with db.engine.connect() as conn:
-                        if use_remote:
-                            # PostgreSQL syntax
-                            conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS main_category VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
-                            conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS main_category_ar VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
-                            conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_home_essentials BOOLEAN DEFAULT TRUE"))
-                            conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_new_arrival BOOLEAN DEFAULT FALSE"))
-                        else:
-                            # SQLite syntax
-                            cols = [row[1] for row in conn.execute(db.text('PRAGMA table_info(products)'))]
-                            if 'main_category' not in cols:
-                                conn.execute(db.text("ALTER TABLE products ADD COLUMN main_category VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
-                            if 'main_category_ar' not in cols:
-                                conn.execute(db.text("ALTER TABLE products ADD COLUMN main_category_ar VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
-                            if 'is_home_essentials' not in cols:
-                                conn.execute(db.text("ALTER TABLE products ADD COLUMN is_home_essentials BOOLEAN DEFAULT 1"))
-                            if 'is_new_arrival' not in cols:
-                                conn.execute(db.text("ALTER TABLE products ADD COLUMN is_new_arrival BOOLEAN DEFAULT 0"))
-                        
-                        # تحديث المنتجات الموجودة
-                        conn.execute(db.text("UPDATE products SET main_category = 'أصالة معاصرة', main_category_ar = 'أصالة معاصرة' WHERE main_category IS NULL"))
-                        conn.commit()
-                    
-                    print("✅ تم إضافة الحقول الجديدة بنجاح!")
-                else:
-                    print("✅ الحقول الجديدة موجودة بالفعل")
-        except Exception as e:
-            print(f"⚠️ خطأ في التحقق من الحقول الجديدة: {e}")
-            print("ℹ️ سيتم إنشاء الحقول عند إضافة أول منتج")
             
     except Exception as e:
         print(f"⚠️ تعذر إنشاء الجداول في تطبيق الإدارة (الإصدار المحسن): {e}")
@@ -261,6 +237,53 @@ class OrderStatusHistory(db.Model):
     
     def __repr__(self):
         return f'<OrderStatusHistory {self.id} for Order {self.order_id}>'
+
+# التحقق من وجود الحقول الجديدة وإضافتها إذا لزم الأمر (متوافق مع PostgreSQL و SQLite)
+def check_and_add_new_fields():
+    """فحص وإضافة الحقول الجديدة للمنتجات"""
+    try:
+        # محاولة الوصول للحقول الجديدة (بعد تعريف النماذج)
+        test_product = Product.query.first()
+        if test_product:
+            # التحقق من وجود الحقول الجديدة
+            if not hasattr(test_product, 'main_category'):
+                print("🔄 إضافة الحقول الجديدة للقسم الرئيسي...")
+                # إضافة الحقول الجديدة (متوافق مع كلا النوعين)
+                with db.engine.connect() as conn:
+                    if use_remote:
+                        # PostgreSQL syntax
+                        conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS main_category VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
+                        conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS main_category_ar VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
+                        conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_home_essentials BOOLEAN DEFAULT TRUE"))
+                        conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_new_arrival BOOLEAN DEFAULT FALSE"))
+                    else:
+                        # SQLite syntax
+                        cols = [row[1] for row in conn.execute(db.text('PRAGMA table_info(products)'))]
+                        if 'main_category' not in cols:
+                            conn.execute(db.text("ALTER TABLE products ADD COLUMN main_category VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
+                        if 'main_category_ar' not in cols:
+                            conn.execute(db.text("ALTER TABLE products ADD COLUMN main_category_ar VARCHAR(100) DEFAULT 'أصالة معاصرة'"))
+                        if 'is_home_essentials' not in cols:
+                            conn.execute(db.text("ALTER TABLE products ADD COLUMN is_home_essentials BOOLEAN DEFAULT 1"))
+                        if 'is_new_arrival' not in cols:
+                            conn.execute(db.text("ALTER TABLE products ADD COLUMN is_new_arrival BOOLEAN DEFAULT 0"))
+                    
+                    # تحديث المنتجات الموجودة
+                    conn.execute(db.text("UPDATE products SET main_category = 'أصالة معاصرة', main_category_ar = 'أصالة معاصرة' WHERE main_category IS NULL"))
+                    conn.commit()
+                
+                print("✅ تم إضافة الحقول الجديدة بنجاح!")
+            else:
+                print("✅ الحقول الجديدة موجودة بالفعل")
+        else:
+            print("ℹ️ لا توجد منتجات في قاعدة البيانات لإضافة الحقول الجديدة")
+    except Exception as e:
+        print(f"⚠️ خطأ في التحقق من الحقول الجديدة: {e}")
+        print("ℹ️ سيتم إنشاء الحقول عند إضافة أول منتج")
+
+# تشغيل فحص الحقول الجديدة داخل سياق التطبيق
+with app.app_context():
+    check_and_add_new_fields()
 
 @app.route('/')
 def index():
@@ -2144,7 +2167,6 @@ def test_categories():
 # --- سلة المشتريات (Cart) ---
 def _get_session_cart():
     """الحصول على محتويات السلة من الجلسة"""
-    from flask import session
     cart = session.get('cart')
     if not isinstance(cart, dict):
         cart = {}
@@ -2152,8 +2174,12 @@ def _get_session_cart():
 
 def _save_session_cart(cart_dict):
     """حفظ محتويات السلة في الجلسة"""
-    from flask import session
     session['cart'] = cart_dict
+    session.modified = True  # تأكيد تعديل الجلسة
+    try:
+        session.permanent = True
+    except Exception:
+        pass
 
 def _cart_total_count(cart_dict):
     """حساب إجمالي عدد العناصر في السلة"""
