@@ -7,6 +7,10 @@
 import os
 import sys
 from datetime import datetime
+from dotenv import load_dotenv
+
+# تحميل متغيرات البيئة
+load_dotenv()
 
 def quick_test():
     """
@@ -46,7 +50,7 @@ def quick_test():
         
         # استيراد دالة الإرسال
         sys.path.append('web')
-        from app import send_email
+        from web.app import send_email
         
         subject = "🧪 اختبار سريع - Velio Store"
         body = f"""هذه رسالة اختبار من نظام Velio Store
