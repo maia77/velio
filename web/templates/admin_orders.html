@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الطلبات - Velio Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-group select, .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .filter-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .orders-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table-content {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .order-row {
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+            transition: background 0.3s;
+        }
+
+        .order-row:hover {
+            background: #f8f9fa;
+        }
+
+        .order-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .order-number {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .customer-info {
+            color: #666;
+        }
+
+        .product-info {
+            color: #666;
+        }
+
+        .order-total {
+            font-weight: 600;
+            color: #28a745;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-processing {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-completed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pagination button:hover {
+            background: #f8f9fa;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .no-orders i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .order-info {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-shopping-cart"></i> إدارة الطلبات</h1>
+            <div style="display: flex; gap: 10px;">
+                <a href="/admin" class="back-btn">
+                    <i class="fas fa-arrow-right"></i> العودة للإدارة
+                </a>
+                <a href="/admin/logout" class="back-btn" style="background: #dc3545;">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="statusFilter">فلترة حسب الحالة</label>
+                    <select id="statusFilter">
+                        <option value="">جميع الحالات</option>
+                        <option value="pending">قيد المراجعة</option>
+                        <option value="processing">قيد المعالجة</option>
+                        <option value="approved">تم الموافقة</option>
+                        <option value="rejected">تم الرفض</option>
+                        <option value="completed">مكتمل</option>
+                        <option value="cancelled">ملغي</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="searchInput">البحث</label>
+                    <input type="text" id="searchInput" placeholder="رقم الطلب أو اسم العميل">
+                </div>
+                <button class="filter-btn" onclick="loadOrders()">
+                    <i class="fas fa-search"></i> بحث
+                </button>
+            </div>
+        </div>
+
+        <div class="orders-table">
+            <div class="table-header">
+                <div class="order-info">
+                    <div>رقم الطلب</div>
+                    <div>العميل</div>
+                    <div>المنتج</div>
+                    <div>المجموع</div>
+                    <div>الحالة</div>
+                    <div>الإجراءات</div>
+                </div>
+            </div>
+            <div class="table-content" id="ordersTable">
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>جاري تحميل الطلبات...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Modal لتحديث حالة الطلب -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">تحديث حالة الطلب</h3>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="statusForm">
+                <input type="hidden" id="orderId">
+                <div class="form-group">
+                    <label for="newStatus">الحالة الجديدة</label>
+                    <select id="newStatus" required>
+                        <option value="pending">قيد المراجعة</option>
+                        <option value="processing">قيد المعالجة</option>
+                        <option value="approved">تم الموافقة</option>
+                        <option value="rejected">تم الرفض</option>
+                        <option value="completed">مكتمل</option>
+                        <option value="cancelled">ملغي</option>
+                    </select>
+                </div>
+                <div class="form-group" id="rejectionReasonGroup" style="display: none;">
+                    <label for="rejectionReason">سبب الرفض</label>
+                    <textarea id="rejectionReason" placeholder="اذكر سبب رفض الطلب..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let currentStatus = '';
+        let currentSearch = '';
+
+        // تحميل الطلبات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrders();
+        });
+
+        // مراقبة تغيير حالة الرفض لإظهار/إخفاء حقل سبب الرفض
+        document.getElementById('newStatus').addEventListener('change', function() {
+            const rejectionGroup = document.getElementById('rejectionReasonGroup');
+            if (this.value === 'rejected') {
+                rejectionGroup.style.display = 'block';
+                document.getElementById('rejectionReason').required = true;
+            } else {
+                rejectionGroup.style.display = 'none';
+                document.getElementById('rejectionReason').required = false;
+            }
+        });
+
+        // تحميل الطلبات
+        async function loadOrders(page = 1) {
+            currentPage = page;
+            currentStatus = document.getElementById('statusFilter').value;
+            currentSearch = document.getElementById('searchInput').value;
+
+            const params = new URLSearchParams({
+                page: page,
+                per_page: 20
+            });
+
+            if (currentStatus) {
+                params.append('status', currentStatus);
+            }
+
+            try {
+                showLoading();
+                const response = await fetch(`/api/admin/orders?${params}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayOrders(data.orders);
+                    displayPagination(data.current_page, data.pages);
+                } else {
+                    showError('حدث خطأ في تحميل الطلبات');
+                }
+            } catch (error) {
+                showError('حدث خطأ في الاتصال بالخادم');
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('ordersTable').innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>جاري تحميل الطلبات...</p>
+                </div>
+            `;
+        }
+
+        function displayOrders(orders) {
+            const table = document.getElementById('ordersTable');
+            
+            if (orders.length === 0) {
+                table.innerHTML = `
+                    <div class="no-orders">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>لا توجد طلبات</h3>
+                        <p>لم يتم العثور على أي طلبات</p>
+                    </div>
+                `;
+                return;
+            }
+
+            table.innerHTML = orders.map(order => `
+                <div class="order-row">
+                    <div class="order-info">
+                        <div class="order-number">#${order.order_number}</div>
+                        <div class="customer-info">
+                            <div>${order.customer_name}</div>
+                            <div style="font-size: 0.8rem; color: #999;">${order.customer_phone || order.customer_email || ''}</div>
+                        </div>
+                        <div class="product-info">
+                            <div>${order.product_name}</div>
+                            <div style="font-size: 0.8rem; color: #999;">الكمية: ${order.quantity}</div>
+                        </div>
+                        <div class="order-total">${order.total_price} $</div>
+                        <div>
+                            <span class="status-badge status-${order.status}">${getStatusText(order.status)}</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="openStatusModal(${order.id}, '${order.status}')">
+                                <i class="fas fa-edit"></i> تحديث
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayPagination(currentPage, totalPages) {
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            
+            // زر السابق
+            html += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="loadOrders(${currentPage - 1})">
+                <i class="fas fa-chevron-right"></i> السابق
+            </button>`;
+
+            // أرقام الصفحات
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage || i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    html += `<button class="${i === currentPage ? 'active' : ''}" onclick="loadOrders(${i})">${i}</button>`;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    html += '<span>...</span>';
+                }
+            }
+
+            // زر التالي
+            html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="loadOrders(${currentPage + 1})">
+                التالي <i class="fas fa-chevron-left"></i>
+            </button>`;
+
+            pagination.innerHTML = html;
+        }
+
+        function openStatusModal(orderId, currentStatus) {
+            document.getElementById('orderId').value = orderId;
+            document.getElementById('newStatus').value = currentStatus;
+            document.getElementById('rejectionReason').value = '';
+            
+            // إظهار/إخفاء حقل سبب الرفض
+            const rejectionGroup = document.getElementById('rejectionReasonGroup');
+            if (currentStatus === 'rejected') {
+                rejectionGroup.style.display = 'block';
+            } else {
+                rejectionGroup.style.display = 'none';
+            }
+            
+            document.getElementById('statusModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('statusModal').style.display = 'none';
+        }
+
+        // تحديث حالة الطلب
+        document.getElementById('statusForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const orderId = document.getElementById('orderId').value;
+            const newStatus = document.getElementById('newStatus').value;
+            const rejectionReason = document.getElementById('rejectionReason').value;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: newStatus,
+                        rejection_reason: rejectionReason
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal();
+                    loadOrders(currentPage);
+                    alert('تم تحديث حالة الطلب بنجاح');
+                } else {
+                    alert('حدث خطأ في تحديث حالة الطلب: ' + (data.error || 'خطأ غير معروف'));
+                }
+            } catch (error) {
+                alert('حدث خطأ في الاتصال بالخادم');
+            }
+        });
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'قيد المراجعة',
+                'processing': 'قيد المعالجة',
+                'approved': 'تم الموافقة',
+                'rejected': 'تم الرفض',
+                'completed': 'مكتمل',
+                'cancelled': 'ملغي'
+            };
+            return statusMap[status] || status;
+        }
+
+        function showError(message) {
+            document.getElementById('ordersTable').innerHTML = `
+                <div class="no-orders">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>خطأ</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+
+        // إغلاق المودال عند النقر خارجه
+        window.onclick = function(event) {
+            const modal = document.getElementById('statusModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

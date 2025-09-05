@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 # تحميل متغيرات البيئة
 load_dotenv()
 
-from models import db, Product, Comment, ProductImage
+from models import db, Product, Comment, ProductImage, Order, OrderStatusHistory
 from sqlalchemy import text
 from config import Config
 from amazon_translate import translate_service
@@ -47,6 +47,10 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = os.path.join(basedir, 'instance', 'flask_session')
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # ساعة واحدة
 app.config['SESSION_FILE_THRESHOLD'] = 500
+
+# إعدادات المصادقة للمدير
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
 
 # إعدادات رفع الملفات
 UPLOAD_FOLDER = 'static/uploads'
@@ -175,6 +179,21 @@ def test_translation_fix():
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# دوال المصادقة
+def is_admin_logged_in():
+    """التحقق من تسجيل دخول المدير"""
+    return session.get('admin_logged_in', False)
+
+def require_admin_auth(f):
+    """ديكوراتور لطلب مصادقة المدير"""
+    from functools import wraps
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not is_admin_logged_in():
+            return redirect(url_for('admin_login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 def save_uploaded_file(file):
     """حفظ الملف المرفوع مع تصغير وضغط الصورة تلقائياً"""
@@ -895,6 +914,7 @@ def add_product_simple():
 
 
 @app.route('/admin')
+@require_admin_auth
 def admin_dashboard():
     """لوحة تحكم المدير"""
     try:
@@ -1145,43 +1165,67 @@ def receive_contact_message():
 @app.route('/api/orders', methods=['POST'])
 def create_order():
     """
-    ينشئ طلبًا جديدًا لمنتج من قاعدة البيانات، ويتحقق من المخزون، ويقوم بتحديثه.
+    ينشئ طلبًا جديدًا في قاعدة البيانات مع نظام حالة الطلبات
     """
     try:
         data = request.get_json()
         product_id = int(data['product_id'])
         quantity = int(data['quantity'])
+        customer_info = data.get('customer_info', {})
 
         # البحث عن المنتج في قاعدة البيانات
-        with app.app_context():
-            product = Product.query.get(product_id)
-            if not product:
-                return jsonify({'success': False, 'error': 'المنتج غير موجود'}), 404
+        product = Product.query.get(product_id)
+        if not product:
+            return jsonify({'success': False, 'error': 'المنتج غير موجود'}), 404
 
-        # حفظ الطلب
-        new_order = {
-            'order_id': len(orders) + 1,
-            'product_id': product_id,
-            'product_name': product.name,
-            'quantity': quantity,
-            'total_price': product.price * quantity,
-            'order_date': datetime.now().isoformat(),
-            'customer_info': data.get('customer_info', {})
-        }
-        orders.append(new_order)
+        # إنشاء رقم طلب فريد
+        import uuid
+        order_number = f"ORD-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}"
+
+        # إنشاء الطلب في قاعدة البيانات
+        new_order = Order(
+            order_number=order_number,
+            product_id=product_id,
+            product_name=product.name,
+            quantity=quantity,
+            unit_price=product.price,
+            total_price=product.price * quantity,
+            customer_name=customer_info.get('name', 'غير محدد'),
+            customer_email=customer_info.get('email'),
+            customer_phone=customer_info.get('phone'),
+            customer_address=customer_info.get('address'),
+            customer_country=customer_info.get('country'),
+            payment_method=customer_info.get('payment_method'),
+            status='pending',
+            status_ar='قيد المراجعة'
+        )
+
+        db.session.add(new_order)
+        db.session.commit()
+
+        # إنشاء سجل في تاريخ الحالة
+        status_history = OrderStatusHistory(
+            order_id=new_order.id,
+            old_status=None,
+            new_status='pending',
+            changed_by='system',
+            notes='تم إنشاء الطلب'
+        )
+        db.session.add(status_history)
+        db.session.commit()
 
         # إرسال إشعار بالبريد الإلكتروني محسن
-        email_subject = f"🛒 طلب جديد #{new_order['order_id']} - {product.name}"
-        customer_info = data.get('customer_info', {})
+        email_subject = f"🛒 طلب جديد #{new_order.order_number} - {product.name}"
         email_body = f"""🛒 إشعار طلب جديد من موقع Velio Store
 
 📋 تفاصيل الطلب:
-رقم الطلب: #{new_order['order_id']}
+رقم الطلب: #{new_order.order_number}
 المنتج: {product.name}
 الكمية: {quantity}
 السعر الواحد: {product.price} $
-السعر الإجمالي: {new_order['total_price']} $
-التاريخ: {new_order['order_date']}
+السعر الإجمالي: {new_order.total_price} $
+التاريخ: {new_order.created_at.strftime('%Y-%m-%d %H:%M:%S')}
+الحالة: {new_order.get_status_display('ar')}
 
 👤 معلومات العميل:"""
         
@@ -1202,7 +1246,7 @@ def create_order():
         email_body += f"""
 
 📞 للتواصل مع العميل:
-- رقم الطلب: #{new_order['order_id']}
+- رقم الطلب: #{new_order.order_number}
 - الوقت: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 ---
@@ -1213,12 +1257,244 @@ def create_order():
         return jsonify({
             'success': True,
             'message': 'تم إنشاء طلبك بنجاح! سنتواصل معك قريباً لتأكيد الطلب.',
-            'order_id': new_order['order_id']
+            'order_number': new_order.order_number,
+            'order_id': new_order.id
         }), 201
 
     except Exception as e:
         print(f"❌ خطأ في إنشاء الطلب: {e}")
+        db.session.rollback()
         return jsonify({'success': False, 'error': 'حدث خطأ في إنشاء الطلب. يرجى المحاولة مرة أخرى.'}), 500
+
+@app.route('/api/orders/<order_number>', methods=['GET'])
+def get_order_status(order_number):
+    """
+    الحصول على حالة طلب معين
+    """
+    try:
+        order = Order.query.filter_by(order_number=order_number).first()
+        if not order:
+            return jsonify({'success': False, 'error': 'الطلب غير موجود'}), 404
+        
+        # الحصول على تاريخ الحالة
+        status_history = OrderStatusHistory.query.filter_by(order_id=order.id).order_by(OrderStatusHistory.created_at.desc()).all()
+        
+        return jsonify({
+            'success': True,
+            'order': order.to_dict(),
+            'status_history': [history.to_dict() for history in status_history]
+        })
+    except Exception as e:
+        print(f"❌ خطأ في الحصول على حالة الطلب: {e}")
+        return jsonify({'success': False, 'error': 'حدث خطأ في الحصول على حالة الطلب'}), 500
+
+@app.route('/api/orders/search', methods=['POST'])
+def search_orders():
+    """
+    البحث عن الطلبات برقم الهاتف أو البريد الإلكتروني
+    """
+    try:
+        data = request.get_json()
+        search_term = data.get('search_term', '').strip()
+        
+        if not search_term:
+            return jsonify({'success': False, 'error': 'يرجى إدخال رقم الهاتف أو البريد الإلكتروني'}), 400
+        
+        # البحث في قاعدة البيانات
+        orders = Order.query.filter(
+            (Order.customer_phone.contains(search_term)) | 
+            (Order.customer_email.contains(search_term))
+        ).order_by(Order.created_at.desc()).limit(10).all()
+        
+        return jsonify({
+            'success': True,
+            'orders': [order.to_dict() for order in orders]
+        })
+    except Exception as e:
+        print(f"❌ خطأ في البحث عن الطلبات: {e}")
+        return jsonify({'success': False, 'error': 'حدث خطأ في البحث عن الطلبات'}), 500
+
+@app.route('/api/admin/orders', methods=['GET'])
+@require_admin_auth
+def get_all_orders():
+    """
+    الحصول على جميع الطلبات (للمدير)
+    """
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        status_filter = request.args.get('status', '')
+        
+        query = Order.query
+        
+        if status_filter:
+            query = query.filter_by(status=status_filter)
+        
+        orders = query.order_by(Order.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        return jsonify({
+            'success': True,
+            'orders': [order.to_dict() for order in orders.items],
+            'total': orders.total,
+            'pages': orders.pages,
+            'current_page': page
+        })
+    except Exception as e:
+        print(f"❌ خطأ في الحصول على الطلبات: {e}")
+        return jsonify({'success': False, 'error': 'حدث خطأ في الحصول على الطلبات'}), 500
+
+@app.route('/api/admin/orders/<int:order_id>/status', methods=['PUT'])
+@require_admin_auth
+def update_order_status(order_id):
+    """
+    تحديث حالة الطلب (للمدير)
+    """
+    try:
+        data = request.get_json()
+        new_status = data.get('status')
+        rejection_reason = data.get('rejection_reason', '')
+        
+        if not new_status:
+            return jsonify({'success': False, 'error': 'يرجى تحديد الحالة الجديدة'}), 400
+        
+        # التحقق من صحة الحالة
+        valid_statuses = ['pending', 'processing', 'approved', 'rejected', 'completed', 'cancelled']
+        if new_status not in valid_statuses:
+            return jsonify({'success': False, 'error': 'حالة غير صحيحة'}), 400
+        
+        order = Order.query.get(order_id)
+        if not order:
+            return jsonify({'success': False, 'error': 'الطلب غير موجود'}), 404
+        
+        old_status = order.status
+        
+        # تحديث حالة الطلب
+        order.status = new_status
+        order.status_ar = order.get_status_display('ar')
+        order.updated_at = datetime.utcnow()
+        
+        # تحديث التواريخ الخاصة
+        if new_status == 'processing' and not order.processed_at:
+            order.processed_at = datetime.utcnow()
+        elif new_status == 'completed' and not order.completed_at:
+            order.completed_at = datetime.utcnow()
+        
+        
+        # إضافة سبب الرفض
+        if new_status == 'rejected' and rejection_reason:
+            order.rejection_reason = rejection_reason
+        
+        # إنشاء سجل في تاريخ الحالة
+        status_history = OrderStatusHistory(
+            order_id=order.id,
+            old_status=old_status,
+            new_status=new_status,
+            changed_by='admin',
+            notes=f'تم تغيير الحالة من {old_status} إلى {new_status}'
+        )
+        
+        db.session.add(status_history)
+        db.session.commit()
+        
+        # إرسال إشعار للعميل (إذا كان لديه بريد إلكتروني)
+        if order.customer_email:
+            send_order_status_notification(order, new_status)
+        
+        return jsonify({
+            'success': True,
+            'message': 'تم تحديث حالة الطلب بنجاح',
+            'order': order.to_dict()
+        })
+    except Exception as e:
+        print(f"❌ خطأ في تحديث حالة الطلب: {e}")
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'حدث خطأ في تحديث حالة الطلب'}), 500
+
+
+def send_order_status_notification(order, new_status):
+    """
+    إرسال إشعار للعميل عند تغيير حالة الطلب
+    """
+    try:
+        status_messages = {
+            'processing': 'تم بدء معالجة طلبك',
+            'approved': 'تم الموافقة على طلبك',
+            'rejected': 'تم رفض طلبك',
+            'completed': 'تم إكمال طلبك بنجاح',
+            'cancelled': 'تم إلغاء طلبك'
+        }
+        
+        subject = f"تحديث حالة طلبك #{order.order_number}"
+        message = status_messages.get(new_status, f'تم تحديث حالة طلبك إلى: {order.get_status_display("ar")}')
+        
+        email_body = f"""مرحباً {order.customer_name},
+
+{message}
+
+📋 تفاصيل الطلب:
+رقم الطلب: #{order.order_number}
+المنتج: {order.product_name}
+الكمية: {order.quantity}
+السعر الإجمالي: {order.total_price} $
+الحالة الحالية: {order.get_status_display('ar')}
+
+"""
+        
+        
+        if order.rejection_reason:
+            email_body += f"سبب الرفض: {order.rejection_reason}\n\n"
+        
+        email_body += "شكراً لاختيارك متجرنا!\n\n---\nVelio Store"
+        
+        send_email(subject, email_body)
+    except Exception as e:
+        print(f"❌ خطأ في إرسال إشعار العميل: {e}")
+
+@app.route('/order-status')
+def order_status_page():
+    """
+    صفحة استعلام حالة الطلب للعملاء
+    """
+    return render_template('order_status.html')
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    """صفحة تسجيل دخول المدير"""
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['admin_logged_in'] = True
+            return redirect(url_for('admin_orders_page'))
+        else:
+            return render_template('admin_login.html', error='اسم المستخدم أو كلمة المرور غير صحيحة')
+    
+    return render_template('admin_login.html')
+
+@app.route('/admin/logout')
+def admin_logout():
+    """تسجيل خروج المدير"""
+    session.pop('admin_logged_in', None)
+    return redirect(url_for('index'))
+
+@app.route('/admin/orders')
+@require_admin_auth
+def admin_orders_page():
+    """
+    صفحة إدارة الطلبات للمدير
+    """
+    return render_template('admin_orders.html')
+
+@app.route('/admin/products/add')
+@require_admin_auth
+def admin_add_product():
+    """
+    صفحة إضافة منتج جديد للمدير
+    """
+    return redirect('/add')
 
 @app.route('/api/products', methods=['GET'])
 def get_products():
@@ -2052,48 +2328,68 @@ def checkout_page():
                 return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
 
             # إنشاء طلب داخلي لكل عنصر وإرسال إشعار شامل
-            created_order = None
+            created_orders = []
             order_items = []
             
             for item in cart_items:
-                order_data = {
-                    'product_id': item['product_id'],
-                    'quantity': item['quantity'],
-                    'customer_info': {
-                        'name': name,
-                        'phone': phone,
-                        'address': address,
-                        'email': email,
-                        'payment_method': payment_method,
-                    }
-                }
-                # استدعاء المنطق الداخلي كما في /api/orders
-                product = Product.query.get(order_data['product_id'])
-                new_order = {
-                    'order_id': len(orders) + 1,
-                    'product_id': order_data['product_id'],
-                    'product_name': product.name if product else f"منتج #{order_data['product_id']}",
-                    'quantity': order_data['quantity'],
-                    'total_price': (product.price if product else 0.0) * order_data['quantity'],
-                    'order_date': datetime.now().isoformat(),
-                    'customer_info': order_data['customer_info']
-                }
-                orders.append(new_order)
-                order_items.append(new_order)
-                created_order = new_order  # آخر واحد كمرجع
+                product = Product.query.get(item['product_id'])
+                if not product:
+                    continue
+                
+                # إنشاء رقم طلب فريد
+                import uuid
+                order_number = f"ORD-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}"
+                
+                # إنشاء الطلب في قاعدة البيانات
+                new_order = Order(
+                    order_number=order_number,
+                    product_id=item['product_id'],
+                    product_name=product.name,
+                    quantity=item['quantity'],
+                    unit_price=product.price,
+                    total_price=product.price * item['quantity'],
+                    customer_name=name,
+                    customer_email=email,
+                    customer_phone=phone,
+                    customer_address=address,
+                    customer_country='السعودية',  # يمكن تحديثه لاحقاً
+                    payment_method=payment_method,
+                    status='pending',
+                    status_ar='قيد المراجعة'
+                )
+                
+                db.session.add(new_order)
+                db.session.flush()  # للحصول على ID
+                
+                # إنشاء سجل في تاريخ الحالة
+                status_history = OrderStatusHistory(
+                    order_id=new_order.id,
+                    old_status=None,
+                    new_status='pending',
+                    changed_by='system',
+                    notes='تم إنشاء الطلب'
+                )
+                db.session.add(status_history)
+                
+                created_orders.append(new_order)
+                order_items.append(new_order.to_dict())
+            
+            db.session.commit()
 
             # إرسال إشعار شامل للطلب الكامل
             if order_items:
-                email_subject = f"🛒 طلب شامل جديد #{created_order['order_id']} - {len(order_items)} منتج"
+                first_order = created_orders[0]
+                email_subject = f"🛒 طلب شامل جديد #{first_order.order_number} - {len(order_items)} منتج"
                 email_body = f"""🛒 إشعار طلب شامل جديد من موقع Velio Store
 
 📋 ملخص الطلب:
-رقم الطلب: #{created_order['order_id']}
+رقم الطلب: #{first_order.order_number}
 عدد المنتجات: {len(order_items)}
 المبلغ الإجمالي: {total} $
 المبلغ المطلوب الآن (50%): {deposit} $
 المبلغ المتبقي عند التسليم: {total - deposit} $
 التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+الحالة: {first_order.get_status_display('ar')}
 
 🛍️ تفاصيل المنتجات:"""
                 
@@ -2119,7 +2415,7 @@ def checkout_page():
 طريقة الدفع: {payment_method}
 
 📞 للتواصل مع العميل:
-- رقم الطلب: #{created_order['order_id']}
+- رقم الطلب: #{first_order.order_number}
 - البريد الإلكتروني: {email}
 - الهاتف: {phone}
 
@@ -2133,7 +2429,7 @@ def checkout_page():
 
             # حساب تفاصيل الشكر
             thank_you_order = {
-                'order_id': created_order['order_id'] if created_order else 0,
+                'order_id': first_order.order_number if created_orders else 'غير محدد',
                 'total_price': total,
                 'deposit_paid_now': deposit,
                 'remaining_on_delivery': total - deposit
