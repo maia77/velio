@@ -958,8 +958,17 @@ def send_email(subject, body, from_name="Velio Store"):
     """
     دالة لإرسال إشعار عبر البريد الإلكتروني مع دعم متعدد المزودين.
     """
+    print(f"📧 محاولة إرسال بريد إلكتروني: {subject}")
+    print(f"🔧 إعدادات البريد: SENDER_EMAIL={SENDER_EMAIL}, RECEIVER_EMAIL={RECEIVER_EMAIL}")
+    print(f"🌐 المزود: {EMAIL_PROVIDER}, الخادم: {SMTP_SERVER}:{SMTP_PORT}")
+    
     if not SENDER_EMAIL or not SENDER_PASSWORD:
         print("⚠️ إعدادات البريد الإلكتروني غير مكتملة. يرجى إضافة SENDER_EMAIL و SENDER_PASSWORD")
+        print("💡 يمكنك تخطي إرسال البريد الإلكتروني والمتابعة مع إنشاء الطلب")
+        return False
+    
+    if not RECEIVER_EMAIL:
+        print("⚠️ عنوان البريد المستقبل غير محدد")
         return False
     
     try:
@@ -981,23 +990,43 @@ Content-Type: text/plain; charset=UTF-8
         # إرسال حسب نوع المزود
         if EMAIL_PROVIDER == 'gmail':
             # Gmail يستخدم SSL
+            print("🔐 استخدام SSL مع Gmail...")
             context = ssl.create_default_context()
             with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
+                print("🔑 محاولة تسجيل الدخول...")
                 server.login(SENDER_EMAIL, SENDER_PASSWORD)
+                print("📤 إرسال الرسالة...")
                 server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message)
         else:
             # Yahoo و Outlook يستخدمان TLS
+            print("🔐 استخدام TLS مع Yahoo/Outlook...")
             with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+                print("🔒 تفعيل TLS...")
                 server.starttls()  # تفعيل TLS
+                print("🔑 محاولة تسجيل الدخول...")
                 server.login(SENDER_EMAIL, SENDER_PASSWORD)
+                print("📤 إرسال الرسالة...")
                 server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message)
         
         print(f"✅ تم إرسال إشعار البريد الإلكتروني بنجاح إلى {RECEIVER_EMAIL}: {subject}")
         return True
         
+    except smtplib.SMTPAuthenticationError as e:
+        print(f"❌ خطأ في المصادقة: {e}")
+        print("💡 تأكد من صحة اسم المستخدم وكلمة المرور")
+        return False
+    except smtplib.SMTPRecipientsRefused as e:
+        print(f"❌ رفض المستقبل: {e}")
+        print("💡 تأكد من صحة عنوان البريد المستقبل")
+        return False
+    except smtplib.SMTPServerDisconnected as e:
+        print(f"❌ انقطع الاتصال بالخادم: {e}")
+        print("💡 تحقق من إعدادات SMTP")
+        return False
     except Exception as e:
         print(f"❌ فشل في إرسال إشعار البريد الإلكتروني: {e}")
         print(f"🔍 المزود: {EMAIL_PROVIDER}, الخادم: {SMTP_SERVER}:{SMTP_PORT}")
+        print(f"📧 المرسل: {SENDER_EMAIL}, المستقبل: {RECEIVER_EMAIL}")
         return False
 
 # --- بيانات تجريبية (قاعدة بيانات مؤقتة في الذاكرة) ---
@@ -2288,20 +2317,28 @@ def cart_remove():
 def checkout_page():
     """عرض صفحة إتمام الشراء واستلام بيانات العميل وإنشاء الطلب."""
     try:
+        print("🛒 بدء عملية checkout...")
+        
         # بناء ملخص السلة من الجلسة
         cart = _get_session_cart()
+        print(f"📦 محتويات السلة: {cart}")
+        
         cart_items = []
         total = 0.0
         for key, qty in cart.items():
             try:
                 pid = int(key)
                 quantity = int(qty)
-            except Exception:
+                print(f"🔍 معالجة منتج ID: {pid}, الكمية: {quantity}")
+            except Exception as e:
+                print(f"❌ خطأ في معالجة منتج {key}: {e}")
                 continue
             if quantity <= 0:
+                print(f"⚠️ كمية غير صحيحة للمنتج {pid}: {quantity}")
                 continue
             product = Product.query.get(pid)
             if not product:
+                print(f"❌ المنتج {pid} غير موجود في قاعدة البيانات")
                 continue
             price = float(getattr(product, 'price', 0.0) or 0.0)
             name = product.name_ar or product.name or f"منتج #{pid}"
@@ -2312,75 +2349,108 @@ def checkout_page():
                 'quantity': quantity,
             })
             total += price * quantity
+            print(f"✅ تمت إضافة المنتج: {name} - السعر: {price} - الكمية: {quantity}")
+        
         deposit = total * 0.5
+        print(f"💰 الإجمالي: {total}, المطلوب الآن: {deposit}")
 
         if request.method == 'POST':
+            print("📝 معالجة طلب POST...")
+            
             # استلام بيانات العميل
             name = request.form.get('name', '').strip()
             phone = request.form.get('phone', '').strip()
             address = request.form.get('address', '').strip()
             email = request.form.get('email', '').strip()
             payment_method = request.form.get('payment_method', 'bank_transfer')
+            
+            print(f"👤 بيانات العميل: الاسم={name}, الهاتف={phone}, البريد={email}")
+            print(f"📍 العنوان: {address}")
+            print(f"💳 طريقة الدفع: {payment_method}")
 
             if not (name and phone and address and email) or total <= 0:
-                # إعادة العرض مع رسالة بسيطة (يمكن تحسينها لاحقاً)
+                print("❌ بيانات ناقصة أو سلة فارغة")
                 flash('يرجى تعبئة جميع الحقول والتأكد من أن السلة غير فارغة')
                 return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
 
+            print("✅ البيانات صحيحة، بدء إنشاء الطلبات...")
+            
             # إنشاء طلب داخلي لكل عنصر وإرسال إشعار شامل
             created_orders = []
             order_items = []
             
             for item in cart_items:
+                print(f"🛍️ إنشاء طلب للمنتج: {item['name']}")
                 product = Product.query.get(item['product_id'])
                 if not product:
+                    print(f"❌ المنتج {item['product_id']} غير موجود")
                     continue
                 
                 # إنشاء رقم طلب فريد
                 import uuid
                 order_number = f"ORD-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}"
+                print(f"🔢 رقم الطلب الجديد: {order_number}")
                 
-                # إنشاء الطلب في قاعدة البيانات
-                new_order = Order(
-                    order_number=order_number,
-                    product_id=item['product_id'],
-                    product_name=product.name,
-                    quantity=item['quantity'],
-                    unit_price=product.price,
-                    total_price=product.price * item['quantity'],
-                    customer_name=name,
-                    customer_email=email,
-                    customer_phone=phone,
-                    customer_address=address,
-                    customer_country='السعودية',  # يمكن تحديثه لاحقاً
-                    payment_method=payment_method,
-                    status='pending',
-                    status_ar='قيد المراجعة'
-                )
-                
-                db.session.add(new_order)
-                db.session.flush()  # للحصول على ID
-                
-                # إنشاء سجل في تاريخ الحالة
-                status_history = OrderStatusHistory(
-                    order_id=new_order.id,
-                    old_status=None,
-                    new_status='pending',
-                    changed_by='system',
-                    notes='تم إنشاء الطلب'
-                )
-                db.session.add(status_history)
-                
-                created_orders.append(new_order)
-                order_items.append(new_order.to_dict())
+                try:
+                    # إنشاء الطلب في قاعدة البيانات
+                    new_order = Order(
+                        order_number=order_number,
+                        product_id=item['product_id'],
+                        product_name=product.name,
+                        quantity=item['quantity'],
+                        unit_price=product.price,
+                        total_price=product.price * item['quantity'],
+                        customer_name=name,
+                        customer_email=email,
+                        customer_phone=phone,
+                        customer_address=address,
+                        customer_country='السعودية',  # يمكن تحديثه لاحقاً
+                        payment_method=payment_method,
+                        status='pending',
+                        status_ar='قيد المراجعة'
+                    )
+                    
+                    db.session.add(new_order)
+                    db.session.flush()  # للحصول على ID
+                    print(f"✅ تم إنشاء الطلب في قاعدة البيانات: {new_order.id}")
+                    
+                    # إنشاء سجل في تاريخ الحالة
+                    status_history = OrderStatusHistory(
+                        order_id=new_order.id,
+                        old_status=None,
+                        new_status='pending',
+                        changed_by='system',
+                        notes='تم إنشاء الطلب'
+                    )
+                    db.session.add(status_history)
+                    print(f"✅ تم إنشاء سجل تاريخ الحالة")
+                    
+                    created_orders.append(new_order)
+                    order_items.append(new_order.to_dict())
+                    print(f"✅ تمت إضافة الطلب إلى القائمة")
+                    
+                except Exception as e:
+                    print(f"❌ خطأ في إنشاء الطلب: {e}")
+                    db.session.rollback()
+                    continue
             
-            db.session.commit()
+            try:
+                print("💾 حفظ الطلبات في قاعدة البيانات...")
+                db.session.commit()
+                print(f"✅ تم حفظ {len(created_orders)} طلب بنجاح")
+            except Exception as e:
+                print(f"❌ خطأ في حفظ قاعدة البيانات: {e}")
+                db.session.rollback()
+                flash('حدث خطأ في حفظ الطلب. يرجى المحاولة مرة أخرى.')
+                return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
 
             # إرسال إشعار شامل للطلب الكامل
             if order_items:
-                first_order = created_orders[0]
-                email_subject = f"🛒 طلب شامل جديد #{first_order.order_number} - {len(order_items)} منتج"
-                email_body = f"""🛒 إشعار طلب شامل جديد من موقع Velio Store
+                print("📧 محاولة إرسال إشعار البريد الإلكتروني...")
+                try:
+                    first_order = created_orders[0]
+                    email_subject = f"🛒 طلب شامل جديد #{first_order.order_number} - {len(order_items)} منتج"
+                    email_body = f"""🛒 إشعار طلب شامل جديد من موقع Velio Store
 
 📋 ملخص الطلب:
 رقم الطلب: #{first_order.order_number}
@@ -2392,19 +2462,19 @@ def checkout_page():
 الحالة: {first_order.get_status_display('ar')}
 
 🛍️ تفاصيل المنتجات:"""
-                
-                for i, order in enumerate(order_items, 1):
-                    email_body += f"""
+                    
+                    for i, order in enumerate(order_items, 1):
+                        email_body += f"""
 {i}. {order['product_name']}
    - الكمية: {order['quantity']}
    - السعر الإجمالي: {order['total_price']} $"""
-                
-                # إنشاء رابط الخريطة للعنوان
-                import urllib.parse
-                encoded_address = urllib.parse.quote_plus(address)
-                map_link = f"https://www.google.com/maps/search/?api=1&query={encoded_address}"
-                
-                email_body += f"""
+                    
+                    # إنشاء رابط الخريطة للعنوان
+                    import urllib.parse
+                    encoded_address = urllib.parse.quote_plus(address)
+                    map_link = f"https://www.google.com/maps/search/?api=1&query={encoded_address}"
+                    
+                    email_body += f"""
 
 👤 معلومات العميل:
 الاسم: {name}
@@ -2421,11 +2491,20 @@ def checkout_page():
 
 ---
 هذه رسالة تلقائية من نظام إشعارات Velio Store"""
-                
-                send_email(email_subject, email_body)
+                    
+                    email_sent = send_email(email_subject, email_body)
+                    if email_sent:
+                        print("✅ تم إرسال البريد الإلكتروني بنجاح")
+                    else:
+                        print("⚠️ فشل في إرسال البريد الإلكتروني - سيتم المتابعة مع الطلب")
+                        
+                except Exception as e:
+                    print(f"❌ خطأ في إرسال البريد الإلكتروني: {e}")
+                    print("⚠️ سيتم المتابعة مع إنشاء الطلب رغم فشل الإرسال")
 
             # تفريغ السلة بعد الإرسال
             _save_session_cart({})
+            print("🗑️ تم تفريغ السلة")
 
             # حساب تفاصيل الشكر
             thank_you_order = {
@@ -2434,12 +2513,28 @@ def checkout_page():
                 'deposit_paid_now': deposit,
                 'remaining_on_delivery': total - deposit
             }
+            print(f"🎉 تم إنشاء الطلب بنجاح: {thank_you_order['order_id']}")
+
+            # التحقق من وجود طلبات تم إنشاؤها
+            if not created_orders:
+                print("❌ لم يتم إنشاء أي طلبات")
+                flash('حدث خطأ في إنشاء الطلب. يرجى المحاولة مرة أخرى.')
+                return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
+
+            # إضافة رسالة نجاح
+            flash(f'تم إنشاء طلبك بنجاح! رقم الطلب: {thank_you_order["order_id"]}')
 
             return render_template('thank_you.html', order=thank_you_order)
 
         # GET: عرض صفحة الدفع مع الملخص
+        print(f"📄 عرض صفحة checkout مع {len(cart_items)} منتج")
         return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
-    except Exception:
+        
+    except Exception as e:
+        print(f"❌ خطأ عام في checkout: {e}")
+        import traceback
+        traceback.print_exc()
+        flash('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.')
         return redirect(url_for('cart_view'))
 
 

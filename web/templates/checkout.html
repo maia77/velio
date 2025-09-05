@@ -87,7 +87,25 @@
 <body>
   <div class="container">
     <h1>🧾 إتمام الطلب</h1>
-    <form method="POST">
+    
+    <!-- رسائل التنبيه -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          {% if 'خطأ' in message or 'فشل' in message or 'يرجى' in message %}
+            <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+              <strong>⚠️ خطأ:</strong> {{ message }}
+            </div>
+          {% else %}
+            <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+              <strong>✅ نجح:</strong> {{ message }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    <form method="POST" id="checkoutForm">
       <div class="grid">
         <div class="card">
           <h3>بيانات العميل</h3>
@@ -164,21 +182,31 @@
 
         <div class="card">
           <h3>ملخص الطلب</h3>
-          <ul class="items">
-            {% for item in cart_items %}
-              <li>
-                <span>{{ item.name }} × {{ item.quantity }}</span>
-                <span>{{ '%.2f'|format(item.price * item.quantity) }} $</span>
-              </li>
-            {% endfor %}
-          </ul>
-          <div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">
-            <div class="summary-row"><span>الإجمالي:</span><strong>{{ '%.2f'|format(total) }} $</strong></div>
-            <div class="summary-row"><span>المطلوب الآن (50%):</span><strong>{{ '%.2f'|format(deposit) }} $</strong></div>
-            <div class="summary-row"><span>الباقي عند الاستلام:</span><strong>{{ '%.2f'|format(total - deposit) }} $</strong></div>
-          </div>
-          <button class="btn btn-primary" type="submit">تأكيد الطلب والدفع الآن</button>
-          <div class="hint" style="margin-top:8px;">بالنقر على الزر، سيتم إنشاء طلبك وإرسال إشعار للإدارة.</div>
+          {% if cart_items %}
+            <ul class="items">
+              {% for item in cart_items %}
+                <li>
+                  <span>{{ item.name }} × {{ item.quantity }}</span>
+                  <span>{{ '%.2f'|format(item.price * item.quantity) }} $</span>
+                </li>
+              {% endfor %}
+            </ul>
+            <div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">
+              <div class="summary-row"><span>الإجمالي:</span><strong>{{ '%.2f'|format(total) }} $</strong></div>
+              <div class="summary-row"><span>المطلوب الآن (50%):</span><strong>{{ '%.2f'|format(deposit) }} $</strong></div>
+              <div class="summary-row"><span>الباقي عند الاستلام:</span><strong>{{ '%.2f'|format(total - deposit) }} $</strong></div>
+            </div>
+            <button class="btn btn-primary" type="submit">تأكيد الطلب والدفع الآن</button>
+            <div class="hint" style="margin-top:8px;">بالنقر على الزر، سيتم إنشاء طلبك وإرسال إشعار للإدارة.</div>
+          {% else %}
+            <div style="text-align: center; padding: 40px 20px; color: #666;">
+              <div style="font-size: 48px; margin-bottom: 16px;">🛒</div>
+              <h3>سلتك فارغة</h3>
+              <p>لم تقم بإضافة أي منتجات إلى السلة بعد.</p>
+            </div>
+            <button class="btn btn-primary" type="submit" disabled style="opacity: 0.5; cursor: not-allowed;">تأكيد الطلب والدفع الآن</button>
+            <div class="hint" style="margin-top:8px; color: #dc3545;">يجب إضافة منتجات إلى السلة أولاً</div>
+          {% endif %}
           <div style="margin-top:12px;">
             <a class="btn" href="/" style="background:#6c757d;color:#fff;width:100%;padding:12px;border-radius:10px;text-align:center;display:inline-block;">متابعة التسوق</a>
           </div>
@@ -188,6 +216,59 @@
   </div>
 
   <script>
+    // التحقق من صحة البيانات قبل الإرسال
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      const name = document.querySelector('input[name="name"]').value.trim();
+      const phone = document.querySelector('input[name="phone"]').value.trim();
+      const address = document.querySelector('textarea[name="address"]').value.trim();
+      const email = document.querySelector('input[name="email"]').value.trim();
+      const location = document.querySelector('select[name="location"]').value;
+      
+      // التحقق من وجود منتجات في السلة
+      const cartItems = document.querySelectorAll('.items li');
+      if (cartItems.length === 0) {
+        e.preventDefault();
+        alert('سلتك فارغة! يرجى إضافة منتجات قبل إتمام الطلب.');
+        return false;
+      }
+      
+      if (!name || !phone || !address || !email || !location) {
+        e.preventDefault();
+        alert('يرجى تعبئة جميع الحقول المطلوبة');
+        return false;
+      }
+      
+      // التحقق من صحة البريد الإلكتروني
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        e.preventDefault();
+        alert('يرجى إدخال بريد إلكتروني صحيح');
+        return false;
+      }
+      
+      // التحقق من صحة رقم الهاتف
+      const phoneRegex = /^[0-9+\-\s()]+$/;
+      if (!phoneRegex.test(phone)) {
+        e.preventDefault();
+        alert('يرجى إدخال رقم هاتف صحيح');
+        return false;
+      }
+      
+      // إظهار رسالة تحميل
+      const submitBtn = document.querySelector('button[type="submit"]');
+      if (submitBtn && !submitBtn.disabled) {
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'جاري المعالجة...';
+        submitBtn.disabled = true;
+        
+        // إعادة تعيين الزر بعد 15 ثانية في حالة عدم التوجه
+        setTimeout(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }, 15000);
+      }
+    });
+
     document.getElementById('gpsBtn').addEventListener('click', function() {
       if (navigator.geolocation) {
         // إظهار رسالة "جاري تحديد الموقع..."
