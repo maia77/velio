@@ -1120,7 +1120,10 @@ def receive_contact_message():
         
         # إضافة الموقع إذا كان متوفراً
         if 'location' in data and data['location']:
-            email_body += f"\n\n📍 الموقع:\n{data['location']}"
+            import urllib.parse
+            encoded_location = urllib.parse.quote_plus(data['location'])
+            map_link = f"https://www.google.com/maps/search/?api=1&query={encoded_location}"
+            email_body += f"\n\n📍 الموقع:\n{data['location']}\n🗺️ رابط الخريطة: {map_link}"
         
         email_body += f"""
 
@@ -1187,6 +1190,12 @@ def create_order():
             for key, value in customer_info.items():
                 if value:
                     email_body += f"\n{key}: {value}"
+                    # إضافة رابط الخريطة إذا كان المفتاح يحتوي على "عنوان" أو "address"
+                    if any(keyword in key.lower() for keyword in ['عنوان', 'address', 'location', 'موقع']):
+                        import urllib.parse
+                        encoded_address = urllib.parse.quote_plus(str(value))
+                        map_link = f"https://www.google.com/maps/search/?api=1&query={encoded_address}"
+                        email_body += f"\n🗺️ رابط الخريطة: {map_link}"
         else:
             email_body += "\nلم يتم توفير معلومات العميل"
         
@@ -2094,6 +2103,11 @@ def checkout_page():
    - الكمية: {order['quantity']}
    - السعر الإجمالي: {order['total_price']} $"""
                 
+                # إنشاء رابط الخريطة للعنوان
+                import urllib.parse
+                encoded_address = urllib.parse.quote_plus(address)
+                map_link = f"https://www.google.com/maps/search/?api=1&query={encoded_address}"
+                
                 email_body += f"""
 
 👤 معلومات العميل:
@@ -2101,6 +2115,7 @@ def checkout_page():
 الهاتف: {phone}
 البريد الإلكتروني: {email}
 العنوان: {address}
+📍 موقع العميل على الخريطة: {map_link}
 طريقة الدفع: {payment_method}
 
 📞 للتواصل مع العميل:
