@@ -2168,18 +2168,21 @@ def test_categories():
 def _get_session_cart():
     """الحصول على محتويات السلة من الجلسة"""
     cart = session.get('cart')
+    print(f"🔍 جلب السلة من الجلسة: {cart}")
     if not isinstance(cart, dict):
         cart = {}
     return cart
 
 def _save_session_cart(cart_dict):
     """حفظ محتويات السلة في الجلسة"""
+    print(f"💾 حفظ السلة في الجلسة: {cart_dict}")
     session['cart'] = cart_dict
     session.modified = True  # تأكيد تعديل الجلسة
     try:
         session.permanent = True
     except Exception:
         pass
+    print(f"✅ تم حفظ السلة. الجلسة الآن: {dict(session)}")
 
 def _cart_total_count(cart_dict):
     """حساب إجمالي عدد العناصر في السلة"""
@@ -2236,9 +2239,11 @@ def cart_view():
     """عرض محتويات السلة"""
     try:
         from flask import render_template_string
+        print(f"🔍 بدء عرض السلة. معرف الجلسة: {session.get('_id', 'غير موجود')}")
         cart = _get_session_cart()
         
         print(f"🛒 عرض السلة. محتويات السلة: {cart}")
+        print(f"🔍 نوع البيانات: {type(cart)}, فارغة: {not cart}")
         
         if not cart:
             print("📭 السلة فارغة")

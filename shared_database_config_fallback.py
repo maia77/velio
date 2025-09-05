@@ -10,11 +10,11 @@ import os
 
 # إعدادات قاعدة البيانات PostgreSQL على Render
 POSTGRESQL_CONFIG = {
-    'host': 'dpg-d2r155je5dus73cn11fg-a.render.com',
+    'host': 'dpg-d2r155je5dus73cn11fg-a.oregon-postgres.render.com',
     'port': '5432',
     'database': 'ty_bmmw',
-    'username': 'ty_bmmw_user',
-    'password': os.environ.get('DB_PASSWORD', '')
+    'user': 'ty_bmmw_user',
+    'password': 'p7wcWLN75Iqu1lkaAyveSOu7QP4TP5gu'
 }
 
 # إعدادات قاعدة البيانات المحلية (SQLite) كاحتياطي
@@ -22,7 +22,7 @@ LOCAL_DATABASE_PATH = os.path.join(os.path.dirname(__file__), 'shared_instance',
 LOCAL_DATABASE_URL = f"sqlite:///{LOCAL_DATABASE_PATH}"
 
 # رابط الاتصال بقاعدة البيانات PostgreSQL
-POSTGRESQL_URL = f"postgresql://{POSTGRESQL_CONFIG['username']}:{POSTGRESQL_CONFIG['password']}@{POSTGRESQL_CONFIG['host']}:{POSTGRESQL_CONFIG['port']}/{POSTGRESQL_CONFIG['database']}"
+POSTGRESQL_URL = f"postgresql://{POSTGRESQL_CONFIG['user']}:{POSTGRESQL_CONFIG['password']}@{POSTGRESQL_CONFIG['host']}:{POSTGRESQL_CONFIG['port']}/{POSTGRESQL_CONFIG['database']}"
 
 # إعدادات Flask-SQLAlchemy
 POSTGRESQL_SQLALCHEMY_CONFIG = {
@@ -51,7 +51,7 @@ def test_postgresql_connection():
             host=POSTGRESQL_CONFIG['host'],
             port=POSTGRESQL_CONFIG['port'],
             database=POSTGRESQL_CONFIG['database'],
-            user=POSTGRESQL_CONFIG['username'],
+            user=POSTGRESQL_CONFIG['user'],
             password=POSTGRESQL_CONFIG['password']
         )
         conn.close()
