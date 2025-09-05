@@ -92,7 +92,7 @@
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for message in messages %}
-          {% if 'خطأ' in message or 'فشل' in message or 'يرجى' in message %}
+          {% if 'خطأ' in message or 'فشل' in message or 'يرجى' in message or 'حدث' in message %}
             <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
               <strong>⚠️ خطأ:</strong> {{ message }}
             </div>
@@ -261,11 +261,20 @@
         submitBtn.textContent = 'جاري المعالجة...';
         submitBtn.disabled = true;
         
-        // إعادة تعيين الزر بعد 15 ثانية في حالة عدم التوجه
+        // إضافة مؤشر تحميل
+        submitBtn.style.opacity = '0.7';
+        submitBtn.style.cursor = 'not-allowed';
+        
+        console.log('📤 إرسال طلب checkout...');
+        
+        // إعادة تعيين الزر بعد 20 ثانية في حالة عدم التوجه
         setTimeout(() => {
           submitBtn.textContent = originalText;
           submitBtn.disabled = false;
-        }, 15000);
+          submitBtn.style.opacity = '1';
+          submitBtn.style.cursor = 'pointer';
+          console.log('⏰ انتهت مهلة الانتظار - إعادة تعيين الزر');
+        }, 20000);
       }
     });
 

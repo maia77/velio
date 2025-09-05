@@ -2322,6 +2322,16 @@ def checkout_page():
         # بناء ملخص السلة من الجلسة
         cart = _get_session_cart()
         print(f"📦 محتويات السلة: {cart}")
+        print(f"📦 نوع السلة: {type(cart)}")
+        print(f"📦 طول السلة: {len(cart) if cart else 0}")
+        print(f"🔑 session ID: {session.get('_id', 'غير محدد')}")
+        print(f"🔑 session keys: {list(session.keys())}")
+        print(f"🔑 session cart key: {session.get('cart', 'غير موجود')}")
+        print(f"🔑 request method: {request.method}")
+        print(f"🔑 request form: {request.form}")
+        print(f"🔑 request args: {request.args}")
+        print(f"🔑 request data: {request.data}")
+        print(f"🔑 request headers: {dict(request.headers)}")
         
         cart_items = []
         total = 0.0
@@ -2353,9 +2363,13 @@ def checkout_page():
         
         deposit = total * 0.5
         print(f"💰 الإجمالي: {total}, المطلوب الآن: {deposit}")
+        print(f"🛒 عدد العناصر في السلة: {len(cart_items)}")
 
         if request.method == 'POST':
             print("📝 معالجة طلب POST...")
+            print(f"📦 السلة قبل POST: {cart}")
+            print(f"🛒 عدد العناصر قبل POST: {len(cart_items)}")
+            print(f"💰 الإجمالي قبل POST: {total}")
             
             # استلام بيانات العميل
             name = request.form.get('name', '').strip()
@@ -2370,6 +2384,7 @@ def checkout_page():
 
             if not (name and phone and address and email) or total <= 0:
                 print("❌ بيانات ناقصة أو سلة فارغة")
+                print(f"🔍 البيانات: name={name}, phone={phone}, address={address}, email={email}, total={total}")
                 flash('يرجى تعبئة جميع الحقول والتأكد من أن السلة غير فارغة')
                 return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
 
@@ -2440,6 +2455,8 @@ def checkout_page():
                 print(f"✅ تم حفظ {len(created_orders)} طلب بنجاح")
             except Exception as e:
                 print(f"❌ خطأ في حفظ قاعدة البيانات: {e}")
+                import traceback
+                traceback.print_exc()
                 db.session.rollback()
                 flash('حدث خطأ في حفظ الطلب. يرجى المحاولة مرة أخرى.')
                 return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
@@ -2502,28 +2519,30 @@ def checkout_page():
                     print(f"❌ خطأ في إرسال البريد الإلكتروني: {e}")
                     print("⚠️ سيتم المتابعة مع إنشاء الطلب رغم فشل الإرسال")
 
-            # تفريغ السلة بعد الإرسال
-            _save_session_cart({})
-            print("🗑️ تم تفريغ السلة")
-
-            # حساب تفاصيل الشكر
-            thank_you_order = {
-                'order_id': first_order.order_number if created_orders else 'غير محدد',
-                'total_price': total,
-                'deposit_paid_now': deposit,
-                'remaining_on_delivery': total - deposit
-            }
-            print(f"🎉 تم إنشاء الطلب بنجاح: {thank_you_order['order_id']}")
-
             # التحقق من وجود طلبات تم إنشاؤها
             if not created_orders:
                 print("❌ لم يتم إنشاء أي طلبات")
                 flash('حدث خطأ في إنشاء الطلب. يرجى المحاولة مرة أخرى.')
                 return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
 
+            # تفريغ السلة بعد الإرسال
+            _save_session_cart({})
+            print("🗑️ تم تفريغ السلة")
+
+            # حساب تفاصيل الشكر
+            first_order = created_orders[0]
+            thank_you_order = {
+                'order_id': first_order.order_number,
+                'total_price': total,
+                'deposit_paid_now': deposit,
+                'remaining_on_delivery': total - deposit
+            }
+            print(f"🎉 تم إنشاء الطلب بنجاح: {thank_you_order['order_id']}")
+
             # إضافة رسالة نجاح
             flash(f'تم إنشاء طلبك بنجاح! رقم الطلب: {thank_you_order["order_id"]}')
-
+            
+            print(f"🎯 التوجه إلى صفحة الشكر مع البيانات: {thank_you_order}")
             return render_template('thank_you.html', order=thank_you_order)
 
         # GET: عرض صفحة الدفع مع الملخص
@@ -2532,9 +2551,11 @@ def checkout_page():
         
     except Exception as e:
         print(f"❌ خطأ عام في checkout: {e}")
+        print(f"🔍 نوع الخطأ: {type(e).__name__}")
+        print(f"🔍 تفاصيل الخطأ: {str(e)}")
         import traceback
         traceback.print_exc()
-        flash('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.')
+        flash(f'حدث خطأ غير متوقع: {str(e)}. يرجى المحاولة مرة أخرى.')
         return redirect(url_for('cart_view'))
 
 
