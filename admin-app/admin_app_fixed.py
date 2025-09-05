@@ -146,6 +146,122 @@ class ProductImage(db.Model):
     def __repr__(self):
         return f'<ProductImage {self.id} for Product {self.product_id}>'
 
+class Order(db.Model):
+    """نموذج الطلبات"""
+    __tablename__ = 'orders'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    order_number = db.Column(db.String(50), unique=True, nullable=False, index=True)  # رقم الطلب
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    product_name = db.Column(db.String(200), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
+    unit_price = db.Column(db.Float, nullable=False)
+    total_price = db.Column(db.Float, nullable=False)
+    
+    # معلومات العميل
+    customer_name = db.Column(db.String(100), nullable=False)
+    customer_email = db.Column(db.String(100), nullable=True)
+    customer_phone = db.Column(db.String(20), nullable=True)
+    customer_address = db.Column(db.Text, nullable=True)
+    customer_country = db.Column(db.String(50), nullable=True)
+    payment_method = db.Column(db.String(50), nullable=True)
+    
+    # حالة الطلب
+    status = db.Column(db.String(20), nullable=False, default='pending')  # pending, processing, approved, rejected, completed, cancelled
+    status_ar = db.Column(db.String(50), nullable=True)  # الترجمة العربية للحالة
+    
+    # تواريخ مهمة
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    processed_at = db.Column(db.DateTime, nullable=True)  # تاريخ المعالجة
+    completed_at = db.Column(db.DateTime, nullable=True)  # تاريخ الإكمال
+    
+    # ملاحظات إضافية
+    rejection_reason = db.Column(db.Text, nullable=True)  # سبب الرفض
+    
+    # علاقة مع المنتج
+    product = db.relationship('Product', backref='orders')
+    
+    # علاقة مع تاريخ حالة الطلب
+    status_history = db.relationship('OrderStatusHistory', backref='order', lazy=True, cascade='all, delete-orphan')
+    
+    def to_dict(self):
+        """تحويل الطلب إلى قاموس"""
+        return {
+            'id': self.id,
+            'order_number': self.order_number,
+            'product_id': self.product_id,
+            'product_name': self.product_name,
+            'quantity': self.quantity,
+            'unit_price': self.unit_price,
+            'total_price': self.total_price,
+            'customer_name': self.customer_name,
+            'customer_email': self.customer_email,
+            'customer_phone': self.customer_phone,
+            'customer_address': self.customer_address,
+            'customer_country': self.customer_country,
+            'payment_method': self.payment_method,
+            'status': self.status,
+            'status_ar': self.status_ar,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'processed_at': self.processed_at.isoformat() if self.processed_at else None,
+            'completed_at': self.completed_at.isoformat() if self.completed_at else None,
+            'rejection_reason': self.rejection_reason
+        }
+    
+    def get_status_display(self, language='ar'):
+        """الحصول على نص الحالة باللغة المطلوبة"""
+        status_map = {
+            'ar': {
+                'pending': 'قيد المراجعة',
+                'processing': 'قيد المعالجة',
+                'approved': 'تم الموافقة',
+                'rejected': 'تم الرفض',
+                'completed': 'مكتمل',
+                'cancelled': 'ملغي'
+            },
+            'en': {
+                'pending': 'Pending',
+                'processing': 'Processing',
+                'approved': 'Approved',
+                'rejected': 'Rejected',
+                'completed': 'Completed',
+                'cancelled': 'Cancelled'
+            }
+        }
+        return status_map.get(language, {}).get(self.status, self.status)
+    
+    def __repr__(self):
+        return f'<Order {self.order_number}>'
+
+class OrderStatusHistory(db.Model):
+    """نموذج تاريخ حالة الطلب"""
+    __tablename__ = 'order_status_history'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
+    old_status = db.Column(db.String(20), nullable=True)
+    new_status = db.Column(db.String(20), nullable=False)
+    changed_by = db.Column(db.String(50), nullable=False)  # admin, customer, system
+    notes = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        """تحويل تاريخ الحالة إلى قاموس"""
+        return {
+            'id': self.id,
+            'order_id': self.order_id,
+            'old_status': self.old_status,
+            'new_status': self.new_status,
+            'changed_by': self.changed_by,
+            'notes': self.notes,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<OrderStatusHistory {self.id} for Order {self.order_id}>'
+
 @app.route('/')
 def index():
     """الصفحة الرئيسية لإدارة المنتجات"""
@@ -412,6 +528,7 @@ def index():
                 
                 <div style="text-align: center; margin-bottom: 20px;">
                     <a href="/add" class="btn">➕ إضافة منتج جديد</a>
+                    <a href="/admin/orders" class="btn" style="background: #17a2b8;">📋 إدارة الطلبات</a>
                     <a href="/cart" class="btn" style="background: #28a745;">🛒 عرض السلة (<span id="cart-count">0</span>)</a>
                     <a href="/" class="btn">🔄 تحديث الصفحة</a>
                 </div>
@@ -2492,6 +2609,178 @@ def add_sample_nature_products():
 def admin_dashboard():
     """لوحة تحكم المدير - مسار بديل"""
     return redirect('/')
+
+# ===== صفحات إدارة الطلبات =====
+
+@app.route('/admin/orders')
+def admin_orders():
+    """صفحة إدارة الطلبات"""
+    try:
+        # جلب الطلبات مع ترقيم الصفحات
+        page = request.args.get('page', 1, type=int)
+        per_page = 20
+        
+        # فلترة الطلبات
+        status_filter = request.args.get('status', '')
+        search_term = request.args.get('search', '')
+        
+        query = Order.query
+        
+        if status_filter:
+            query = query.filter(Order.status == status_filter)
+        
+        if search_term:
+            query = query.filter(
+                (Order.customer_name.contains(search_term)) |
+                (Order.customer_email.contains(search_term)) |
+                (Order.customer_phone.contains(search_term)) |
+                (Order.order_number.contains(search_term))
+            )
+        
+        orders = query.order_by(Order.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        # إحصائيات سريعة
+        total_orders = Order.query.count()
+        pending_orders = Order.query.filter_by(status='pending').count()
+        completed_orders = Order.query.filter_by(status='completed').count()
+        
+        return render_template('admin_orders.html',
+                             orders=orders,
+                             total_orders=total_orders,
+                             pending_orders=pending_orders,
+                             completed_orders=completed_orders,
+                             current_status=status_filter,
+                             current_search=search_term)
+        
+    except Exception as e:
+        print(f"❌ خطأ في صفحة إدارة الطلبات: {e}")
+        return f"خطأ في تحميل صفحة الطلبات: {str(e)}", 500
+
+@app.route('/api/admin/orders', methods=['GET'])
+def get_all_orders_api():
+    """API للحصول على جميع الطلبات"""
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        status_filter = request.args.get('status', '')
+        search_term = request.args.get('search', '')
+        
+        query = Order.query
+        
+        if status_filter:
+            query = query.filter(Order.status == status_filter)
+        
+        if search_term:
+            query = query.filter(
+                (Order.customer_name.contains(search_term)) |
+                (Order.customer_email.contains(search_term)) |
+                (Order.customer_phone.contains(search_term)) |
+                (Order.order_number.contains(search_term))
+            )
+        
+        orders = query.order_by(Order.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        return jsonify({
+            'success': True,
+            'orders': [order.to_dict() for order in orders.items],
+            'pagination': {
+                'page': orders.page,
+                'pages': orders.pages,
+                'per_page': orders.per_page,
+                'total': orders.total,
+                'has_next': orders.has_next,
+                'has_prev': orders.has_prev
+            }
+        })
+        
+    except Exception as e:
+        print(f"❌ خطأ في API الطلبات: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/admin/orders/<int:order_id>/status', methods=['PUT'])
+def update_order_status_api(order_id):
+    """API لتحديث حالة الطلب"""
+    try:
+        data = request.get_json()
+        new_status = data.get('status')
+        rejection_reason = data.get('rejection_reason', '')
+        
+        if not new_status:
+            return jsonify({'success': False, 'error': 'يرجى تحديد الحالة الجديدة'}), 400
+        
+        # التحقق من صحة الحالة
+        valid_statuses = ['pending', 'processing', 'approved', 'rejected', 'completed', 'cancelled']
+        if new_status not in valid_statuses:
+            return jsonify({'success': False, 'error': 'حالة غير صحيحة'}), 400
+        
+        order = Order.query.get(order_id)
+        if not order:
+            return jsonify({'success': False, 'error': 'الطلب غير موجود'}), 404
+        
+        old_status = order.status
+        
+        # تحديث حالة الطلب
+        order.status = new_status
+        order.status_ar = order.get_status_display('ar')
+        order.updated_at = datetime.utcnow()
+        
+        # تحديث التواريخ الخاصة
+        if new_status == 'processing' and not order.processed_at:
+            order.processed_at = datetime.utcnow()
+        elif new_status == 'completed' and not order.completed_at:
+            order.completed_at = datetime.utcnow()
+        
+        # إضافة سبب الرفض
+        if new_status == 'rejected' and rejection_reason:
+            order.rejection_reason = rejection_reason
+        
+        # إنشاء سجل في تاريخ الحالة
+        status_history = OrderStatusHistory(
+            order_id=order.id,
+            old_status=old_status,
+            new_status=new_status,
+            changed_by='admin',
+            notes=f'تم تغيير الحالة من {old_status} إلى {new_status}'
+        )
+        
+        db.session.add(status_history)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'تم تحديث حالة الطلب بنجاح',
+            'order': order.to_dict()
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"❌ خطأ في تحديث حالة الطلب: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/admin/orders/<int:order_id>', methods=['GET'])
+def get_order_details_api(order_id):
+    """API للحصول على تفاصيل طلب معين"""
+    try:
+        order = Order.query.get(order_id)
+        if not order:
+            return jsonify({'success': False, 'error': 'الطلب غير موجود'}), 404
+        
+        # الحصول على تاريخ الحالة
+        status_history = OrderStatusHistory.query.filter_by(order_id=order.id).order_by(OrderStatusHistory.created_at.desc()).all()
+        
+        return jsonify({
+            'success': True,
+            'order': order.to_dict(),
+            'status_history': [history.to_dict() for history in status_history]
+        })
+        
+    except Exception as e:
+        print(f"❌ خطأ في الحصول على تفاصيل الطلب: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
     print("🚀 بدء تشغيل تطبيق إدارة المنتجات...")
