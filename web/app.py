@@ -912,15 +912,31 @@ def index_en():
 # تشغيل التطبيق (تم الإبقاء على تشغيل واحد في نهاية الملف بعد تعريف جميع المسارات)
 
 # --- إعدادات البريد الإلكتروني ---
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 465
+# دعم متعدد لمقدمي الخدمة
+EMAIL_PROVIDER = os.environ.get('EMAIL_PROVIDER', 'yahoo').lower()  # yahoo, gmail, outlook
+
+# إعدادات SMTP حسب المزود
+if EMAIL_PROVIDER == 'gmail':
+    SMTP_SERVER = "smtp.gmail.com"
+    SMTP_PORT = 465
+elif EMAIL_PROVIDER == 'yahoo':
+    SMTP_SERVER = "smtp.mail.yahoo.com"
+    SMTP_PORT = 587  # Yahoo يستخدم 587 مع TLS
+elif EMAIL_PROVIDER == 'outlook':
+    SMTP_SERVER = "smtp-mail.outlook.com"
+    SMTP_PORT = 587
+else:
+    # افتراضي Yahoo
+    SMTP_SERVER = "smtp.mail.yahoo.com"
+    SMTP_PORT = 587
+
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', '')  # يجب إضافة البريد الإلكتروني من متغيرات البيئة
 SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD', '') # يجب إضافة كلمة مرور التطبيقات من متغيرات البيئة
 RECEIVER_EMAIL = 'velio.contact@yahoo.com'  # البريد المطلوب لاستقبال الإشعارات
 
 def send_email(subject, body, from_name="Velio Store"):
     """
-    دالة لإرسال إشعار عبر البريد الإلكتروني.
+    دالة لإرسال إشعار عبر البريد الإلكتروني مع دعم متعدد المزودين.
     """
     if not SENDER_EMAIL or not SENDER_PASSWORD:
         print("⚠️ إعدادات البريد الإلكتروني غير مكتملة. يرجى إضافة SENDER_EMAIL و SENDER_PASSWORD")
@@ -940,14 +956,28 @@ Content-Type: text/plain; charset=UTF-8
 التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         """.encode('utf-8')
         
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
-            server.login(SENDER_EMAIL, SENDER_PASSWORD)
-            server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message)
-            print(f"✅ تم إرسال إشعار البريد الإلكتروني بنجاح إلى {RECEIVER_EMAIL}: {subject}")
-            return True
+        print(f"📧 محاولة الإرسال عبر {EMAIL_PROVIDER.upper()}: {SMTP_SERVER}:{SMTP_PORT}")
+        
+        # إرسال حسب نوع المزود
+        if EMAIL_PROVIDER == 'gmail':
+            # Gmail يستخدم SSL
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
+                server.login(SENDER_EMAIL, SENDER_PASSWORD)
+                server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message)
+        else:
+            # Yahoo و Outlook يستخدمان TLS
+            with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+                server.starttls()  # تفعيل TLS
+                server.login(SENDER_EMAIL, SENDER_PASSWORD)
+                server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message)
+        
+        print(f"✅ تم إرسال إشعار البريد الإلكتروني بنجاح إلى {RECEIVER_EMAIL}: {subject}")
+        return True
+        
     except Exception as e:
         print(f"❌ فشل في إرسال إشعار البريد الإلكتروني: {e}")
+        print(f"🔍 المزود: {EMAIL_PROVIDER}, الخادم: {SMTP_SERVER}:{SMTP_PORT}")
         return False
 
 # --- بيانات تجريبية (قاعدة بيانات مؤقتة في الذاكرة) ---
