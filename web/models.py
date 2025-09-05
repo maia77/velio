@@ -17,7 +17,7 @@ class Product(db.Model):
     category_ar = db.Column(db.String(100), nullable=True)
     brand = db.Column(db.String(100), nullable=True)
     brand_ar = db.Column(db.String(100), nullable=True)
-    image_url = db.Column(db.String(500), nullable=True)
+    image_url = db.Column(db.String(500), nullable=True)  # الصورة الرئيسية (للتوافق مع النظام القديم)
     # القسم الرئيسي للمنتج (أصالة معاصرة، تفاصيل مميزة، لمسات فريدة، زينة الطبيعة)
     main_category = db.Column(db.String(100), nullable=True, default='أصالة معاصرة')
     main_category_ar = db.Column(db.String(100), nullable=True, default='أصالة معاصرة')
@@ -27,6 +27,9 @@ class Product(db.Model):
     # إظهار المنتج في قسم "كل ما يحتاجه منزلك" و"وصل حديثاً"
     is_home_essentials = db.Column(db.Boolean, default=True)
     is_new_arrival = db.Column(db.Boolean, default=False)
+    
+    # علاقة مع الصور المتعددة
+    images = db.relationship('ProductImage', backref='product', lazy=True, cascade='all, delete-orphan')
     
     def to_dict(self):
         """تحويل المنتج إلى قاموس"""
@@ -52,7 +55,35 @@ class Product(db.Model):
         }
     
     def __repr__(self):
-        return f'<Product {self.name}>' 
+        return f'<Product {self.name}>'
+
+
+class ProductImage(db.Model):
+    """نموذج صور المنتج"""
+    __tablename__ = 'product_images'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    image_url = db.Column(db.String(500), nullable=False)
+    alt_text = db.Column(db.String(200), nullable=True)  # نص بديل للصورة
+    is_primary = db.Column(db.Boolean, default=False)  # الصورة الرئيسية
+    sort_order = db.Column(db.Integer, default=0)  # ترتيب الصورة
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        """تحويل الصورة إلى قاموس"""
+        return {
+            'id': self.id,
+            'product_id': self.product_id,
+            'image_url': self.image_url,
+            'alt_text': self.alt_text,
+            'is_primary': self.is_primary,
+            'sort_order': self.sort_order,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<ProductImage {self.id} for Product {self.product_id}>'
 
 
 class Comment(db.Model):

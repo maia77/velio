@@ -275,10 +275,190 @@
                 padding: 8px;
             }
             
-            .checkbox-text {
-                font-size: 0.95em;
-            }
+                    .checkbox-text {
+            font-size: 0.95em;
         }
+    }
+    
+    /* أنماط رفع الصور المتعددة */
+    .image-upload-section {
+        margin-bottom: 20px;
+    }
+    
+    .upload-area {
+        border: 2px dashed #667eea;
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        background: #f8f9ff;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .upload-area:hover {
+        border-color: #5a67d8;
+        background: #f0f4ff;
+        transform: translateY(-2px);
+    }
+    
+    .upload-area.dragover {
+        border-color: #4c51bf;
+        background: #e6f3ff;
+        transform: scale(1.02);
+    }
+    
+    .upload-content {
+        pointer-events: none;
+    }
+    
+    .upload-icon {
+        font-size: 3em;
+        color: #667eea;
+        margin-bottom: 15px;
+        display: block;
+    }
+    
+    .upload-text {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #2d3748;
+        margin: 0 0 8px 0;
+    }
+    
+    .upload-subtext {
+        font-size: 0.9em;
+        color: #718096;
+        margin: 0;
+    }
+    
+    .file-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .image-preview-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .image-preview-item {
+        position: relative;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .image-preview-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .image-preview-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .image-preview-controls {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        gap: 5px;
+    }
+    
+    .image-preview-btn {
+        width: 24px;
+        height: 24px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary-image {
+        background: #28a745;
+        color: white;
+    }
+    
+    .btn-primary-image:hover {
+        background: #218838;
+        transform: scale(1.1);
+    }
+    
+    .btn-danger-image {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .btn-danger-image:hover {
+        background: #c82333;
+        transform: scale(1.1);
+    }
+    
+    .image-preview-info {
+        padding: 8px;
+        font-size: 0.8em;
+        color: #6c757d;
+        text-align: center;
+    }
+    
+    .primary-badge {
+        background: #007bff;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 0.7em;
+        font-weight: 600;
+    }
+    
+    .no-images-message {
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+        padding: 20px;
+        grid-column: 1 / -1;
+    }
+    
+    @media (max-width: 768px) {
+        .image-preview-container {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            padding: 15px;
+        }
+        
+        .upload-area {
+            padding: 30px 15px;
+        }
+        
+        .upload-icon {
+            font-size: 2.5em;
+        }
+        
+        .upload-text {
+            font-size: 1.1em;
+        }
+    }
     </style>
 </head>
 <body>
@@ -346,12 +526,22 @@
                     <div class="help-text">اختر القسم الذي سيظهر فيه المنتج في الصفحة الرئيسية</div>
                 </div>
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="product_image" class="form-label">صورة المنتج <span class="required">*</span></label>
-                        <input type="file" id="product_image" name="product_image" class="form-input" accept="image/*" required>
-                        <div class="help-text">اختر صورة للمنتج (PNG, JPG, JPEG, GIF, WEBP)</div>
+                <div class="form-group">
+                    <label class="form-label">صور المنتج <span class="required">*</span></label>
+                    <div class="image-upload-section">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <p class="upload-text">اسحب وأفلت الصور هنا أو انقر للاختيار</p>
+                                <p class="upload-subtext">يمكنك رفع عدة صور في المرة الواحدة</p>
+                            </div>
+                            <input type="file" id="product_images" name="product_images" class="file-input" accept="image/*" multiple required>
+                        </div>
+                        <div class="image-preview-container" id="imagePreviewContainer">
+                            <!-- معاينة الصور المرفوعة -->
+                        </div>
                     </div>
+                    <div class="help-text">اختر صور للمنتج (PNG, JPG, JPEG, GIF, WEBP) - يمكن رفع عدة صور</div>
                 </div>
 
                 <div class="form-group">
@@ -406,6 +596,9 @@
     </div>
     
     <script>
+        let uploadedImages = [];
+        let primaryImageIndex = 0;
+        
         // تحديث المعاينة في الوقت الفعلي
         function updatePreview() {
             const name = document.getElementById('name').value || 'اسم المنتج';
@@ -436,6 +629,116 @@
             }
         }
         
+        // إدارة الصور المتعددة
+        function initializeImageUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('product_images');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            
+            // معالجة السحب والإفلات
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = Array.from(e.dataTransfer.files);
+                handleFiles(files);
+            });
+            
+            // معالجة النقر على منطقة الرفع
+            uploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // معالجة اختيار الملفات
+            fileInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                handleFiles(files);
+            });
+        }
+        
+        function handleFiles(files) {
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length === 0) {
+                alert('يرجى اختيار ملفات صور صحيحة');
+                return;
+            }
+            
+            imageFiles.forEach(file => {
+                if (file.size > 5 * 1024 * 1024) { // 5MB
+                    alert(`ملف ${file.name} كبير جداً. الحد الأقصى 5MB`);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = {
+                        file: file,
+                        url: e.target.result,
+                        name: file.name,
+                        size: file.size
+                    };
+                    uploadedImages.push(imageData);
+                    updateImagePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function updateImagePreview() {
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            
+            if (uploadedImages.length === 0) {
+                previewContainer.innerHTML = '<div class="no-images-message">لم يتم رفع أي صور بعد</div>';
+                return;
+            }
+            
+            previewContainer.innerHTML = uploadedImages.map((image, index) => `
+                <div class="image-preview-item">
+                    <img src="${image.url}" alt="${image.name}">
+                    <div class="image-preview-controls">
+                        <button type="button" class="image-preview-btn btn-primary-image" 
+                                onclick="setPrimaryImage(${index})" 
+                                title="تعيين كصورة رئيسية">
+                            ${index === primaryImageIndex ? '✓' : '★'}
+                        </button>
+                        <button type="button" class="image-preview-btn btn-danger-image" 
+                                onclick="removeImage(${index})" 
+                                title="حذف الصورة">
+                            ×
+                        </button>
+                    </div>
+                    <div class="image-preview-info">
+                        <div>${image.name}</div>
+                        <div>${(image.size / 1024 / 1024).toFixed(1)} MB</div>
+                        ${index === primaryImageIndex ? '<div class="primary-badge">رئيسية</div>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function setPrimaryImage(index) {
+            primaryImageIndex = index;
+            updateImagePreview();
+        }
+        
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            if (primaryImageIndex >= uploadedImages.length) {
+                primaryImageIndex = Math.max(0, uploadedImages.length - 1);
+            }
+            updateImagePreview();
+        }
+        
         // إضافة مستمعي الأحداث
         document.getElementById('name').addEventListener('input', updatePreview);
         document.getElementById('description').addEventListener('input', updatePreview);
@@ -461,10 +764,20 @@
                 alert('يجب أن يكون السعر أكبر من صفر');
                 return false;
             }
+            
+            if (uploadedImages.length === 0) {
+                e.preventDefault();
+                alert('يرجى رفع صورة واحدة على الأقل');
+                return false;
+            }
         });
         
-        // تحديث المعاينة عند تحميل الصفحة
-        updatePreview();
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+            initializeImageUpload();
+            updateImagePreview();
+        });
     </script>
 </body>
 </html> 

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تفاصيل المنتج - Velio</title>
+  
+  <!-- الخطوط -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/css/translation.css">
+  <link rel="stylesheet" href="/static/responsive.css">
+  
+  <style>
+    .product-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #DCD5B9;
+      color: #333;
+      padding: 12px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      background: #c4b896;
+      transform: translateY(-2px);
+    }
+    
+    .product-container {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    
+    .product-gallery {
+      background: #f8f9fa;
+      padding: 40px;
+    }
+    
+    .main-image {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      overflow-x: auto;
+      padding: 5px 0;
+      min-width: max-content;
+    }
+    
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .thumbnail.active {
+      border-color: #DCD5B9;
+      transform: scale(1.05);
+    }
+    
+    .thumbnail:hover {
+      transform: scale(1.05);
+    }
+    
+    .product-info {
+      padding: 40px;
+    }
+    
+    .product-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .product-description {
+      font-size: 1.2rem;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+    
+    .price {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #DCD5B9;
+      margin-bottom: 30px;
+    }
+    
+    .btn {
+      background: #DCD5B9;
+      color: #333;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .btn:hover {
+      background: #c4b896;
+      transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+      .product-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .product-gallery,
+      .product-info {
+        padding: 20px;
+      }
+      
+      .main-image {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="product-page">
+    <div class="container">
+      <a href="/" class="back-btn">
+        <i class="fas fa-arrow-right"></i>
+        العودة للصفحة الرئيسية
+      </a>
+      
+      <div id="product-content">
+        <div style="text-align: center; padding: 40px;">
+          <i class="fas fa-spinner fa-spin"></i>
+          جاري تحميل تفاصيل المنتج...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // تحميل تفاصيل المنتج
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+      
+      if (productId) {
+        loadProduct(productId);
+      } else {
+        showError('لم يتم العثور على معرف المنتج');
+      }
+    });
+
+    async function loadProduct(productId) {
+      try {
+        const response = await fetch('/api/products-simple');
+        const data = await response.json();
+        
+        if (data.success) {
+          const product = data.products.find(p => p.id == productId);
+          if (product) {
+            showProduct(product);
+          } else {
+            showError('لم يتم العثور على المنتج');
+          }
+        } else {
+          showError('خطأ في تحميل بيانات المنتج');
+        }
+      } catch (error) {
+        console.error('خطأ:', error);
+        showError('خطأ في تحميل تفاصيل المنتج');
+      }
+    }
+
+    function showProduct(product) {
+      currentProduct = product; // حفظ المنتج في المتغير العام
+      const images = product.images && product.images.length > 0 ? product.images : [{ image_url: product.image_url }];
+      
+      console.log('تحميل منتج:', product);
+      console.log('الصور:', images);
+      
+      const productHTML = `
+        <div class="product-container">
+          <div class="product-gallery">
+            <img id="main-image" src="${images[0].image_url}" alt="${product.name_ar || product.name}" class="main-image" onerror="this.src='https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+            ${images.length > 1 ? `
+              <div class="thumbnails">
+                ${images.map((image, index) => `
+                  <img src="${image.image_url}" alt="${product.name_ar || product.name}" 
+                       class="thumbnail ${index === 0 ? 'active' : ''}" 
+                       onclick="changeImage(${index})"
+                       onerror="this.src='https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+          
+          <div class="product-info">
+            <h1 class="product-title">${product.name_ar || product.name}</h1>
+            <p class="product-description">${product.description_ar || product.description}</p>
+            <div class="price">${product.price} $</div>
+            <button class="btn" onclick="addToCart()">
+              <i class="fas fa-shopping-cart"></i>
+              أضف للسلة
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('product-content').innerHTML = productHTML;
+      
+      // إضافة معالجات الأحداث بعد إنشاء HTML
+      setTimeout(() => {
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach((thumb, index) => {
+          thumb.addEventListener('click', () => {
+            changeImage(index);
+          });
+        });
+      }, 100);
+    }
+
+    function changeImage(index) {
+      console.log('تغيير الصورة إلى الفهرس:', index);
+      const mainImage = document.getElementById('main-image');
+      const thumbnails = document.querySelectorAll('.thumbnail');
+      
+      // تحديث الصورة الرئيسية
+      if (currentProduct) {
+        const images = currentProduct.images && currentProduct.images.length > 0 ? currentProduct.images : [{ image_url: currentProduct.image_url }];
+        console.log('الصور المتاحة:', images);
+        if (images[index]) {
+          console.log('تغيير الصورة إلى:', images[index].image_url);
+          mainImage.src = images[index].image_url;
+          mainImage.alt = currentProduct.name_ar || currentProduct.name;
+        } else {
+          console.error('لا توجد صورة في الفهرس:', index);
+        }
+      } else {
+        console.error('لم يتم تحميل بيانات المنتج بعد');
+      }
+      
+      // تحديث الصور المصغرة
+      thumbnails.forEach((thumb, i) => {
+        if (i === index) {
+          thumb.classList.add('active');
+        } else {
+          thumb.classList.remove('active');
+        }
+      });
+    }
+
+    function addToCart() {
+      alert(`تم إضافة "${currentProduct.name_ar || currentProduct.name}" للسلة!`);
+    }
+
+    function showError(message) {
+      document.getElementById('product-content').innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #e74c3c;">
+          <i class="fas fa-exclamation-triangle"></i>
+          ${message}
+        </div>
+      `;
+    }
+
+    let currentProduct = null;
+  </script>
+</body>
+</html>

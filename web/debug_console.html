@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشخيص Console</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        .product { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>تشخيص Console</h1>
+    
+    <div id="debug-info" class="debug">
+        <h3>معلومات التشخيص:</h3>
+        <div id="api-status">جاري فحص API...</div>
+        <div id="products-count">جاري عد المنتجات...</div>
+        <div id="display-status">جاري فحص العرض...</div>
+    </div>
+    
+    <div id="products-container">
+        <h3>المنتجات:</h3>
+        <div id="products-list"></div>
+    </div>
+
+    <script>
+        async function debugProducts() {
+            const apiStatus = document.getElementById('api-status');
+            const productsCount = document.getElementById('products-count');
+            const displayStatus = document.getElementById('display-status');
+            const productsList = document.getElementById('products-list');
+            
+            try {
+                console.log('بدء تشخيص المنتجات...');
+                apiStatus.textContent = 'جاري فحص API...';
+                
+                const response = await fetch('/api/products-simple');
+                console.log('استجابة API:', response);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('بيانات API:', data);
+                
+                apiStatus.textContent = `✅ API يعمل - Status: ${response.status}`;
+                apiStatus.className = 'debug success';
+                
+                if (data.success && data.products) {
+                    productsCount.textContent = `✅ تم العثور على ${data.products.length} منتج`;
+                    productsCount.className = 'debug success';
+                    
+                    if (data.products.length > 0) {
+                        displayStatus.textContent = '✅ المنتجات متاحة للعرض';
+                        displayStatus.className = 'debug success';
+                        
+                        // محاكاة دالة displayProducts
+                        const containerId = 'products-list';
+                        const container = document.getElementById(containerId);
+                        const products = data.products;
+                        const limit = 8;
+                        
+                        console.log(`عرض المنتجات في الحاوية: ${containerId}`);
+                        console.log(`عدد المنتجات المراد عرضها: ${products.length}`);
+                        
+                        if (!container) {
+                            console.error(`لم يتم العثور على الحاوية: ${containerId}`);
+                            return;
+                        }
+
+                        const productsToShow = limit ? products.slice(0, limit) : products;
+                        console.log(`المنتجات المراد عرضها: ${productsToShow.length}`);
+                        
+                        if (productsToShow.length === 0) {
+                            console.log('لا توجد منتجات للعرض');
+                            container.innerHTML = `
+                                <div class="empty-products">
+                                    <h3>لا توجد منتجات متاحة</h3>
+                                    <p>لم يتم إضافة أي منتجات بعد. يرجى التواصل مع الإدارة.</p>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        let productsHTML = '';
+                        
+                        productsToShow.forEach((product, index) => {
+                            const productName = product.name_ar || product.name;
+                            const productDescription = product.description_ar || product.description;
+                            const productPrice = product.price;
+                            const imageUrl = product.image_url || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+                            
+                            productsHTML += `
+                                <div class="product">
+                                    <h4>${index + 1}. ${productName}</h4>
+                                    <p><strong>السعر:</strong> ${productPrice} $</p>
+                                    <p><strong>الوصف:</strong> ${productDescription}</p>
+                                    <p><strong>الصورة:</strong> ${product.image_url || 'لا توجد صورة'}</p>
+                                    <p><strong>is_home_essentials:</strong> ${product.is_home_essentials}</p>
+                                    <p><strong>is_new_arrival:</strong> ${product.is_new_arrival}</p>
+                                    <img src="${imageUrl}" style="max-width: 200px; max-height: 200px;" alt="${productName}">
+                                </div>
+                            `;
+                        });
+                        
+                        console.log('HTML الناتج:', productsHTML);
+                        container.innerHTML = productsHTML;
+                        console.log(`تم عرض ${productsToShow.length} منتج في الحاوية ${containerId}`);
+                        
+                    } else {
+                        displayStatus.textContent = '❌ لا توجد منتجات للعرض';
+                        displayStatus.className = 'debug error';
+                    }
+                } else {
+                    productsCount.textContent = '❌ فشل في تحميل المنتجات';
+                    productsCount.className = 'debug error';
+                    displayStatus.textContent = '❌ لا يمكن عرض المنتجات';
+                    displayStatus.className = 'debug error';
+                }
+                
+            } catch (error) {
+                console.error('خطأ في التشخيص:', error);
+                apiStatus.textContent = `❌ خطأ في API: ${error.message}`;
+                apiStatus.className = 'debug error';
+                productsCount.textContent = '❌ فشل في تحميل المنتجات';
+                productsCount.className = 'debug error';
+                displayStatus.textContent = '❌ لا يمكن عرض المنتجات';
+                displayStatus.className = 'debug error';
+            }
+        }
+        
+        // تشغيل التشخيص عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', debugProducts);
+    </script>
+</body>
+</html>

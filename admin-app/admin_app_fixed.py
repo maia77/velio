@@ -51,7 +51,7 @@ with app.app_context():
         
         # التحقق من وجود الحقول الجديدة وإضافتها إذا لزم الأمر (متوافق مع PostgreSQL و SQLite)
         try:
-            # محاولة الوصول للحقول الجديدة
+            # محاولة الوصول للحقول الجديدة (بعد تعريف النماذج)
             test_product = Product.query.first()
             if test_product:
                 # التحقق من وجود الحقول الجديدة
@@ -104,7 +104,7 @@ class Product(db.Model):
     category_ar = db.Column(db.String(100), nullable=True)
     brand = db.Column(db.String(100), nullable=True)
     brand_ar = db.Column(db.String(100), nullable=True)
-    image_url = db.Column(db.String(500), nullable=True)
+    image_url = db.Column(db.String(500), nullable=True)  # الصورة الرئيسية (للتوافق مع النظام القديم)
     # القسم الرئيسي للمنتج (أصالة معاصرة، تفاصيل مميزة، لمسات فريدة، زينة الطبيعة)
     main_category = db.Column(db.String(100), nullable=True, default='أصالة معاصرة')
     main_category_ar = db.Column(db.String(100), nullable=True, default='أصالة معاصرة')
@@ -114,6 +114,37 @@ class Product(db.Model):
     # إظهار المنتج في قسم "كل ما يحتاجه منزلك" و"وصل حديثاً"
     is_home_essentials = db.Column(db.Boolean, default=True)
     is_new_arrival = db.Column(db.Boolean, default=False)
+    
+    # علاقة مع الصور المتعددة
+    images = db.relationship('ProductImage', backref='product', lazy=True, cascade='all, delete-orphan')
+
+
+class ProductImage(db.Model):
+    """نموذج صور المنتج"""
+    __tablename__ = 'product_images'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    image_url = db.Column(db.String(500), nullable=False)
+    alt_text = db.Column(db.String(200), nullable=True)  # نص بديل للصورة
+    is_primary = db.Column(db.Boolean, default=False)  # الصورة الرئيسية
+    sort_order = db.Column(db.Integer, default=0)  # ترتيب الصورة
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        """تحويل الصورة إلى قاموس"""
+        return {
+            'id': self.id,
+            'product_id': self.product_id,
+            'image_url': self.image_url,
+            'alt_text': self.alt_text,
+            'is_primary': self.is_primary,
+            'sort_order': self.sort_order,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<ProductImage {self.id} for Product {self.product_id}>'
 
 @app.route('/')
 def index():
@@ -123,7 +154,19 @@ def index():
         
         products_html = ""
         for product in products:
-            image_html = f'<img src="{product.image_url}" style="max-width: 150px; max-height: 150px; border-radius: 8px;" alt="{product.name}">' if product.image_url else '<p>📦 لا توجد صورة</p>'
+            # دعم الصور المتعددة
+            if hasattr(product, 'images') and product.images:
+                # عرض الصور المتعددة
+                images_html = ""
+                for i, img in enumerate(product.images[:3]):  # أول 3 صور
+                    primary_badge = " (رئيسية)" if img.is_primary else ""
+                    images_html += f'<img src="{img.image_url}" style="max-width: 80px; max-height: 80px; border-radius: 8px; margin: 2px;" alt="{product.name}{primary_badge}">'
+                if len(product.images) > 3:
+                    images_html += f'<div style="display: inline-block; width: 80px; height: 80px; background: #f0f0f0; border-radius: 8px; text-align: center; line-height: 80px; font-size: 12px; color: #666;">+{len(product.images) - 3}</div>'
+                image_html = f'<div style="display: flex; flex-wrap: wrap; gap: 5px;">{images_html}</div>'
+            else:
+                # الصورة الواحدة القديمة
+                image_html = f'<img src="{product.image_url}" style="max-width: 150px; max-height: 150px; border-radius: 8px;" alt="{product.name}">' if product.image_url else '<p>📦 لا توجد صورة</p>'
             
             products_html += f"""
             <div class="product-card">
@@ -929,14 +972,24 @@ def add_product():
             is_home_essentials = request.form.get('is_home_essentials') == 'on'
             is_new_arrival = request.form.get('is_new_arrival') == 'on'
             
-            # معالجة الصورة المرفوعة (بدون رابط صورة)
-            image_url = ''
-            if 'product_image' in request.files:
-                file = request.files['product_image']
-                if file and file.filename:
-                    uploaded_url = save_uploaded_file(file)
-                    if uploaded_url:
-                        image_url = uploaded_url
+            # معالجة الصور المتعددة
+            image_url = ''  # الصورة الرئيسية للتوافق مع النظام القديم
+            uploaded_images = []
+            
+            # معالجة الصور المتعددة
+            if 'product_images' in request.files:
+                files = request.files.getlist('product_images')
+                for i, file in enumerate(files):
+                    if file and file.filename:
+                        uploaded_url = save_uploaded_file(file)
+                        if uploaded_url:
+                            uploaded_images.append({
+                                'url': uploaded_url,
+                                'is_primary': i == 0,  # أول صورة هي الرئيسية
+                                'sort_order': i
+                            })
+                            if i == 0:  # الصورة الأولى تصبح الصورة الرئيسية
+                                image_url = uploaded_url
             
             # إنشاء المنتج
             product = Product(
@@ -959,6 +1012,19 @@ def add_product():
             )
             
             db.session.add(product)
+            db.session.flush()  # للحصول على ID المنتج
+            
+            # إضافة الصور إلى قاعدة البيانات
+            for img_data in uploaded_images:
+                product_image = ProductImage(
+                    product_id=product.id,
+                    image_url=img_data['url'],
+                    is_primary=img_data['is_primary'],
+                    sort_order=img_data['sort_order'],
+                    created_at=datetime.now()
+                )
+                db.session.add(product_image)
+            
             db.session.commit()
             
             return f"""
@@ -1049,8 +1115,9 @@ def add_product():
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>صورة المنتج:</label>
-                    <input type="file" name="product_image" accept="image/*" required>
+                    <label>صور المنتج:</label>
+                    <input type="file" name="product_images" accept="image/*" multiple required>
+                    <small style="color: #666; font-size: 0.9em;">يمكنك اختيار عدة صور في المرة الواحدة</small>
                 </div>
                 
                 <!-- خيارات العرض المحسنة -->
@@ -1105,7 +1172,19 @@ def admin_products():
         
         products_html = ""
         for product in products:
-            image_html = f'<img src="{product.image_url}" style="max-width: 150px; max-height: 150px; border-radius: 8px;" alt="{product.name}">' if product.image_url else '<p>📦 لا توجد صورة</p>'
+            # دعم الصور المتعددة
+            if hasattr(product, 'images') and product.images:
+                # عرض الصور المتعددة
+                images_html = ""
+                for i, img in enumerate(product.images[:3]):  # أول 3 صور
+                    primary_badge = " (رئيسية)" if img.is_primary else ""
+                    images_html += f'<img src="{img.image_url}" style="max-width: 80px; max-height: 80px; border-radius: 8px; margin: 2px;" alt="{product.name}{primary_badge}">'
+                if len(product.images) > 3:
+                    images_html += f'<div style="display: inline-block; width: 80px; height: 80px; background: #f0f0f0; border-radius: 8px; text-align: center; line-height: 80px; font-size: 12px; color: #666;">+{len(product.images) - 3}</div>'
+                image_html = f'<div style="display: flex; flex-wrap: wrap; gap: 5px;">{images_html}</div>'
+            else:
+                # الصورة الواحدة القديمة
+                image_html = f'<img src="{product.image_url}" style="max-width: 150px; max-height: 150px; border-radius: 8px;" alt="{product.name}">' if product.image_url else '<p>📦 لا توجد صورة</p>'
             
             products_html += f"""
             <div class="product-card">

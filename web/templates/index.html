@@ -23,6 +23,375 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+    
+    /* تحسينات للصور المتعددة */
+    .product-image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 15px 15px 0 0;
+      background: #f8f9fa;
+    }
+    
+    .product-images-slider {
+      display: flex;
+      transition: transform 0.3s ease;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .product-images-slider .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+      display: block;
+    }
+    
+    .image-indicators {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      z-index: 10;
+    }
+    
+    .image-indicators .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      border: 2px solid rgba(255,255,255,0.8);
+    }
+    
+    .image-indicators .indicator.active {
+      background: #DCD5B9;
+    }
+    
+    .image-indicators .indicator:not(.active) {
+      background: rgba(255,255,255,0.5);
+    }
+    
+    /* تحسينات إضافية للصور */
+    .product-image {
+      background: #f8f9fa;
+      min-height: 200px;
+    }
+    
+    .product-image[src=""] {
+      background: #f8f9fa;
+    }
+    
+    /* نافذة تفاصيل المنتج */
+    .product-detail-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+      position: relative;
+      background: white;
+      border-radius: 20px;
+      max-width: 90%;
+      max-height: 90%;
+      width: 1200px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .close-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
+    }
+    
+    .product-detail-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    /* معرض الصور */
+    .product-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .main-image-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #f8f9fa;
+    }
+    
+    .main-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .image-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+    
+    .nav-btn {
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      pointer-events: all;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .nav-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
+    }
+    
+    .thumbnail-container {
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+    
+    .thumbnail-list {
+      display: flex;
+      gap: 10px;
+      min-width: max-content;
+    }
+    
+    .thumbnail-item {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .thumbnail-item.active {
+      border-color: #DCD5B9;
+      transform: scale(1.05);
+    }
+    
+    .thumbnail-item:hover {
+      transform: scale(1.05);
+    }
+    
+    .thumbnail-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* معلومات المنتج */
+    .product-details {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .product-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
+    }
+    
+    .product-description {
+      font-size: 1.1rem;
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .price-section {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    
+    .product-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #DCD5B9;
+    }
+    
+    .currency {
+      font-size: 1.5rem;
+      color: #666;
+    }
+    
+    .product-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .add-to-cart-btn {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .comments-section {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid #eee;
+    }
+    
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .comment-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      border-right: 4px solid #DCD5B9;
+    }
+    
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .comment-rating {
+      color: #DCD5B9;
+    }
+    
+    .comment-content {
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .comment-form input,
+    .comment-form select,
+    .comment-form textarea {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    /* تصميم متجاوب */
+    @media (max-width: 768px) {
+      .modal-content {
+        max-width: 95%;
+        width: 95%;
+        margin: 20px;
+      }
+      
+      .product-detail-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+      
+      .main-image-container {
+        height: 300px;
+      }
+      
+      .product-title {
+        font-size: 1.5rem;
+      }
+      
+      .product-price {
+        font-size: 2rem;
+      }
+    }
+    
    .gps-btn {
   background: #4A90E2; /* لون الخلفية */
   color: white; /* لون النص */
@@ -277,7 +646,7 @@
 
     /* القسم الرئيسي (Hero) */
     .hero-section {
-      background: url("/static/images/456.jpg") center bottom/100% auto no-repeat;
+      background: url("/static/images/456.jpg") center/cover;
       min-height: 70vh;
       display: flex;
       align-items: center;
@@ -285,8 +654,6 @@
       text-align: center;
       position: relative;
       color: white;
-      padding-top: 60px;
-      margin-top: -20px;
     }
 
     .hero-content {
@@ -1269,7 +1636,7 @@
 <body>
   <!-- شريط الإعلانات -->
   <div class="announcement-bar">
-    خصومات تصل إلى 50% على جميع المنتجات!
+    🔥 خصومات تصل إلى 50% على جميع المنتجات!
   </div>
 
   <!-- الهيدر الرئيسي -->
@@ -1309,6 +1676,8 @@
   <section id="home" class="page-section active">
     <div class="hero-section">
       <div class="hero-content">
+        <h1 class="hero-title">{{ _('Everything your home needs') }}</h1>
+        <p class="hero-subtitle">{{ _('From classic to modern designs') }}</p>
         <a href="#" class="cta-button" onclick="showSection('products')">
           <i class="fas fa-shopping-bag"></i>
           {{ _('Shop Now') }}
@@ -1387,13 +1756,72 @@
       
       <!-- قسم زينة الطبيعة -->
       <section class="content-section" style="padding-top: 40px; padding-bottom: 40px; background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
-        <h2 class="section-title" style="margin-bottom: 20px;">زينة الطبيعة</h2>
+        <h2 class="section-title" style="margin-bottom: 20px;">🌿 زينة الطبيعة</h2>
         <p style="text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 40px;">
           أضف لمسة من الطبيعة إلى منزلك مع مجموعتنا المميزة
         </p>
         
         <div class="nature-category-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
-          <!-- المنتجات ستظهر هنا من قاعدة البيانات -->
+          <!-- منتجات زينة الطبيعة -->
+          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="نباتات طبيعية" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">نباتات طبيعية</h3>
+              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">نباتات منزلية طبيعية تضيف الحياة والجمال</p>
+              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">150 $</div>
+              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
+            </div>
+          </div>
+          
+          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="أواني نباتات" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">أواني نباتات</h3>
+              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">أواني أنيقة ومتينة لنباتاتك المنزلية</p>
+              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">80 $</div>
+              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
+            </div>
+          </div>
+          
+          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e72c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="ديكورات خشبية" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">ديكورات خشبية</h3>
+              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">قطع خشبية طبيعية بأشكال فريدة</p>
+              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">120 $</div>
+              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
+            </div>
+          </div>
+          
+          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="شمعدانات طبيعية" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">شمعدانات طبيعية</h3>
+              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">شمعدانات بتصاميم مستوحاة من الطبيعة</p>
+              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">95 $</div>
+              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
+            </div>
+          </div>
+          
+          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="سجاد طبيعي" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">سجاد طبيعي</h3>
+              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">سجاد بألوان وتصاميم مستوحاة من الطبيعة</p>
+              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">180 $</div>
+              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
+            </div>
+          </div>
+          
+          <div class="category-product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="إضاءة طبيعية" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+              <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">إضاءة طبيعية</h3>
+              <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">مصابيح بتصاميم مستوحاة من الطبيعة</p>
+              <div style="color: #DCD5B9; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">160 $</div>
+              <button class="btn-primary" style="width: 100%;">أضف للسلة</button>
+            </div>
+          </div>
         </div>
         
         <div style="text-align: center;">
@@ -1405,7 +1833,7 @@
 
       <!-- قسم لمسات فريدة -->
       <section class="content-section" style="padding-top: 40px; padding-bottom: 40px;">
-        <h2 class="section-title" style="margin-bottom: 20px;">لمسات فريدة</h2>
+        <h2 class="section-title" style="margin-bottom: 20px;">✨ لمسات فريدة</h2>
         <p style="text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 40px;">
           قطع مميزة تضيف لمسة خاصة لمنزلك
         </p>
@@ -1424,7 +1852,7 @@
 
       <!-- قسم تفاصيل مميزة -->
       <section class="content-section" style="padding-top: 40px; padding-bottom: 40px; background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
-        <h2 class="section-title" style="margin-bottom: 20px;">تفاصيل مميزة</h2>
+        <h2 class="section-title" style="margin-bottom: 20px;">🎨 تفاصيل مميزة</h2>
         <p style="text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 40px;">
           اهتم بالتفاصيل الصغيرة التي تحدث فرقاً كبيراً
         </p>
@@ -1442,7 +1870,7 @@
 
       <!-- قسم أصالة معاصرة -->
       <section class="content-section" style="padding-top: 40px; padding-bottom: 40px;">
-        <h2 class="section-title" style="margin-bottom: 20px;">أصالة معاصرة</h2>
+        <h2 class="section-title" style="margin-bottom: 20px;">🏛️ أصالة معاصرة</h2>
         <p style="text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 40px;">
           جمع بين الأصالة والحداثة في تصميم منزلك
         </p>
@@ -1460,7 +1888,7 @@
 
       <!-- قسم جميع المنتجات -->
       <section class="content-section" style="padding-top: 40px; padding-bottom: 40px; background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
-        <h2 class="section-title" style="margin-bottom: 20px;">جميع المنتجات</h2>
+        <h2 class="section-title" style="margin-bottom: 20px;">🛍️ جميع المنتجات</h2>
         <p style="text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 40px;">
           تصفح مجموعتنا الكاملة من المنتجات المميزة
         </p>
@@ -1501,8 +1929,8 @@
         <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
           <h3 style="color: #DCD5B9; margin-bottom: 20px;">سياسة الإرجاع:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>جميع المبيعات نهائية.</li>
-            <li>لا نقبل الإرجاع أو الاستبدال بعد إتمام الشراء، إلا في حال وجود عيب مصنعي واضح أو تلف أثناء الشحن.</li>
+            <li>🔸 جميع المبيعات نهائية.</li>
+            <li>🔸 لا نقبل الإرجاع أو الاستبدال بعد إتمام الشراء، إلا في حال وجود عيب مصنعي واضح أو تلف أثناء الشحن.</li>
           </ul>
           
           <h3 style="color: #DCD5B9; margin: 30px 0 20px;">في حال استلام منتج تالف:</h3>
@@ -1514,10 +1942,10 @@
           
           <h3 style="color: #DCD5B9; margin: 30px 0 20px;">سياسة الشحن:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>شحن مجاني للطلبات التي تزيد عن 500 $</li>
-            <li>مدة التوصيل: 3-7 أيام عمل</li>
-            <li>تغليف آمن ومضمون لجميع المنتجات</li>
-            <li>تتبع الطلب عبر الهاتف أو البريد الإلكتروني</li>
+            <li>🚚 شحن مجاني للطلبات التي تزيد عن 500 $</li>
+            <li>⏰ مدة التوصيل: 3-7 أيام عمل</li>
+            <li>📦 تغليف آمن ومضمون لجميع المنتجات</li>
+            <li>📞 تتبع الطلب عبر الهاتف أو البريد الإلكتروني</li>
           </ul>
         </div>
       </div>
@@ -1590,8 +2018,8 @@
         <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
           <h3 style="color: #DCD5B9; margin-bottom: 20px;">سياسة الإرجاع:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>جميع المبيعات نهائية.</li>
-            <li>لا نقبل الإرجاع أو الاستبدال بعد إتمام الشراء، إلا في حال وجود عيب مصنعي واضح أو تلف أثناء الشحن.</li>
+            <li>🔸 جميع المبيعات نهائية.</li>
+            <li>🔸 لا نقبل الإرجاع أو الاستبدال بعد إتمام الشراء، إلا في حال وجود عيب مصنعي واضح أو تلف أثناء الشحن.</li>
           </ul>
           
           <h3 style="color: #DCD5B9; margin: 30px 0 20px;">في حال استلام منتج تالف:</h3>
@@ -1603,10 +2031,10 @@
           
           <h3 style="color: #DCD5B9; margin: 30px 0 20px;">شروط الإرجاع:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>المنتج في حالته الأصلية</li>
-            <li>جميع الملحقات والعبوات الأصلية</li>
+            <li>✅ المنتج في حالته الأصلية</li>
+            <li>✅ جميع الملحقات والعبوات الأصلية</li>
 
-            <li>التواصل خلال المدة المحددة</li>
+            <li>✅ التواصل خلال المدة المحددة</li>
           </ul>
         </div>
       </div>
@@ -1630,26 +2058,26 @@
         <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
           <h3 style="color: #DCD5B9; margin-bottom: 20px;">سياسة الشحن:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>شحن مجاني للطلبات التي تزيد عن 500 $</li>
-            <li>مدة التوصيل: 3-7 أيام عمل</li>
-            <li>تغليف آمن ومضمون لجميع المنتجات</li>
-            <li>تتبع الطلب عبر الهاتف أو البريد الإلكتروني</li>
+            <li>🚚 شحن مجاني للطلبات التي تزيد عن 500 $</li>
+            <li>⏰ مدة التوصيل: 3-7 أيام عمل</li>
+            <li>📦 تغليف آمن ومضمون لجميع المنتجات</li>
+            <li>📞 تتبع الطلب عبر الهاتف أو البريد الإلكتروني</li>
           </ul>
           
           <h3 style="color: #DCD5B9; margin: 30px 0 20px;">خيارات الشحن:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>الشحن العادي: 3-5 أيام عمل (مجاني للطلبات فوق 500 $)</li>
-            <li>الشحن السريع: 1-2 أيام عمل (رسوم إضافية)</li>
-            <li>التوصيل للمنزل: متاح لجميع المناطق</li>
-            <li>نقاط الاستلام: متاحة في المراكز التجارية</li>
+            <li>🚛 الشحن العادي: 3-5 أيام عمل (مجاني للطلبات فوق 500 $)</li>
+            <li>⚡ الشحن السريع: 1-2 أيام عمل (رسوم إضافية)</li>
+            <li>🏠 التوصيل للمنزل: متاح لجميع المناطق</li>
+            <li>🏪 نقاط الاستلام: متاحة في المراكز التجارية</li>
           </ul>
           
           <h3 style="color: #DCD5B9; margin: 30px 0 20px;">مناطق التوصيل:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>جميع مدن المملكة العربية السعودية</li>
-            <li>المناطق الحضرية والريفية</li>
-            <li>المناطق الجبلية والحدودية</li>
-            <li>المناطق الساحلية والجزر</li>
+            <li>🌍 جميع مدن المملكة العربية السعودية</li>
+            <li>🏙️ المناطق الحضرية والريفية</li>
+            <li>🏔️ المناطق الجبلية والحدودية</li>
+            <li>🏖️ المناطق الساحلية والجزر</li>
           </ul>
         </div>
       </div>
@@ -1682,11 +2110,11 @@
           
           <h3 style="color: #DCD5B9; margin: 30px 0 20px;">قيمنا:</h3>
           <ul style="text-align: right; line-height: 2;">
-            <li>الجودة العالية في جميع منتجاتنا</li>
-            <li>خدمة عملاء متميزة</li>
+            <li>🎯 الجودة العالية في جميع منتجاتنا</li>
+            <li>🤝 خدمة عملاء متميزة</li>
 
-            <li>الابتكار في التصميم والخدمة</li>
-            <li>الاستدامة والمسؤولية الاجتماعية</li>
+            <li>🚀 الابتكار في التصميم والخدمة</li>
+            <li>🌱 الاستدامة والمسؤولية الاجتماعية</li>
           </ul>
         </div>
         
@@ -1804,31 +2232,6 @@
       <p>&copy; 2024 Classique Tempus. جميع الحقوق محفوظة.</p>
     </div>
   </footer>
-
-  <!-- شريط التنقل السفلي للهواتف -->
-  <div class="mobile-bottom-nav">
-    <a href="#" onclick="showSection('home')" class="nav-item">
-      <i class="fas fa-home"></i>
-      <span>الرئيسية</span>
-    </a>
-    <a href="#" onclick="showSection('products')" class="nav-item">
-      <i class="fas fa-shopping-bag"></i>
-      <span>المنتجات</span>
-    </a>
-    <a href="#" onclick="toggleCart()" class="nav-item">
-      <i class="fas fa-shopping-cart"></i>
-      <span>السلة</span>
-      <span class="cart-count" id="mobile-cart-count">0</span>
-    </a>
-    <a href="#" onclick="showSection('about-page')" class="nav-item">
-      <i class="fas fa-info-circle"></i>
-      <span>من نحن</span>
-    </a>
-    <a href="#" onclick="showSection('contact')" class="nav-item">
-      <i class="fas fa-phone"></i>
-      <span>اتصل بنا</span>
-    </a>
-  </div>
 
   <!-- نموذج الطلب -->
   <div id="order-modal" class="modal">
@@ -2054,11 +2457,6 @@
     // وظيفة تحديث عرض السلة
     function updateCartDisplay() {
       document.getElementById('cart-count').textContent = cartCount;
-      // تحديث عداد السلة في الشريط السفلي للهواتف
-      const mobileCartCount = document.getElementById('mobile-cart-count');
-      if (mobileCartCount) {
-        mobileCartCount.textContent = cartCount;
-      }
     }
 
     // وظيفة إظهار الإشعارات (معطلة حسب الطلب)
@@ -2471,6 +2869,21 @@
       console.log('تم تحميل الصفحة، جاري تحميل المنتجات...');
       // تحميل المنتجات من قاعدة البيانات
       loadProductsFromDatabase();
+      // إضافة معالجات النقر على المنتجات
+      addProductClickHandlers();
+      
+      // إضافة دعم لوحة المفاتيح للتنقل بين الصور
+      document.addEventListener('keydown', function(e) {
+        if (document.getElementById('product-detail-modal').style.display === 'flex') {
+          if (e.key === 'ArrowLeft') {
+            previousImage();
+          } else if (e.key === 'ArrowRight') {
+            nextImage();
+          } else if (e.key === 'Escape') {
+            closeProductDetail();
+          }
+        }
+      });
     });
 
     // وظيفة تحميل المنتجات من قاعدة البيانات
@@ -2791,7 +3204,7 @@
       if (productsToShow.length === 0) {
         container.innerHTML = `
           <div class="empty-products">
-            <h3>لا توجد منتجات متاحة</h3>
+            <h3>📦 لا توجد منتجات متاحة</h3>
             <p>لم يتم إضافة أي منتجات بعد. يرجى التواصل مع الإدارة.</p>
           </div>
         `;
@@ -2806,9 +3219,49 @@
         const productDescription = product.description_ar || product.description;
         const productPrice = product.price;
         
+        // التحقق من وجود صور متعددة
+        const hasMultipleImages = product.images && product.images.length > 1;
+        
+        let imageHTML = '';
+        if (hasMultipleImages) {
+          // عرض الصور المتعددة مع شريط تمرير
+          imageHTML = `
+            <div class="product-image-container" style="position: relative; overflow: hidden; width: 100%; height: 200px; border-radius: 15px 15px 0 0;">
+              <div class="product-images-slider" style="display: flex; transition: transform 0.3s ease; width: ${product.images.length * 100}%; height: 100%;">
+                ${product.images.map((image, index) => `
+                  <div style="width: ${100 / product.images.length}%; height: 100%; flex-shrink: 0; position: relative;">
+                    <img src="${image.image_url}" 
+                         alt="${productName}" 
+                         class="product-image ${index === 0 ? 'active' : ''}"
+                         style="width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; top: 0; left: 0;"
+                         onload="console.log('تم تحميل الصورة ${index + 1} للمنتج ${product.id}')"
+                         onerror="console.error('خطأ في تحميل الصورة ${index + 1} للمنتج ${product.id}'); this.src='https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                  </div>
+                `).join('')}
+              </div>
+              <div class="image-indicators" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 10;">
+                ${product.images.map((image, index) => `
+                  <span class="indicator ${index === 0 ? 'active' : ''}" 
+                        onclick="showProductImage(${product.id}, ${index})"
+                        style="width: 8px; height: 8px; border-radius: 50%; background: ${index === 0 ? '#DCD5B9' : 'rgba(255,255,255,0.5)'}; cursor: pointer; transition: background 0.3s ease; border: 2px solid rgba(255,255,255,0.8);"></span>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        } else {
+          // عرض صورة واحدة
+          imageHTML = `
+            <img src="${imageUrl}" 
+                 alt="${productName}" 
+                 class="product-image"
+                 style="width: 100%; height: 200px; object-fit: cover;"
+                 onerror="this.src='https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+          `;
+        }
+        
         productsHTML += `
-          <div class="product-card">
-            <img src="${imageUrl}" alt="${productName}" class="product-image">
+          <div class="product-card" data-product-id="${product.id}">
+            ${imageHTML}
             <div class="product-info">
               <h3 class="product-name">${productName}</h3>
               <p class="product-description">${productDescription}</p>
@@ -2847,6 +3300,251 @@
       });
       
       container.innerHTML = productsHTML;
+    }
+
+    // متغيرات نافذة تفاصيل المنتج
+    let currentProduct = null;
+    let currentImageIndex = 0;
+    let productImages = [];
+
+    // وظيفة فتح نافذة تفاصيل المنتج
+    function openProductDetail(productId) {
+      // البحث عن المنتج في البيانات المحملة
+      fetch('/api/products-simple')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const product = data.products.find(p => p.id === productId);
+            if (product) {
+              showProductDetailModal(product);
+            }
+          }
+        })
+        .catch(error => {
+          console.error('خطأ في تحميل تفاصيل المنتج:', error);
+        });
+    }
+
+    // وظيفة عرض نافذة تفاصيل المنتج
+    function showProductDetailModal(product) {
+      currentProduct = product;
+      productImages = product.images && product.images.length > 0 ? product.images : [{ image_url: product.image_url }];
+      currentImageIndex = 0;
+
+      // تحديث معلومات المنتج
+      document.getElementById('detail-product-name').textContent = product.name_ar || product.name;
+      document.getElementById('detail-product-description').textContent = product.description_ar || product.description;
+      document.getElementById('detail-product-price').textContent = product.price;
+
+      // تحديث الصور
+      updateProductImages();
+      updateThumbnails();
+
+      // إظهار النافذة
+      document.getElementById('product-detail-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // منع التمرير في الخلفية
+    }
+
+    // وظيفة تحديث الصور الرئيسية
+    function updateProductImages() {
+      const mainImage = document.getElementById('main-product-image');
+      if (productImages.length > 0) {
+        mainImage.src = productImages[currentImageIndex].image_url;
+        mainImage.alt = currentProduct.name_ar || currentProduct.name;
+      }
+    }
+
+    // وظيفة تحديث الصور المصغرة
+    function updateThumbnails() {
+      const thumbnailList = document.getElementById('thumbnail-list');
+      thumbnailList.innerHTML = '';
+
+      productImages.forEach((image, index) => {
+        const thumbnailItem = document.createElement('div');
+        thumbnailItem.className = `thumbnail-item ${index === currentImageIndex ? 'active' : ''}`;
+        thumbnailItem.onclick = () => selectImage(index);
+
+        const img = document.createElement('img');
+        img.src = image.image_url;
+        img.alt = currentProduct.name_ar || currentProduct.name;
+        img.onerror = () => {
+          img.src = 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+        };
+
+        thumbnailItem.appendChild(img);
+        thumbnailList.appendChild(thumbnailItem);
+      });
+    }
+
+    // وظيفة اختيار صورة
+    function selectImage(index) {
+      currentImageIndex = index;
+      updateProductImages();
+      updateThumbnails();
+    }
+
+    // وظيفة الصورة التالية
+    function nextImage() {
+      if (productImages.length > 1) {
+        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        updateProductImages();
+        updateThumbnails();
+      }
+    }
+
+    // وظيفة الصورة السابقة
+    function previousImage() {
+      if (productImages.length > 1) {
+        currentImageIndex = currentImageIndex === 0 ? productImages.length - 1 : currentImageIndex - 1;
+        updateProductImages();
+        updateThumbnails();
+      }
+    }
+
+    // وظيفة إغلاق نافذة التفاصيل
+    function closeProductDetail() {
+      document.getElementById('product-detail-modal').style.display = 'none';
+      document.body.style.overflow = 'auto'; // إعادة تفعيل التمرير
+      currentProduct = null;
+      currentImageIndex = 0;
+      productImages = [];
+    }
+
+    // وظيفة إضافة للسلة من نافذة التفاصيل
+    function addToCartFromDetail() {
+      if (currentProduct) {
+        addToCartQuick(currentProduct.id, currentProduct.name_ar || currentProduct.name);
+        showNotification(`تم إضافة "${currentProduct.name_ar || currentProduct.name}" للسلة!`, 'success');
+      }
+    }
+
+    // وظيفة إظهار/إخفاء التعليقات
+    function toggleCommentsFromDetail() {
+      const commentsSection = document.getElementById('detail-comments-section');
+      const isHidden = commentsSection.style.display === 'none';
+      commentsSection.style.display = isHidden ? 'block' : 'none';
+      
+      if (isHidden && currentProduct) {
+        loadDetailComments(currentProduct.id);
+      }
+    }
+
+    // وظيفة تحميل تعليقات المنتج
+    async function loadDetailComments(productId) {
+      try {
+        const response = await fetch(`/api/products/${productId}/comments`);
+        const data = await response.json();
+        
+        const commentsList = document.getElementById('detail-comments-list');
+        const commentsEmpty = document.getElementById('detail-comments-empty');
+        
+        if (data.success && data.comments && data.comments.length > 0) {
+          commentsList.innerHTML = data.comments.map(comment => `
+            <div class="comment-item">
+              <div class="comment-header">
+                <span class="comment-author">${comment.author_name}</span>
+                <span class="comment-rating">${renderStars(comment.rating)}</span>
+              </div>
+              <div class="comment-content">${escapeHTML(comment.content)}</div>
+            </div>
+          `).join('');
+          commentsList.style.display = 'block';
+          commentsEmpty.style.display = 'none';
+        } else {
+          commentsList.style.display = 'none';
+          commentsEmpty.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('خطأ في تحميل التعليقات:', error);
+      }
+    }
+
+    // وظيفة إرسال تعليق من نافذة التفاصيل
+    async function submitDetailComment(event) {
+      event.preventDefault();
+      
+      if (!currentProduct) return;
+      
+      const name = document.getElementById('detail-comment-name').value;
+      const rating = document.getElementById('detail-comment-rating').value;
+      const content = document.getElementById('detail-comment-content').value;
+      
+      try {
+        const response = await fetch(`/api/products/${currentProduct.id}/comments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            author_name: name,
+            content: content,
+            rating: rating ? parseInt(rating) : null
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          showNotification('تم نشر التعليق بنجاح!', 'success');
+          resetDetailComment();
+          loadDetailComments(currentProduct.id);
+        } else {
+          showNotification('فشل في نشر التعليق', 'error');
+        }
+      } catch (error) {
+        console.error('خطأ في إرسال التعليق:', error);
+        showNotification('خطأ في إرسال التعليق', 'error');
+      }
+    }
+
+    // وظيفة إعادة تعيين نموذج التعليق
+    function resetDetailComment() {
+      document.getElementById('detail-comment-name').value = '';
+      document.getElementById('detail-comment-rating').value = '';
+      document.getElementById('detail-comment-content').value = '';
+    }
+
+    // إضافة النقر على بطاقات المنتجات للانتقال لصفحة المنتج
+    function addProductClickHandlers() {
+      document.addEventListener('click', function(e) {
+        const productCard = e.target.closest('.product-card');
+        if (productCard && !e.target.closest('.product-actions')) {
+          const productId = productCard.getAttribute('data-product-id');
+          if (productId) {
+            // الانتقال إلى صفحة المنتج
+            window.location.href = `/product?id=${productId}`;
+          }
+        }
+      });
+    }
+
+    // وظيفة التنقل بين صور المنتج (للشريط الصغير)
+    function showProductImage(productId, imageIndex) {
+      const productCard = document.querySelector(`[data-product-id="${productId}"]`);
+      if (!productCard) return;
+      
+      const slider = productCard.querySelector('.product-images-slider');
+      const indicators = productCard.querySelectorAll('.indicator');
+      
+      if (slider && indicators) {
+        // حساب النسبة المئوية للتحريك
+        const totalImages = indicators.length;
+        const translateX = -(imageIndex * (100 / totalImages));
+        
+        // تحريك الشريط إلى الصورة المحددة
+        slider.style.transform = `translateX(${translateX}%)`;
+        
+        // تحديث المؤشرات
+        indicators.forEach((indicator, index) => {
+          if (index === imageIndex) {
+            indicator.classList.add('active');
+            indicator.style.background = '#DCD5B9';
+          } else {
+            indicator.classList.remove('active');
+            indicator.style.background = 'rgba(255,255,255,0.5)';
+          }
+        });
+      }
     }
 
     function renderStars(rating) {
@@ -2969,7 +3667,6 @@
 
     async function updateCartCount(optionalCount) {
       const el = document.getElementById('cart-count');
-      const mobileEl = document.getElementById('mobile-cart-count');
       if (!el) return;
       try {
         let count = optionalCount;
@@ -2979,15 +3676,8 @@
           count = data && data.success ? data.count : 0;
         }
         el.textContent = count;
-        // تحديث عداد السلة في الشريط السفلي للهواتف
-        if (mobileEl) {
-          mobileEl.textContent = count;
-        }
       } catch (e) {
         el.textContent = '0';
-        if (mobileEl) {
-          mobileEl.textContent = '0';
-        }
       }
     }
     // وظيفة إضافة منتج للسلة (محدثة)
@@ -3041,7 +3731,7 @@
       progressBar.innerHTML = '<div class="translation-progress-bar"></div>';
       document.body.appendChild(progressBar);
       
-      console.log('تم إضافة واجهة الترجمة إلى الصفحة');
+      console.log('✅ تم إضافة واجهة الترجمة إلى الصفحة');
     });
     
     // وظيفة لعرض إشعارات الترجمة
@@ -3050,7 +3740,7 @@
       notification.className = `translation-notification ${type}`;
       notification.innerHTML = `
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span>${type === 'success' ? 'تم' : type === 'error' ? 'خطأ' : type === 'warning' ? 'تحذير' : 'معلومات'}</span>
+          <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}</span>
           <span>${message}</span>
         </div>
       `;
@@ -3080,6 +3770,78 @@
       }
     }
   </script>
-</body>
+  <!-- نافذة تفاصيل المنتج -->
+  <div id="product-detail-modal" class="product-detail-modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeProductDetail()"></div>
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeProductDetail()">&times;</button>
+      
+      <div class="product-detail-container">
+        <!-- معرض الصور -->
+        <div class="product-gallery">
+          <div class="main-image-container">
+            <img id="main-product-image" src="" alt="" class="main-image">
+            <div class="image-nav">
+              <button class="nav-btn prev-btn" onclick="previousImage()">‹</button>
+              <button class="nav-btn next-btn" onclick="nextImage()">›</button>
+            </div>
+          </div>
+          
+          <div class="thumbnail-container">
+            <div id="thumbnail-list" class="thumbnail-list">
+              <!-- سيتم إضافة الصور المصغرة هنا -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- معلومات المنتج -->
+        <div class="product-details">
+          <h2 id="detail-product-name" class="product-title"></h2>
+          <p id="detail-product-description" class="product-description"></p>
+          <div class="price-section">
+            <span id="detail-product-price" class="product-price"></span>
+            <span class="currency">$</span>
+          </div>
+          
+          <div class="product-actions">
+            <button class="btn-primary add-to-cart-btn" onclick="addToCartFromDetail()">
+              <i class="fas fa-shopping-cart"></i>
+              أضف للسلة
+            </button>
+            <button class="btn-outline" onclick="toggleCommentsFromDetail()">
+              <i class="fas fa-comments"></i>
+              التعليقات
+            </button>
+          </div>
+          
+          <!-- قسم التعليقات -->
+          <div id="detail-comments-section" class="comments-section" style="display: none;">
+            <div id="detail-comments-list" class="comments-list"></div>
+            <div id="detail-comments-empty" class="comments-empty" style="display: none;">
+              لا توجد تعليقات بعد. كن أول من يعلّق!
+            </div>
+            <form id="detail-comment-form" class="comment-form" onsubmit="return submitDetailComment(event)">
+              <input type="text" id="detail-comment-name" placeholder="الاسم" required>
+              <select id="detail-comment-rating">
+                <option value="">تقييم (اختياري)</option>
+                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                <option value="4">⭐⭐⭐⭐ (4)</option>
+                <option value="3">⭐⭐⭐ (3)</option>
+                <option value="2">⭐⭐ (2)</option>
+                <option value="1">⭐ (1)</option>
+              </select>
+              <textarea id="detail-comment-content" rows="3" placeholder="نص التعليق" required></textarea>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">نشر التعليق</button>
+                <button type="button" class="btn-outline" onclick="resetDetailComment()">إلغاء</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </body>
 </html>
 

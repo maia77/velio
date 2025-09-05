@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار المنتجات</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        .product { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>اختبار تحميل المنتجات</h1>
+    
+    <div id="debug-info" class="debug">
+        <h3>معلومات التشخيص:</h3>
+        <div id="api-status">جاري فحص API...</div>
+        <div id="products-count">جاري عد المنتجات...</div>
+        <div id="display-status">جاري فحص العرض...</div>
+    </div>
+    
+    <div id="products-container">
+        <h3>المنتجات:</h3>
+        <div id="products-list"></div>
+    </div>
+
+    <script>
+        async function testLoadProducts() {
+            const apiStatus = document.getElementById('api-status');
+            const productsCount = document.getElementById('products-count');
+            const displayStatus = document.getElementById('display-status');
+            const productsList = document.getElementById('products-list');
+            
+            try {
+                console.log('بدء اختبار تحميل المنتجات...');
+                apiStatus.textContent = 'جاري فحص API...';
+                
+                const response = await fetch('/api/products-simple');
+                console.log('استجابة API:', response);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('بيانات API:', data);
+                
+                apiStatus.textContent = `✅ API يعمل - Status: ${response.status}`;
+                apiStatus.className = 'debug success';
+                
+                if (data.success && data.products) {
+                    productsCount.textContent = `✅ تم العثور على ${data.products.length} منتج`;
+                    productsCount.className = 'debug success';
+                    
+                    if (data.products.length > 0) {
+                        displayStatus.textContent = '✅ المنتجات متاحة للعرض';
+                        displayStatus.className = 'debug success';
+                        
+                        data.products.forEach((product, index) => {
+                            const productDiv = document.createElement('div');
+                            productDiv.className = 'product';
+                            productDiv.innerHTML = `
+                                <h4>${index + 1}. ${product.name_ar || product.name}</h4>
+                                <p><strong>السعر:</strong> ${product.price} $</p>
+                                <p><strong>الوصف:</strong> ${product.description_ar || product.description}</p>
+                                <p><strong>الصورة:</strong> ${product.image_url || 'لا توجد صورة'}</p>
+                                <p><strong>is_home_essentials:</strong> ${product.is_home_essentials}</p>
+                                <p><strong>is_new_arrival:</strong> ${product.is_new_arrival}</p>
+                            `;
+                            productsList.appendChild(productDiv);
+                        });
+                    } else {
+                        displayStatus.textContent = '❌ لا توجد منتجات للعرض';
+                        displayStatus.className = 'debug error';
+                    }
+                } else {
+                    productsCount.textContent = '❌ فشل في تحميل المنتجات';
+                    productsCount.className = 'debug error';
+                    displayStatus.textContent = '❌ لا يمكن عرض المنتجات';
+                    displayStatus.className = 'debug error';
+                }
+                
+            } catch (error) {
+                console.error('خطأ في التشخيص:', error);
+                apiStatus.textContent = `❌ خطأ في API: ${error.message}`;
+                apiStatus.className = 'debug error';
+                productsCount.textContent = '❌ فشل في تحميل المنتجات';
+                productsCount.className = 'debug error';
+                displayStatus.textContent = '❌ لا يمكن عرض المنتجات';
+                displayStatus.className = 'debug error';
+            }
+        }
+        
+        // تشغيل الاختبار عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', testLoadProducts);
+    </script>
+</body>
+</html>

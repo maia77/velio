@@ -633,16 +633,104 @@ html, body {
 img {
   max-width: 100%;
   height: auto;
+  display: block;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+/* تحسين صور المنتجات */
+.product-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+/* تحسين صور المنتجات على الهواتف */
+@media (max-width: 768px) {
+  .product-image {
+    height: 220px;
+    border-radius: 6px;
+  }
+}
+
+/* تحسين صور المنتجات على الهواتف الصغيرة */
+@media (max-width: 480px) {
+  .product-image {
+    height: 180px;
+    border-radius: 4px;
+  }
+}
+
+/* تحسين الصور في القسم الرئيسي */
+.hero-section {
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    background-attachment: scroll;
+    background-position: center center;
+  }
+}
+
+/* تحسين الصور في الفوتر */
+.footer-section img {
+  max-width: 100px;
+  height: auto;
+  border-radius: 50%;
+}
+
+/* تحسين الصور في النماذج */
+.modal-content img,
+.cart-content img {
+  max-width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* تحسين الصور في شريط التنقل السفلي */
+.mobile-bottom-nav img {
+  max-width: 20px;
+  height: 20px;
+}
+
+/* تحسين الصور للطباعة */
+@media print {
+  img {
+    max-width: 100%;
+    height: auto;
+    page-break-inside: avoid;
+  }
+  
+  .product-image {
+    height: 150px;
+  }
 }
 
 /* تحسين الجداول على الهواتف */
 @media (max-width: 768px) {
   table {
     font-size: 14px;
+    width: 100%;
+    border-collapse: collapse;
   }
   
   th, td {
     padding: 8px 4px;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
   }
 }
 
@@ -654,5 +742,244 @@ img {
   
   li {
     margin-bottom: 8px;
+  }
+}
+
+/* ===== تحسينات إضافية للتوافق مع جميع الأجهزة ===== */
+
+/* تحسين للشاشات الصغيرة جداً (أقل من 320px) */
+@media (max-width: 320px) {
+  .hero-title {
+    font-size: 1.5rem !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 0.9rem !important;
+  }
+  
+  .section-title {
+    font-size: 1.3rem !important;
+  }
+  
+  .logo {
+    font-size: 1.2rem !important;
+  }
+  
+  .nav-link {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .mobile-bottom-nav .nav-item {
+    padding: 4px 1px;
+    min-height: 50px;
+  }
+  
+  .mobile-bottom-nav .nav-item i {
+    font-size: 14px;
+  }
+  
+  .mobile-bottom-nav .nav-item span {
+    font-size: 8px;
+  }
+}
+
+/* تحسين للشاشات المتوسطة (أجهزة لوحية صغيرة) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .hero-title {
+    font-size: 2.8rem !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* تحسين للشاشات الكبيرة (أجهزة لوحية كبيرة) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 25px;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .footer-content {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .hero-title {
+    font-size: 3.2rem !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.3rem !important;
+  }
+}
+
+/* تحسين للشاشات الكبيرة جداً */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 30px;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+  
+  .hero-title {
+    font-size: 4rem !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem !important;
+  }
+  
+  .section-title {
+    font-size: 3rem !important;
+  }
+}
+
+/* ===== تحسينات خاصة بالاتجاه ===== */
+
+/* تحسين للاتجاه من اليمين إلى اليسار */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .form-group input,
+[dir="rtl"] .form-group textarea,
+[dir="rtl"] .form-group select {
+  text-align: right;
+}
+
+[dir="rtl"] .search-input {
+  text-align: right;
+  padding-right: 40px;
+  padding-left: 15px;
+}
+
+[dir="rtl"] .search-btn {
+  right: 10px;
+  left: auto;
+}
+
+/* ===== تحسينات الأداء ===== */
+
+/* تحسين التمرير على الأجهزة النقالة */
+@media (max-width: 768px) {
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .modal-content,
+  .cart-content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* تحسين الذاكرة على الأجهزة النقالة */
+@media (max-width: 768px) {
+  .product-card:hover .product-image {
+    transform: none;
+  }
+  
+  .feature-card:hover {
+    transform: none;
+  }
+  
+  .hero-section {
+    background-attachment: scroll;
+  }
+  
+  body {
+    background-attachment: scroll;
+  }
+}
+
+/* ===== تحسينات إمكانية الوصول ===== */
+
+/* تحسين للقراءات الصوتية */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* تحسين التباين */
+@media (prefers-contrast: high) {
+  .product-card {
+    border: 2px solid #333;
+  }
+  
+  .btn-primary {
+    background: #000;
+    color: #fff;
+  }
+  
+  .btn-outline {
+    border: 2px solid #000;
+    color: #000;
+  }
+  
+  .nav-link {
+    border: 1px solid #333;
+  }
+}
+
+/* ===== تحسينات الطباعة ===== */
+@media print {
+  .main-header,
+  .announcement-bar,
+  .main-footer,
+  .cart-modal,
+  .modal,
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+  
+  .hero-section {
+    min-height: auto;
+    padding: 20px;
+    background: none !important;
+    color: #000 !important;
+  }
+  
+  .product-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .hero-title,
+  .hero-subtitle,
+  .section-title,
+  .product-name {
+    color: #000 !important;
+  }
+  
+  body {
+    background: none !important;
+    color: #000 !important;
   }
 }

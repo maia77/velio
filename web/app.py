@@ -9,8 +9,12 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 from PIL import Image, ImageOps
+from dotenv import load_dotenv
 
-from models import db, Product, Comment
+# تحميل متغيرات البيئة
+load_dotenv()
+
+from models import db, Product, Comment, ProductImage
 from sqlalchemy import text
 from config import Config
 from amazon_translate import translate_service
@@ -525,6 +529,11 @@ def index():
     
     return render_template('index.html')
 
+@app.route('/product')
+def product_detail():
+    """صفحة تفاصيل المنتج"""
+    return render_template('product.html')
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -552,6 +561,22 @@ def test_api():
     """اختبار API بسيط"""
     return jsonify({'success': True, 'message': 'API يعمل!'})
 
+@app.route('/test-products-debug')
+def test_products_debug():
+    """صفحة اختبار المنتجات للتشخيص"""
+    return send_from_directory('.', 'test_products_debug.html')
+
+@app.route('/debug-console')
+def debug_console():
+    """صفحة تشخيص Console"""
+    return send_from_directory('.', 'debug_console.html')
+
+@app.route('/test-simple')
+def test_simple():
+    """صفحة اختبار بسيطة"""
+    return send_from_directory('.', 'test_simple.html')
+
+
 @app.route('/api/products-simple')
 def get_products_simple():
     """API بسيط للمنتجات"""
@@ -575,8 +600,10 @@ def get_products_simple():
                 'category': product.category,
                 'brand': product.brand,
                 'image_url': product.image_url,
+                'images': [img.to_dict() for img in product.images] if hasattr(product, 'images') else [],
                 'main_category': getattr(product, 'main_category', 'أصالة معاصرة'),
                 'main_category_ar': getattr(product, 'main_category_ar', 'أصالة معاصرة'),
+                'is_home_essentials': getattr(product, 'is_home_essentials', True) if hasattr(product, 'is_home_essentials') and getattr(product, 'is_home_essentials') is not None else True,
                 'is_new_arrival': getattr(product, 'is_new_arrival', False)
             })
         
@@ -615,12 +642,28 @@ def add_product_simple():
             is_home_essentials = request.form.get('is_home_essentials') == 'on'
             is_new_arrival = request.form.get('is_new_arrival') == 'on'
             
-            # معالجة الصورة المرفوعة
-            image_url = ''
+            # معالجة الصور المتعددة
+            image_url = ''  # الصورة الرئيسية للتوافق مع النظام القديم
+            uploaded_images = []
+            
+            # معالجة الصور المتعددة - دعم اسمين مختلفين للحقل
+            files = []
+            if 'product_images' in request.files:
+                files.extend(request.files.getlist('product_images'))
             if 'product_image' in request.files:
-                uploaded_file = request.files['product_image']
-                if uploaded_file.filename != '':
-                    image_url = save_uploaded_file(uploaded_file)
+                files.append(request.files['product_image'])
+            
+            for i, file in enumerate(files):
+                if file and file.filename:
+                    uploaded_url = save_uploaded_file(file)
+                    if uploaded_url:
+                        uploaded_images.append({
+                            'url': uploaded_url,
+                            'is_primary': i == 0,  # أول صورة هي الرئيسية
+                            'sort_order': i
+                        })
+                        if i == 0:  # الصورة الأولى تصبح الصورة الرئيسية
+                            image_url = uploaded_url
             
             # إنشاء المنتج
             product = Product(
@@ -684,6 +727,19 @@ def add_product_simple():
             
             # حفظ المنتج في قاعدة البيانات
             db.session.add(product)
+            db.session.flush()  # للحصول على ID المنتج
+            
+            # إضافة الصور إلى قاعدة البيانات
+            for img_data in uploaded_images:
+                product_image = ProductImage(
+                    product_id=product.id,
+                    image_url=img_data['url'],
+                    is_primary=img_data['is_primary'],
+                    sort_order=img_data['sort_order'],
+                    created_at=datetime.utcnow()
+                )
+                db.session.add(product_image)
+            
             db.session.commit()
             # لا حاجة لتفريغ الكاش بعد إزالته
             
@@ -860,21 +916,39 @@ SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', '')  # يجب إضافة البريد الإلكتروني من متغيرات البيئة
 SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD', '') # يجب إضافة كلمة مرور التطبيقات من متغيرات البيئة
-RECEIVER_EMAIL = os.environ.get('RECEIVER_EMAIL', '') # البريد الذي سيستقبل الإشعارات
+RECEIVER_EMAIL = 'velio.contact@yahoo.com'  # البريد المطلوب لاستقبال الإشعارات
 
-def send_email(subject, body):
+def send_email(subject, body, from_name="Velio Store"):
     """
     دالة لإرسال إشعار عبر البريد الإلكتروني.
     """
-    message = f"Subject: {subject}\n\n{body}".encode('utf-8')
-    context = ssl.create_default_context()
+    if not SENDER_EMAIL or not SENDER_PASSWORD:
+        print("⚠️ إعدادات البريد الإلكتروني غير مكتملة. يرجى إضافة SENDER_EMAIL و SENDER_PASSWORD")
+        return False
+    
     try:
+        # إنشاء رسالة محسنة
+        message = f"""From: {from_name} <{SENDER_EMAIL}>
+To: {RECEIVER_EMAIL}
+Subject: {subject}
+Content-Type: text/plain; charset=UTF-8
+
+{body}
+
+---
+تم إرسال هذه الرسالة تلقائياً من موقع Velio Store
+التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+        """.encode('utf-8')
+        
+        context = ssl.create_default_context()
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
             server.login(SENDER_EMAIL, SENDER_PASSWORD)
             server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message)
-            print(f"✅ تم إرسال إشعار البريد الإلكتروني بنجاح: {subject}")
+            print(f"✅ تم إرسال إشعار البريد الإلكتروني بنجاح إلى {RECEIVER_EMAIL}: {subject}")
+            return True
     except Exception as e:
         print(f"❌ فشل في إرسال إشعار البريد الإلكتروني: {e}")
+        return False
 
 # --- بيانات تجريبية (قاعدة بيانات مؤقتة في الذاكرة) ---
 SAMPLE_PRODUCTS = [
@@ -1002,13 +1076,30 @@ def receive_contact_message():
         # حفظ الرسالة (اختياري)
         contact_messages.append(data)
 
-        # إرسال إشعار
-        email_subject = f"رسالة جديدة من {data['name']}"
-        email_body = f"من: {data['name']} ({data['email']})\n\nالرسالة:\n{data['message']}"
+        # إرسال إشعار محسن
+        email_subject = f"📧 رسالة تواصل جديدة من {data['name']}"
+        email_body = f"""🔔 إشعار جديد من موقع Velio Store
+
+👤 معلومات المرسل:
+الاسم: {data['name']}
+البريد الإلكتروني: {data['email']}
+التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+📝 محتوى الرسالة:
+{data['message']}"""
         
         # إضافة الموقع إذا كان متوفراً
         if 'location' in data and data['location']:
-            email_body += f"\n\nالموقع:\n{data['location']}"
+            email_body += f"\n\n📍 الموقع:\n{data['location']}"
+        
+        email_body += f"""
+
+📞 للرد على العميل:
+- البريد الإلكتروني: {data['email']}
+- الوقت: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+---
+هذه رسالة تلقائية من نظام إشعارات Velio Store"""
         
         send_email(email_subject, email_body)
 
@@ -1046,20 +1137,38 @@ def create_order():
         }
         orders.append(new_order)
 
-        # إرسال إشعار بالبريد الإلكتروني
-        email_subject = f"طلب جديد - {product.name}"
-        email_body = f"""
-طلب جديد:
+        # إرسال إشعار بالبريد الإلكتروني محسن
+        email_subject = f"🛒 طلب جديد #{new_order['order_id']} - {product.name}"
+        customer_info = data.get('customer_info', {})
+        email_body = f"""🛒 إشعار طلب جديد من موقع Velio Store
 
+📋 تفاصيل الطلب:
+رقم الطلب: #{new_order['order_id']}
 المنتج: {product.name}
 الكمية: {quantity}
+السعر الواحد: {product.price} $
 السعر الإجمالي: {new_order['total_price']} $
-رقم الطلب: {new_order['order_id']}
 التاريخ: {new_order['order_date']}
 
-معلومات العميل:
-{data.get('customer_info', {})}
-        """
+👤 معلومات العميل:"""
+        
+        # إضافة تفاصيل العميل إذا كانت متوفرة
+        if customer_info:
+            for key, value in customer_info.items():
+                if value:
+                    email_body += f"\n{key}: {value}"
+        else:
+            email_body += "\nلم يتم توفير معلومات العميل"
+        
+        email_body += f"""
+
+📞 للتواصل مع العميل:
+- رقم الطلب: #{new_order['order_id']}
+- الوقت: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+---
+هذه رسالة تلقائية من نظام إشعارات Velio Store"""
+        
         send_email(email_subject, email_body)
 
         return jsonify({
@@ -1104,7 +1213,8 @@ def get_products():
                 'category_language': category_language,  # إضافة معلومات اللغة الأصلية
                 'brand': product.brand,
                 'brand_language': brand_language,  # إضافة معلومات اللغة الأصلية
-                'image_url': product.image_url
+                'image_url': product.image_url,
+                'images': [img.to_dict() for img in product.images] if hasattr(product, 'images') else []
             })
         
         print(f"تم إرسال {len(products_data)} منتج عبر API مع معلومات اللغة")
@@ -1902,8 +2012,10 @@ def checkout_page():
                 flash('يرجى تعبئة جميع الحقول والتأكد من أن السلة غير فارغة')
                 return render_template('checkout.html', cart_items=cart_items, total=total, deposit=deposit)
 
-            # إنشاء طلب داخلي لكل عنصر (أبسطياً)، وإرسال بريد إشعار كما هو متاح سابقاً
+            # إنشاء طلب داخلي لكل عنصر وإرسال إشعار شامل
             created_order = None
+            order_items = []
+            
             for item in cart_items:
                 order_data = {
                     'product_id': item['product_id'],
@@ -1928,7 +2040,48 @@ def checkout_page():
                     'customer_info': order_data['customer_info']
                 }
                 orders.append(new_order)
+                order_items.append(new_order)
                 created_order = new_order  # آخر واحد كمرجع
+
+            # إرسال إشعار شامل للطلب الكامل
+            if order_items:
+                email_subject = f"🛒 طلب شامل جديد #{created_order['order_id']} - {len(order_items)} منتج"
+                email_body = f"""🛒 إشعار طلب شامل جديد من موقع Velio Store
+
+📋 ملخص الطلب:
+رقم الطلب: #{created_order['order_id']}
+عدد المنتجات: {len(order_items)}
+المبلغ الإجمالي: {total} $
+المبلغ المطلوب الآن (50%): {deposit} $
+المبلغ المتبقي عند التسليم: {total - deposit} $
+التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+🛍️ تفاصيل المنتجات:"""
+                
+                for i, order in enumerate(order_items, 1):
+                    email_body += f"""
+{i}. {order['product_name']}
+   - الكمية: {order['quantity']}
+   - السعر الإجمالي: {order['total_price']} $"""
+                
+                email_body += f"""
+
+👤 معلومات العميل:
+الاسم: {name}
+الهاتف: {phone}
+البريد الإلكتروني: {email}
+العنوان: {address}
+طريقة الدفع: {payment_method}
+
+📞 للتواصل مع العميل:
+- رقم الطلب: #{created_order['order_id']}
+- البريد الإلكتروني: {email}
+- الهاتف: {phone}
+
+---
+هذه رسالة تلقائية من نظام إشعارات Velio Store"""
+                
+                send_email(email_subject, email_body)
 
             # تفريغ السلة بعد الإرسال
             _save_session_cart({})

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار بسيط</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .product { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .loading { color: #666; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>اختبار تحميل المنتجات</h1>
+    <div id="status" class="loading">جاري التحميل...</div>
+    <div id="products"></div>
+
+    <script>
+        async function loadProducts() {
+            const status = document.getElementById('status');
+            const productsDiv = document.getElementById('products');
+            
+            try {
+                console.log('بدء تحميل المنتجات...');
+                status.textContent = 'جاري تحميل المنتجات...';
+                
+                const response = await fetch('/api/products-simple');
+                console.log('استجابة API:', response);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('بيانات API:', data);
+                
+                if (data.success && data.products) {
+                    status.textContent = `تم تحميل ${data.products.length} منتج بنجاح`;
+                    status.className = 'success';
+                    
+                    if (data.products.length > 0) {
+                        let html = '';
+                        data.products.forEach((product, index) => {
+                            const name = product.name_ar || product.name;
+                            const price = product.price;
+                            const image = product.image_url || 'https://via.placeholder.com/200x200?text=No+Image';
+                            
+                            html += `
+                                <div class="product">
+                                    <h3>${index + 1}. ${name}</h3>
+                                    <p><strong>السعر:</strong> ${price} $</p>
+                                    <p><strong>is_home_essentials:</strong> ${product.is_home_essentials}</p>
+                                    <p><strong>is_new_arrival:</strong> ${product.is_new_arrival}</p>
+                                    <img src="${image}" style="max-width: 200px; max-height: 200px;" alt="${name}">
+                                </div>
+                            `;
+                        });
+                        
+                        productsDiv.innerHTML = html;
+                        console.log('تم عرض المنتجات بنجاح');
+                    } else {
+                        productsDiv.innerHTML = '<p>لا توجد منتجات</p>';
+                    }
+                } else {
+                    status.textContent = 'فشل في تحميل المنتجات';
+                    status.className = 'error';
+                }
+                
+            } catch (error) {
+                console.error('خطأ:', error);
+                status.textContent = `خطأ: ${error.message}`;
+                status.className = 'error';
+            }
+        }
+        
+        // تشغيل التحميل عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>

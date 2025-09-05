@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="page-title">تفاصيل المنتج - Velio</title>
+  
+  <!-- الخطوط -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/css/translation.css">
+  <link rel="stylesheet" href="/static/responsive.css">
+  
+  <style>
+    /* تصميم صفحة تفاصيل المنتج */
+    .product-detail-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #DCD5B9;
+      color: #333;
+      padding: 12px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(220, 213, 185, 0.3);
+    }
+    
+    .back-btn:hover {
+      background: #c4b896;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(220, 213, 185, 0.4);
+    }
+    
+    .product-detail-container {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 600px;
+    }
+    
+    /* معرض الصور */
+    .product-gallery {
+      background: #f8f9fa;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .main-image-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      border-radius: 15px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .image-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+    
+    .nav-btn {
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      pointer-events: all;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .nav-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
+    }
+    
+    .thumbnail-container {
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+    
+    .thumbnail-list {
+      display: flex;
+      gap: 15px;
+      min-width: max-content;
+    }
+    
+    .thumbnail-item {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .thumbnail-item.active {
+      border-color: #DCD5B9;
+      transform: scale(1.05);
+    }
+    
+    .thumbnail-item:hover {
+      transform: scale(1.05);
+    }
+    
+    .thumbnail-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* معلومات المنتج */
+    .product-info {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .product-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
+      line-height: 1.2;
+    }
+    
+    .product-description {
+      font-size: 1.2rem;
+      color: #666;
+      line-height: 1.8;
+      margin: 0;
+    }
+    
+    .price-section {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      padding: 20px;
+      background: linear-gradient(135deg, #DCD5B9, #c4b896);
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(220, 213, 185, 0.3);
+    }
+    
+    .product-price {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    .currency {
+      font-size: 1.8rem;
+      color: #666;
+    }
+    
+    .product-actions {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #DCD5B9, #c4b896);
+      color: #333;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      justify-content: center;
+      min-width: 200px;
+      box-shadow: 0 8px 25px rgba(220, 213, 185, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(220, 213, 185, 0.4);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: #DCD5B9;
+      border: 2px solid #DCD5B9;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      justify-content: center;
+      min-width: 200px;
+    }
+    
+    .btn-outline:hover {
+      background: #DCD5B9;
+      color: #333;
+      transform: translateY(-3px);
+    }
+    
+    /* قسم التعليقات */
+    .comments-section {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 2px solid #eee;
+    }
+    
+    .comments-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .comment-item {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 15px;
+      border-right: 4px solid #DCD5B9;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      color: #333;
+      font-size: 1.1rem;
+    }
+    
+    .comment-rating {
+      color: #DCD5B9;
+      font-size: 1.2rem;
+    }
+    
+    .comment-content {
+      color: #666;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    
+    .comment-form {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .comment-form input,
+    .comment-form select,
+    .comment-form textarea {
+      padding: 15px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .comment-form input:focus,
+    .comment-form select:focus,
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: #DCD5B9;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 15px;
+    }
+    
+    /* تصميم متجاوب */
+    @media (max-width: 768px) {
+      .product-detail-container {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      
+      .product-gallery {
+        padding: 20px;
+      }
+      
+      .product-info {
+        padding: 20px;
+      }
+      
+      .main-image-container {
+        height: 300px;
+      }
+      
+      .product-title {
+        font-size: 2rem;
+      }
+      
+      .product-price {
+        font-size: 2.5rem;
+      }
+      
+      .product-actions {
+        flex-direction: column;
+      }
+    }
+    
+    /* تحميل */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 400px;
+      font-size: 1.2rem;
+      color: #666;
+    }
+    
+    .error {
+      text-align: center;
+      padding: 40px;
+      color: #e74c3c;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="product-detail-page">
+    <div class="container">
+      <a href="/" class="back-btn">
+        <i class="fas fa-arrow-right"></i>
+        العودة للصفحة الرئيسية
+      </a>
+      
+      <div id="product-content">
+        <div class="loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          جاري تحميل تفاصيل المنتج...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // متغيرات المنتج
+    let currentProduct = null;
+    let currentImageIndex = 0;
+    let productImages = [];
+
+    // تحميل تفاصيل المنتج عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+      
+      if (productId) {
+        loadProductDetails(productId);
+      } else {
+        showError('لم يتم العثور على معرف المنتج');
+      }
+    });
+
+    // تحميل تفاصيل المنتج
+    async function loadProductDetails(productId) {
+      try {
+        const response = await fetch(`/api/products-simple`);
+        const data = await response.json();
+        
+        if (data.success) {
+          const product = data.products.find(p => p.id == productId);
+          if (product) {
+            showProductDetails(product);
+          } else {
+            showError('لم يتم العثور على المنتج');
+          }
+        } else {
+          showError('خطأ في تحميل بيانات المنتج');
+        }
+      } catch (error) {
+        console.error('خطأ في تحميل تفاصيل المنتج:', error);
+        showError('خطأ في تحميل تفاصيل المنتج');
+      }
+    }
+
+    // عرض تفاصيل المنتج
+    function showProductDetails(product) {
+      currentProduct = product;
+      productImages = product.images && product.images.length > 0 ? product.images : [{ image_url: product.image_url }];
+      currentImageIndex = 0;
+
+      // تحديث عنوان الصفحة
+      document.getElementById('page-title').textContent = `${product.name_ar || product.name} - Velio`;
+
+      // إنشاء HTML للمنتج
+      const productHTML = `
+        <div class="product-detail-container">
+          <!-- معرض الصور -->
+          <div class="product-gallery">
+            <div class="main-image-container">
+              <img id="main-product-image" src="${productImages[0].image_url}" alt="${product.name_ar || product.name}" class="main-image">
+              ${productImages.length > 1 ? `
+                <div class="image-nav">
+                  <button class="nav-btn prev-btn" onclick="previousImage()">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                  <button class="nav-btn next-btn" onclick="nextImage()">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+            
+            ${productImages.length > 1 ? `
+              <div class="thumbnail-container">
+                <div id="thumbnail-list" class="thumbnail-list">
+                  ${productImages.map((image, index) => `
+                    <div class="thumbnail-item ${index === 0 ? 'active' : ''}" onclick="selectImage(${index})">
+                      <img src="${image.image_url}" alt="${product.name_ar || product.name}">
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+          
+          <!-- معلومات المنتج -->
+          <div class="product-info">
+            <h1 class="product-title">${product.name_ar || product.name}</h1>
+            <p class="product-description">${product.description_ar || product.description}</p>
+            
+            <div class="price-section">
+              <span class="product-price">${product.price}</span>
+              <span class="currency">$</span>
+            </div>
+            
+            <div class="product-actions">
+              <button class="btn-primary" onclick="addToCart()">
+                <i class="fas fa-shopping-cart"></i>
+                أضف للسلة
+              </button>
+              <button class="btn-outline" onclick="toggleComments()">
+                <i class="fas fa-comments"></i>
+                التعليقات
+              </button>
+            </div>
+            
+            <!-- قسم التعليقات -->
+            <div id="comments-section" class="comments-section" style="display: none;">
+              <h3 class="comments-title">التعليقات</h3>
+              <div id="comments-list" class="comments-list"></div>
+              <div id="comments-empty" class="comments-empty" style="display: none;">
+                لا توجد تعليقات بعد. كن أول من يعلّق!
+              </div>
+              <form id="comment-form" class="comment-form" onsubmit="return submitComment(event)">
+                <input type="text" id="comment-name" placeholder="الاسم" required>
+                <select id="comment-rating">
+                  <option value="">تقييم (اختياري)</option>
+                  <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                  <option value="4">⭐⭐⭐⭐ (4)</option>
+                  <option value="3">⭐⭐⭐ (3)</option>
+                  <option value="2">⭐⭐ (2)</option>
+                  <option value="1">⭐ (1)</option>
+                </select>
+                <textarea id="comment-content" rows="4" placeholder="نص التعليق" required></textarea>
+                <div class="form-actions">
+                  <button type="submit" class="btn-primary">نشر التعليق</button>
+                  <button type="button" class="btn-outline" onclick="resetComment()">إلغاء</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('product-content').innerHTML = productHTML;
+    }
+
+    // عرض خطأ
+    function showError(message) {
+      document.getElementById('product-content').innerHTML = `
+        <div class="error">
+          <i class="fas fa-exclamation-triangle"></i>
+          ${message}
+        </div>
+      `;
+    }
+
+    // اختيار صورة
+    function selectImage(index) {
+      currentImageIndex = index;
+      updateMainImage();
+      updateThumbnails();
+    }
+
+    // الصورة التالية
+    function nextImage() {
+      if (productImages.length > 1) {
+        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        updateMainImage();
+        updateThumbnails();
+      }
+    }
+
+    // الصورة السابقة
+    function previousImage() {
+      if (productImages.length > 1) {
+        currentImageIndex = currentImageIndex === 0 ? productImages.length - 1 : currentImageIndex - 1;
+        updateMainImage();
+        updateThumbnails();
+      }
+    }
+
+    // تحديث الصورة الرئيسية
+    function updateMainImage() {
+      const mainImage = document.getElementById('main-product-image');
+      if (mainImage && productImages[currentImageIndex]) {
+        mainImage.src = productImages[currentImageIndex].image_url;
+        mainImage.alt = currentProduct.name_ar || currentProduct.name;
+      }
+    }
+
+    // تحديث الصور المصغرة
+    function updateThumbnails() {
+      const thumbnails = document.querySelectorAll('.thumbnail-item');
+      thumbnails.forEach((thumb, index) => {
+        if (index === currentImageIndex) {
+          thumb.classList.add('active');
+        } else {
+          thumb.classList.remove('active');
+        }
+      });
+    }
+
+    // إضافة للسلة
+    function addToCart() {
+      if (currentProduct) {
+        // إضافة للسلة (يمكن تطويرها لاحقاً)
+        alert(`تم إضافة "${currentProduct.name_ar || currentProduct.name}" للسلة!`);
+      }
+    }
+
+    // إظهار/إخفاء التعليقات
+    function toggleComments() {
+      const commentsSection = document.getElementById('comments-section');
+      const isHidden = commentsSection.style.display === 'none';
+      commentsSection.style.display = isHidden ? 'block' : 'none';
+      
+      if (isHidden && currentProduct) {
+        loadComments(currentProduct.id);
+      }
+    }
+
+    // تحميل التعليقات
+    async function loadComments(productId) {
+      try {
+        const response = await fetch(`/api/products/${productId}/comments`);
+        const data = await response.json();
+        
+        const commentsList = document.getElementById('comments-list');
+        const commentsEmpty = document.getElementById('comments-empty');
+        
+        if (data.success && data.comments && data.comments.length > 0) {
+          commentsList.innerHTML = data.comments.map(comment => `
+            <div class="comment-item">
+              <div class="comment-header">
+                <span class="comment-author">${comment.author_name}</span>
+                <span class="comment-rating">${renderStars(comment.rating)}</span>
+              </div>
+              <div class="comment-content">${escapeHTML(comment.content)}</div>
+            </div>
+          `).join('');
+          commentsList.style.display = 'block';
+          commentsEmpty.style.display = 'none';
+        } else {
+          commentsList.style.display = 'none';
+          commentsEmpty.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('خطأ في تحميل التعليقات:', error);
+      }
+    }
+
+    // إرسال تعليق
+    async function submitComment(event) {
+      event.preventDefault();
+      
+      if (!currentProduct) return;
+      
+      const name = document.getElementById('comment-name').value;
+      const rating = document.getElementById('comment-rating').value;
+      const content = document.getElementById('comment-content').value;
+      
+      try {
+        const response = await fetch(`/api/products/${currentProduct.id}/comments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            author_name: name,
+            content: content,
+            rating: rating ? parseInt(rating) : null
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('تم نشر التعليق بنجاح!');
+          resetComment();
+          loadComments(currentProduct.id);
+        } else {
+          alert('فشل في نشر التعليق');
+        }
+      } catch (error) {
+        console.error('خطأ في إرسال التعليق:', error);
+        alert('خطأ في إرسال التعليق');
+      }
+    }
+
+    // إعادة تعيين نموذج التعليق
+    function resetComment() {
+      document.getElementById('comment-name').value = '';
+      document.getElementById('comment-rating').value = '';
+      document.getElementById('comment-content').value = '';
+    }
+
+    // دعم لوحة المفاتيح
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') {
+        nextImage();
+      } else if (e.key === 'ArrowRight') {
+        previousImage();
+      }
+    });
+
+    // وظائف مساعدة
+    function renderStars(rating) {
+      if (!rating) return '';
+      const r = Math.max(1, Math.min(5, parseInt(rating)));
+      return '⭐'.repeat(r) + (r < 5 ? '☆'.repeat(5 - r) : '');
+    }
+
+    function escapeHTML(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
