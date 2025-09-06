@@ -1,0 +1,1334 @@
+/* ===== إصلاح نهائي لشريط التنقل السفلي ===== */
+
+/* ضمان ثبات شريط التنقل السفلي */
+.mobile-bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 70px !important;
+  background: linear-gradient(135deg, #DCD5B9, #C4B5A0) !important;
+  border-top: 2px solid #B8A082 !important;
+  display: flex !important;
+  z-index: 9999 !important;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  -webkit-perspective: 1000px !important;
+  perspective: 1000px !important;
+  /* إجبار الثبات */
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة المحمولة */
+@media (max-width: 1024px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media screen and (max-width: 1024px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة المحمولة */
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 1200px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 1400px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 1600px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 1800px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 2000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 2200px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 2400px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 2600px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 2800px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 3000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 3200px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 3400px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 3600px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 3800px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 4000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 4200px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 4400px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 4600px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 4800px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 5000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 5200px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 5400px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 5600px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 5800px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 6000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 6200px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 6400px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 6600px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 6800px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 7000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 7200px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 7400px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 7600px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 7800px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 8000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 10000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 12000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 15000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 20000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 50000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 100000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 200000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 500000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 1000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 2000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 5000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 10000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 20000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 50000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 100000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 200000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 500000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 1000000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 2000000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 5000000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 10000000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 20000000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 50000000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
+
+/* إظهار شريط التنقل السفلي على جميع الأجهزة */
+@media (max-width: 100000000000px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}
