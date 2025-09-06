@@ -183,6 +183,7 @@ class Order(db.Model):
             'pending': {'ar': 'قيد المراجعة', 'en': 'Pending'},
             'processing': {'ar': 'قيد المعالجة', 'en': 'Processing'},
             'approved': {'ar': 'تم الموافقة', 'en': 'Approved'},
+            'shipped': {'ar': 'تم الإرسال', 'en': 'Shipped'},
             'rejected': {'ar': 'تم الرفض', 'en': 'Rejected'},
             'completed': {'ar': 'مكتمل', 'en': 'Completed'},
             'cancelled': {'ar': 'ملغي', 'en': 'Cancelled'}

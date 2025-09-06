@@ -1288,7 +1288,33 @@ def create_order():
 ---
 هذه رسالة تلقائية من نظام إشعارات Velio Store"""
         
+        # إرسال إشعار للمدير
         send_email(email_subject, email_body)
+        
+        # إرسال إشعار تأكيد للعميل
+        if new_order.customer_email:
+            customer_subject = f"تأكيد استلام طلبك #{new_order.order_number}"
+            customer_body = f"""مرحباً {new_order.customer_name},
+
+شكراً لك على طلبك! تم استلام طلبك بنجاح وسنقوم بمراجعته قريباً.
+
+📋 تفاصيل طلبك:
+رقم الطلب: #{new_order.order_number}
+المنتج: {new_order.product_name}
+الكمية: {new_order.quantity}
+السعر الإجمالي: {new_order.total_price} $
+الحالة الحالية: {new_order.get_status_display('ar')}
+
+📞 للاستفسارات، يرجى التواصل معنا على:
+- البريد الإلكتروني: velio.contact@yahoo.com
+- رقم الطلب: #{new_order.order_number}
+
+شكراً لاختيارك متجرنا!
+
+---
+Velio Store"""
+            
+            send_customer_email(new_order.customer_email, customer_subject, customer_body)
 
         return jsonify({
             'success': True,
@@ -1396,7 +1422,7 @@ def update_order_status(order_id):
             return jsonify({'success': False, 'error': 'يرجى تحديد الحالة الجديدة'}), 400
         
         # التحقق من صحة الحالة
-        valid_statuses = ['pending', 'processing', 'approved', 'rejected', 'completed', 'cancelled']
+        valid_statuses = ['pending', 'processing', 'approved', 'shipped', 'rejected', 'completed', 'cancelled']
         if new_status not in valid_statuses:
             return jsonify({'success': False, 'error': 'حالة غير صحيحة'}), 400
         
@@ -1449,14 +1475,81 @@ def update_order_status(order_id):
         return jsonify({'success': False, 'error': 'حدث خطأ في تحديث حالة الطلب'}), 500
 
 
+def send_customer_email(customer_email, subject, body):
+    """
+    دالة لإرسال إشعار للعميل عبر البريد الإلكتروني
+    """
+    print(f"📧 محاولة إرسال بريد إلكتروني للعميل: {subject}")
+    print(f"👤 بريد العميل: {customer_email}")
+    
+    if not SENDER_EMAIL or not SENDER_PASSWORD:
+        print("⚠️ إعدادات البريد الإلكتروني غير مكتملة. يرجى إضافة SENDER_EMAIL و SENDER_PASSWORD")
+        return False
+    
+    if not customer_email:
+        print("⚠️ عنوان البريد الإلكتروني للعميل غير محدد")
+        return False
+    
+    try:
+        # إنشاء رسالة محسنة
+        message = f"""From: Velio Store <{SENDER_EMAIL}>
+To: {customer_email}
+Subject: {subject}
+Content-Type: text/plain; charset=UTF-8
+
+{body}"""
+
+        # إعداد السياق الأمني
+        context = ssl.create_default_context()
+        
+        if EMAIL_PROVIDER == 'gmail':
+            # Gmail يستخدم SSL
+            with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
+                print("🔑 محاولة تسجيل الدخول...")
+                server.login(SENDER_EMAIL, SENDER_PASSWORD)
+                print("📤 إرسال الرسالة...")
+                server.sendmail(SENDER_EMAIL, customer_email, message)
+        else:
+            # Yahoo و Outlook يستخدمان TLS
+            with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+                server.ehlo()
+                server.starttls()  # تفعيل TLS
+                print("🔑 محاولة تسجيل الدخول...")
+                server.login(SENDER_EMAIL, SENDER_PASSWORD)
+                print("📤 إرسال الرسالة...")
+                server.sendmail(SENDER_EMAIL, customer_email, message)
+        
+        print(f"✅ تم إرسال إشعار البريد الإلكتروني بنجاح إلى العميل {customer_email}: {subject}")
+        return True
+        
+    except smtplib.SMTPAuthenticationError as e:
+        print(f"❌ خطأ في المصادقة: {e}")
+        print("💡 تأكد من صحة كلمة مرور التطبيقات")
+        return False
+    except smtplib.SMTPRecipientsRefused as e:
+        print(f"❌ تم رفض المستقبل: {e}")
+        return False
+    except Exception as e:
+        print(f"❌ فشل في إرسال إشعار البريد الإلكتروني للعميل: {e}")
+        print(f"🔍 المزود: {EMAIL_PROVIDER}, الخادم: {SMTP_SERVER}:{SMTP_PORT}")
+        print(f"📧 المرسل: {SENDER_EMAIL}, المستقبل: {customer_email}")
+        return False
+
+
 def send_order_status_notification(order, new_status):
     """
     إرسال إشعار للعميل عند تغيير حالة الطلب
     """
     try:
+        # التحقق من وجود بريد العميل
+        if not order.customer_email:
+            print(f"⚠️ لا يوجد بريد إلكتروني للعميل في الطلب #{order.order_number}")
+            return False
+            
         status_messages = {
             'processing': 'تم بدء معالجة طلبك',
             'approved': 'تم الموافقة على طلبك',
+            'shipped': 'تم إرسال طلبك',
             'rejected': 'تم رفض طلبك',
             'completed': 'تم إكمال طلبك بنجاح',
             'cancelled': 'تم إلغاء طلبك'
@@ -1478,15 +1571,17 @@ def send_order_status_notification(order, new_status):
 
 """
         
-        
         if order.rejection_reason:
             email_body += f"سبب الرفض: {order.rejection_reason}\n\n"
         
         email_body += "شكراً لاختيارك متجرنا!\n\n---\nVelio Store"
         
-        send_email(subject, email_body)
+        # إرسال الإشعار للعميل
+        return send_customer_email(order.customer_email, subject, email_body)
+        
     except Exception as e:
         print(f"❌ خطأ في إرسال إشعار العميل: {e}")
+        return False
 
 @app.route('/order-status')
 def order_status_page():
@@ -2517,11 +2612,52 @@ def checkout_page():
 ---
 هذه رسالة تلقائية من نظام إشعارات Velio Store"""
                     
+                    # إرسال إشعار للمدير
                     email_sent = send_email(email_subject, email_body)
                     if email_sent:
-                        print("✅ تم إرسال البريد الإلكتروني بنجاح")
+                        print("✅ تم إرسال البريد الإلكتروني للمدير بنجاح")
                     else:
-                        print("⚠️ فشل في إرسال البريد الإلكتروني - سيتم المتابعة مع الطلب")
+                        print("⚠️ فشل في إرسال البريد الإلكتروني للمدير - سيتم المتابعة مع الطلب")
+                    
+                    # إرسال إشعار تأكيد للعميل
+                    if email:
+                        customer_subject = f"تأكيد استلام طلبك #{first_order.order_number}"
+                        customer_body = f"""مرحباً {name},
+
+شكراً لك على طلبك! تم استلام طلبك بنجاح وسنقوم بمراجعته قريباً.
+
+📋 ملخص طلبك:
+رقم الطلب: #{first_order.order_number}
+عدد المنتجات: {len(order_items)}
+المبلغ الإجمالي: {total} $
+المبلغ المطلوب الآن (50%): {deposit} $
+المبلغ المتبقي عند التسليم: {total - deposit} $
+الحالة الحالية: {first_order.get_status_display('ar')}
+
+🛍️ تفاصيل المنتجات:"""
+                        
+                        for i, order in enumerate(order_items, 1):
+                            customer_body += f"""
+{i}. {order['product_name']}
+   - الكمية: {order['quantity']}
+   - السعر الإجمالي: {order['total_price']} $"""
+                        
+                        customer_body += f"""
+
+📞 للاستفسارات، يرجى التواصل معنا على:
+- البريد الإلكتروني: velio.contact@yahoo.com
+- رقم الطلب: #{first_order.order_number}
+
+شكراً لاختيارك متجرنا!
+
+---
+Velio Store"""
+                        
+                        customer_email_sent = send_customer_email(email, customer_subject, customer_body)
+                        if customer_email_sent:
+                            print("✅ تم إرسال إشعار التأكيد للعميل بنجاح")
+                        else:
+                            print("⚠️ فشل في إرسال إشعار التأكيد للعميل")
                         
                 except Exception as e:
                     print(f"❌ خطأ في إرسال البريد الإلكتروني: {e}")

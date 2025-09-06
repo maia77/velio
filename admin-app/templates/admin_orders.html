@@ -65,6 +65,9 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .back-btn:hover {
@@ -73,6 +76,10 @@
             transform: translateY(-1px);
             text-decoration: none;
             color: white;
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
         }
 
         .stats {
@@ -141,6 +148,9 @@
             border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.3s;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .filter-group select:focus,
@@ -161,11 +171,18 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .search-btn:hover {
             background: #5a6fd8;
             transform: translateY(-1px);
+        }
+
+        .search-btn:active {
+            transform: scale(0.95);
         }
 
         .orders-section {
@@ -330,6 +347,9 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            min-height: 36px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-view {
@@ -341,6 +361,10 @@
             background: #dee2e6;
         }
 
+        .btn-view:active {
+            transform: scale(0.95);
+        }
+
         .btn-edit {
             background: #007bff;
             color: white;
@@ -350,12 +374,17 @@
             background: #0056b3;
         }
 
+        .btn-edit:active {
+            transform: scale(0.95);
+        }
+
         .pagination {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .pagination a,
@@ -366,12 +395,23 @@
             text-decoration: none;
             color: #333;
             transition: all 0.3s;
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .pagination a:hover {
             background: #667eea;
             color: white;
             border-color: #667eea;
+        }
+
+        .pagination a:active {
+            transform: scale(0.95);
         }
 
         .pagination .current {
@@ -455,10 +495,43 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .close:hover {
             color: #000;
+        }
+
+        .close:active {
+            transform: scale(0.95);
+        }
+
+        /* تحسينات للأداء */
+        .order-card {
+            will-change: transform;
+        }
+
+        .action-btn,
+        .search-btn,
+        .back-btn,
+        .btn,
+        .close {
+            will-change: transform;
+        }
+
+        /* تحسينات إضافية للتفاعل مع اللمس */
+        .action-btn:active,
+        .search-btn:active,
+        .back-btn:active,
+        .btn:active,
+        .close:active {
+            transform: scale(0.95);
         }
 
         .form-group {
@@ -480,6 +553,9 @@
             border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.3s;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .form-group select:focus,
@@ -502,6 +578,9 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-primary {
@@ -513,6 +592,10 @@
             background: #5a6fd8;
         }
 
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+
         .btn-secondary {
             background: #6c757d;
             color: white;
@@ -522,49 +605,275 @@
             background: #5a6268;
         }
 
+        .btn-secondary:active {
+            transform: scale(0.95);
+        }
+
+        /* تحسينات إضافية للتفاعل مع اللمس */
+        .action-btn:active,
+        .search-btn:active,
+        .back-btn:active,
+        .btn:active,
+        .close:active {
+            transform: scale(0.95);
+        }
+
+        /* تحسينات للهواتف الذكية */
         @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
             .container {
-                margin: 10px;
-                border-radius: 10px;
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
             }
 
             .header {
-                padding: 20px;
+                padding: 15px;
             }
 
             .header h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .back-btn {
+                font-size: 0.8rem;
+                padding: 8px 15px;
             }
 
             .stats {
                 grid-template-columns: 1fr;
-                padding: 20px;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .stat-card {
+                padding: 20px 15px;
+            }
+
+            .stat-icon {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
             }
 
             .filters {
-                padding: 20px;
+                padding: 15px;
             }
 
             .filter-row {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 15px;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .search-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
             }
 
             .orders-section {
-                padding: 20px;
+                padding: 15px;
             }
 
-            .orders-table {
-                font-size: 0.85rem;
-            }
-
-            .orders-table th,
-            .orders-table td {
-                padding: 10px 8px;
-            }
-
-            .actions {
+            .orders-header {
                 flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .orders-title {
+                font-size: 1.2rem;
+            }
+
+            /* تحويل الجدول إلى بطاقات للهواتف */
+            .orders-table {
+                display: none;
+            }
+
+            .orders-mobile {
+                display: block;
+            }
+
+            .order-card {
+                background: white;
+                border-radius: 12px;
+                padding: 15px;
+                margin-bottom: 15px;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+                border: 1px solid #e9ecef;
+            }
+
+            .order-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #f1f3f4;
+            }
+
+            .order-number {
+                font-size: 1.1rem;
+                font-weight: 700;
+            }
+
+            .order-date {
+                font-size: 0.8rem;
+                color: #666;
+            }
+
+            .order-info {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .info-item {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+            }
+
+            .info-label {
+                font-size: 0.8rem;
+                color: #666;
+                font-weight: 600;
+            }
+
+            .info-value {
+                font-size: 0.9rem;
+                color: #333;
+            }
+
+            .customer-info-mobile {
+                grid-column: 1 / -1;
+            }
+
+            .product-info-mobile {
+                grid-column: 1 / -1;
+            }
+
+            .order-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 10px;
+                border-top: 1px solid #f1f3f4;
+            }
+
+            .order-price {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #28a745;
+            }
+
+            .actions-mobile {
+                display: flex;
+                gap: 8px;
+            }
+
+            .action-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                border-radius: 6px;
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .pagination a,
+            .pagination span {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+                max-height: 90vh;
+            }
+
+            .modal-title {
+                font-size: 1.2rem;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* إخفاء البطاقات في الشاشات الكبيرة */
+        @media (min-width: 769px) {
+            .orders-mobile {
+                display: none;
+            }
+        }
+
+        /* تحسينات إضافية للهواتف الصغيرة */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .stat-card {
+                padding: 15px 10px;
+            }
+
+            .stat-icon {
+                font-size: 1.8rem;
+            }
+
+            .stat-number {
+                font-size: 1.3rem;
+            }
+
+            .order-card {
+                padding: 12px;
+            }
+
+            .order-info {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .actions-mobile {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -645,6 +954,7 @@
             </div>
 
             {% if orders.items %}
+                <!-- جدول للشاشات الكبيرة -->
                 <table class="orders-table">
                     <thead>
                         <tr>
@@ -703,6 +1013,62 @@
                         {% endfor %}
                     </tbody>
                 </table>
+
+                <!-- عرض البطاقات للهواتف -->
+                <div class="orders-mobile">
+                    {% for order in orders.items %}
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <div class="order-number">#{{ order.order_number }}</div>
+                            <div class="order-date">{{ order.created_at.strftime('%Y-%m-%d %H:%M') if order.created_at else 'غير محدد' }}</div>
+                        </div>
+                        
+                        <div class="order-info">
+                            <div class="info-item customer-info-mobile">
+                                <div class="info-label">العميل</div>
+                                <div class="info-value">
+                                    <div class="customer-name">{{ order.customer_name }}</div>
+                                    {% if order.customer_phone %}
+                                    <div class="customer-contact">{{ order.customer_phone }}</div>
+                                    {% endif %}
+                                    {% if order.customer_email %}
+                                    <div class="customer-contact">{{ order.customer_email }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="info-item product-info-mobile">
+                                <div class="info-label">المنتج</div>
+                                <div class="info-value">
+                                    <div class="product-name">{{ order.product_name }}</div>
+                                    <div class="product-details">الكمية: {{ order.quantity }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-label">الحالة</div>
+                                <div class="info-value">
+                                    <span class="status-badge status-{{ order.status }}">
+                                        {{ order.status_ar or order.status }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-footer">
+                            <div class="order-price">{{ order.total_price }} ريال</div>
+                            <div class="actions-mobile">
+                                <button class="action-btn btn-view" onclick="viewOrder({{ order.id }})">
+                                    <i class="fas fa-eye"></i> عرض
+                                </button>
+                                <button class="action-btn btn-edit" onclick="editOrderStatus({{ order.id }}, '{{ order.status }}')">
+                                    <i class="fas fa-edit"></i> تعديل
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
 
                 <!-- ترقيم الصفحات -->
                 {% if orders.pages > 1 %}
