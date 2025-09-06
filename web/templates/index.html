@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no"/>
   <meta name="format-detection" content="telephone=no">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -109,6 +109,8 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/translation.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimizations.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/universal-compatibility.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/advanced-responsive.css') }}">
 
   <style>
     * {
@@ -2569,6 +2571,31 @@
     </div>
   </footer>
 
+  <!-- شريط التنقل السفلي للهواتف المحمولة -->
+  <nav class="mobile-bottom-nav">
+    <a href="#home" class="nav-item" onclick="showSection('home')">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </a>
+    <a href="#products" class="nav-item" onclick="showSection('products')">
+      <i class="fas fa-box"></i>
+      <span>المنتجات</span>
+    </a>
+    <a href="#about" class="nav-item" onclick="showSection('about')">
+      <i class="fas fa-info-circle"></i>
+      <span>من نحن</span>
+    </a>
+    <a href="#contact" class="nav-item" onclick="showSection('contact')">
+      <i class="fas fa-envelope"></i>
+      <span>اتصل بنا</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span>السلة</span>
+      <span class="cart-count" id="mobile-cart-count">0</span>
+    </a>
+  </nav>
+
   <!-- نموذج الطلب -->
   <div id="order-modal" class="modal">
     <div class="modal-content">
@@ -4003,6 +4030,7 @@
 
     async function updateCartCount(optionalCount) {
       const el = document.getElementById('cart-count');
+      const mobileEl = document.getElementById('mobile-cart-count');
       
       try {
         let count = optionalCount;
@@ -4015,8 +4043,12 @@
         if (el) {
           el.textContent = count;
         }
+        if (mobileEl) {
+          mobileEl.textContent = count;
+        }
       } catch (e) {
         if (el) el.textContent = '0';
+        if (mobileEl) mobileEl.textContent = '0';
       }
     }
     // وظيفة إضافة منتج للسلة (محدثة)
@@ -4044,6 +4076,9 @@
   
   <!-- نظام الترجمة التلقائية -->
   <script src="{{ url_for('static', filename='js/translation.js') }}"></script>
+  
+  <!-- تحسينات الأجهزة -->
+  <script src="{{ url_for('static', filename='js/device-optimization.js') }}"></script>
   <script>
     // إضافة زر تغيير اللغة إلى الصفحة
     document.addEventListener('DOMContentLoaded', function() {
