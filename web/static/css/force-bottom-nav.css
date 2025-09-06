@@ -1,0 +1,52 @@
+/* ===== إجبار شريط التنقل السفلي على العمل ===== */
+
+/* إجبار إظهار شريط التنقل السفلي */
+.mobile-bottom-nav {
+  display: flex !important;
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 70px !important;
+  z-index: 99999 !important;
+  background: linear-gradient(135deg, #DCD5B9, #C4B5A0) !important;
+  border-top: 2px solid #B8A082 !important;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+}
+
+/* إجبار إضافة padding للجسم */
+body {
+  padding-bottom: 70px !important;
+}
+
+/* إجبار إضافة margin للفوتر */
+.main-footer {
+  margin-bottom: 70px !important;
+}
+
+/* إجبار إظهار الشريط على جميع الأجهزة */
+@media screen and (max-width: 9999px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 99999 !important;
+  }
+  
+  body {
+    padding-bottom: 70px !important;
+  }
+  
+  .main-footer {
+    margin-bottom: 70px !important;
+  }
+}

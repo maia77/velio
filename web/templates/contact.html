@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimizations.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bottom-navigation.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/fixed-bottom-nav.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/force-bottom-nav.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/moving-bottom-nav.css') }}">
 </head>
 <body>
   <!-- شريط الإعلانات -->
@@ -54,8 +56,37 @@
   <!-- النماذج المنبثقة (Modal) والإشعارات -->
   <!-- انسخ هنا النماذج المنبثقة -->
 
+  <!-- شريط التنقل السفلي للهواتف المحمولة -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </a>
+    <a href="/#products" class="nav-item">
+      <i class="fas fa-box"></i>
+      <span>المنتجات</span>
+    </a>
+    <a href="/#about" class="nav-item">
+      <i class="fas fa-info-circle"></i>
+      <span>من نحن</span>
+    </a>
+    <a href="/#contact" class="nav-item">
+      <i class="fas fa-envelope"></i>
+      <span>اتصل بنا</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span>السلة</span>
+      <span class="cart-count" id="mobile-cart-count">0</span>
+    </a>
+  </nav>
+
   <script>
     // انسخ هنا محتوى الـ <script> بالكامل (بدون دالة showSection)
   </script>
+  
+  <!-- تحسينات شريط التنقل السفلي -->
+  <script src="{{ url_for('static', filename='js/bottom-navigation.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/moving-bottom-nav.js') }}"></script>
 </body>
 </html>

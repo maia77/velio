@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="/static/css/mobile-optimizations.css">
   <link rel="stylesheet" href="/static/css/bottom-navigation.css">
   <link rel="stylesheet" href="/static/css/fixed-bottom-nav.css">
+  <link rel="stylesheet" href="/static/css/force-bottom-nav.css">
+  <link rel="stylesheet" href="/static/css/moving-bottom-nav.css">
   
   <style>
     /* تصميم صفحة تفاصيل المنتج */
@@ -718,5 +720,34 @@
       return div.innerHTML;
     }
   </script>
+  
+  <!-- شريط التنقل السفلي للهواتف المحمولة -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </a>
+    <a href="/#products" class="nav-item">
+      <i class="fas fa-box"></i>
+      <span>المنتجات</span>
+    </a>
+    <a href="/#about" class="nav-item">
+      <i class="fas fa-info-circle"></i>
+      <span>من نحن</span>
+    </a>
+    <a href="/#contact" class="nav-item">
+      <i class="fas fa-envelope"></i>
+      <span>اتصل بنا</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span>السلة</span>
+      <span class="cart-count" id="mobile-cart-count">0</span>
+    </a>
+  </nav>
+  
+  <!-- تحسينات شريط التنقل السفلي -->
+  <script src="/static/js/bottom-navigation.js"></script>
+  <script src="/static/js/moving-bottom-nav.js"></script>
 </body>
 </html>
