@@ -213,7 +213,7 @@
       cursor: pointer;
     }
 
-    .cart-btn, .login-.cart-btn, .login-btn, .lang-btn {
+    .cart-btn, .login-.cart-btn, .login-btn, .lang-btn, .track-order-btn {
       background: none;
       border: 2px solid #DCD5B9;
       color: #DCD5B9;
@@ -228,7 +228,7 @@
       gap: 5px;
     }
 
-    .cart-btn:hover, .login-btn:hover, .lang-btn:hover {
+    .cart-btn:hover, .login-btn:hover, .lang-btn:hover, .track-order-btn:hover {
       background: #DCD5B9;
       color: white;
     }

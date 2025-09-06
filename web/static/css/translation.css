@@ -9,7 +9,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     padding: 15px;
     z-index: 1000;
-    border: 2px solid #e9ecef;
+    border: none;
     transition: all 0.3s ease;
     min-width: 200px;
 }
@@ -347,7 +347,7 @@
     padding: 6px 10px;
     min-width: auto;
     border-radius: 20px;
-    border: 2px solid #DCD5B9;
+    border: none;
     box-shadow: none;
     background: white;
     display: flex;
