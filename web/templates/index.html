@@ -445,12 +445,22 @@
       padding: 12px;
       border: 1px solid #ddd;
       border-radius: 8px;
-      font-size: 1rem;
+    }
+    
+    .comments-empty {
+      text-align: center;
+      color: #6c757d;
+      font-style: italic;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px dashed #ddd;
     }
     
     .form-actions {
       display: flex;
       gap: 10px;
+      justify-content: flex-end;
     }
     
       .modal-content {
@@ -3726,11 +3736,15 @@
         const commentsList = document.getElementById('detail-comments-list');
         const commentsEmpty = document.getElementById('detail-comments-empty');
         
-        if (data.success && data.comments && data.comments.length > 0) {
+        if (!data.success) {
+          throw new Error(data.error || 'خطأ في جلب التعليقات: ' + (data.error || 'خطأ غير معروف'));
+        }
+        
+        if (data.comments && data.comments.length > 0) {
           commentsList.innerHTML = data.comments.map(comment => `
             <div class="comment-item">
               <div class="comment-header">
-                <span class="comment-author">${comment.author_name}</span>
+                <span class="comment-author">${escapeHTML(comment.name)}</span>
                 <span class="comment-rating">${renderStars(comment.rating)}</span>
               </div>
               <div class="comment-content">${escapeHTML(comment.content)}</div>
@@ -3744,6 +3758,14 @@
         }
       } catch (error) {
         console.error('خطأ في تحميل التعليقات:', error);
+        const commentsList = document.getElementById('detail-comments-list');
+        const commentsEmpty = document.getElementById('detail-comments-empty');
+        if (commentsList) {
+          commentsList.innerHTML = '<div style="color:#dc3545; text-align:center; padding:20px;">تعذر تحميل التعليقات. يرجى المحاولة مرة أخرى.</div>';
+        }
+        if (commentsEmpty) {
+          commentsEmpty.style.display = 'none';
+        }
       }
     }
 
@@ -3764,7 +3786,7 @@
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            author_name: name,
+            name: name,
             content: content,
             rating: rating ? parseInt(rating) : null
           })
@@ -3777,11 +3799,11 @@
           resetDetailComment();
           loadDetailComments(currentProduct.id);
         } else {
-          showNotification('فشل في نشر التعليق', 'error');
+          showNotification('فشل في نشر التعليق: ' + (data.error || 'خطأ غير معروف'), 'error');
         }
       } catch (error) {
         console.error('خطأ في إرسال التعليق:', error);
-        showNotification('خطأ في إرسال التعليق', 'error');
+        showNotification('خطأ في إرسال التعليق. يرجى المحاولة مرة أخرى.', 'error');
       }
     }
 
@@ -3870,7 +3892,7 @@
       try {
         const res = await fetch(`/api/products/${productId}/comments`);
         const data = await res.json();
-        if (!data.success) throw new Error(data.error || 'خطأ في جلب التعليقات');
+        if (!data.success) throw new Error(data.error || 'خطأ في جلب التعليقات: ' + (data.error || 'خطأ غير معروف'));
         if (!data.comments || data.comments.length === 0) {
           listEl.innerHTML = '';
           emptyEl.style.display = 'block';
@@ -3887,7 +3909,13 @@
           </div>
         `).join('');
       } catch (e) {
-        listEl.innerHTML = '<div style="color:#dc3545;">تعذر تحميل التعليقات.</div>';
+        console.error('خطأ في تحميل التعليقات:', e);
+        if (listEl) {
+          listEl.innerHTML = '<div style="color:#dc3545; text-align:center; padding:20px;">تعذر تحميل التعليقات. يرجى المحاولة مرة أخرى.</div>';
+        }
+        if (emptyEl) {
+          emptyEl.style.display = 'none';
+        }
       }
     }
 
@@ -3926,14 +3954,17 @@
           body: JSON.stringify({ name, content, rating: rating || null })
         });
         const data = await res.json();
-        if (!data.success) throw new Error(data.error || 'فشل إضافة التعليق');
+        if (!data.success) throw new Error(data.error || 'فشل إضافة التعليق: ' + (data.error || 'خطأ غير معروف'));
         resetProductComment(productId);
         statusEl.style.color = '#198754';
         statusEl.textContent = 'تم إضافة تعليقك بنجاح';
         loadProductComments(productId);
       } catch (e) {
-        statusEl.style.color = '#dc3545';
-        statusEl.textContent = 'تعذر إضافة التعليق';
+        console.error('خطأ في إرسال التعليق:', e);
+        if (statusEl) {
+          statusEl.style.color = '#dc3545';
+          statusEl.textContent = 'تعذر إضافة التعليق. يرجى المحاولة مرة أخرى.';
+        }
       }
       return false;
     }
