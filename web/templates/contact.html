@@ -13,12 +13,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <!-- ربط ملف التصميم -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimizations.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/bottom-navigation.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/fixed-bottom-nav.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/force-bottom-nav.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/moving-bottom-nav.css') }}">
 </head>
 <body>
   <!-- شريط الإعلانات -->
@@ -36,9 +30,22 @@
         <a href="/about" class="nav-link">من نحن</a>
         <a href="/contact" class="nav-link active">اتصل بنا</a>
       </nav>
-      <!-- انسخ هنا بقية الهيدر (صندوق البحث، السلة، إلخ ) -->
-       <div class="header-actions">
-         <!-- ... -->
+      <!-- سطر البحث والسلة ومتابعة الطلب -->
+      <div class="header-actions">
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="ابحث عن المنتجات...">
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <a href="#" class="cart-link" onclick="openCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span>السلة</span>
+          <span class="cart-count" id="header-cart-count">0</span>
+        </a>
+        <a href="/track-order" class="track-order-link">
+          <i class="fas fa-truck"></i>
+          <span>متابعة الطلب</span>
+        </a>
+        <div id="header-language-slot"></div>
       </div>
     </div>
   </header>
@@ -82,11 +89,25 @@
   </nav>
 
   <script>
-    // انسخ هنا محتوى الـ <script> بالكامل (بدون دالة showSection)
+    // دالة فتح السلة
+    function openCart() {
+      window.location.href = '/cart';
+    }
+    
+    // تحديث عداد السلة
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('header-cart-count').textContent = count;
+      document.getElementById('mobile-cart-count').textContent = count;
+    }
+    
+    // تحديث العداد عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+      updateCartCount();
+    });
   </script>
   
   <!-- تحسينات شريط التنقل السفلي -->
-  <script src="{{ url_for('static', filename='js/bottom-navigation.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/moving-bottom-nav.js') }}"></script>
 </body>
 </html>
