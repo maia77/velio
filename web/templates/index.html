@@ -3740,7 +3740,7 @@
         const commentsEmpty = document.getElementById('detail-comments-empty');
         
         if (!data.success) {
-          throw new Error(data.error || 'خطأ في جلب التعليقات: ' + (data.error || 'خطأ غير معروف'));
+          throw new Error(data.error || 'خطأ في جلب التعليقات');
         }
         
         if (data.comments && data.comments.length > 0) {
@@ -3899,7 +3899,9 @@
       try {
         const res = await fetch(`/api/products/${productId}/comments`);
         const data = await res.json();
-        if (!data.success) throw new Error(data.error || 'خطأ في جلب التعليقات: ' + (data.error || 'خطأ غير معروف'));
+        if (!data.success) {
+          throw new Error(data.error || 'خطأ في جلب التعليقات');
+        }
         if (!data.comments || data.comments.length === 0) {
           listEl.innerHTML = '';
           emptyEl.style.display = 'block';
@@ -3961,7 +3963,9 @@
           body: JSON.stringify({ name, content, rating: rating || null })
         });
         const data = await res.json();
-        if (!data.success) throw new Error(data.error || 'فشل إضافة التعليق: ' + (data.error || 'خطأ غير معروف'));
+        if (!data.success) {
+          throw new Error(data.error || 'فشل إضافة التعليق');
+        }
         resetProductComment(productId);
         statusEl.style.color = '#198754';
         statusEl.textContent = 'تم إضافة تعليقك بنجاح';

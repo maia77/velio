@@ -92,8 +92,8 @@ class Comment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False, index=True)
-    name = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    name = db.Column('customer_name', db.String(100), nullable=False)  # Map to actual column name
+    content = db.Column('comment_text', db.Text, nullable=False)  # Map to actual column name
     rating = db.Column(db.Integer, nullable=True)  # 1..5 اختياري
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_approved = db.Column(db.Boolean, default=True)
