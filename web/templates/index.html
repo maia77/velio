@@ -463,7 +463,7 @@
       justify-content: flex-end;
     }
     
-      .modal-content {
+    .modal-content {
         max-width: 95%;
         width: 95%;
         margin: 20px;
@@ -488,7 +488,7 @@
       }
     }
     
-   .gps-btn {
+    .gps-btn {
   background: #4A90E2; /* لون الخلفية */
   color: white; /* لون النص */
   border: none; /* بدون حدود */
@@ -1248,10 +1248,7 @@
         flex-shrink: 0;
         margin-left: 0;
       }
-      
     }
-
-
 
 
 
@@ -1350,7 +1347,7 @@
       }
 
       /* تحسينات إضافية للصور في الهواتف الصغيرة */
-        .products-grid {
+      .products-grid {
           gap: 10px;
         }
         
@@ -1385,7 +1382,6 @@
           margin-top: 8px;
         }
       }
-
 
     /* الأقسام المخفية */
     .page-section {
@@ -1928,7 +1924,6 @@
         margin: 0 10px;
       }
     }
-
   </style>
 </head>
 
@@ -3566,15 +3561,15 @@
                <div class="product-price">${productPrice} $</div>
               <div class="product-actions">
                 <button class="btn-primary" 
-                        onclick="addToCartQuick(${product.id}, '${productName}')">
+                        onclick="addToCartQuick(${product.id}, '${productName}', event)">
                   اطلب الآن
                 </button>
-                <button class="btn-outline" onclick="toggleComments(${product.id})">التعليقات</button>
+                <button class="btn-outline" onclick="toggleComments(${product.id}, event)">التعليقات</button>
               </div>
-              <div class="comments-block" id="comments-${product.id}" style="display:none; margin-top:12px;">
+              <div class="comments-block" id="comments-${product.id}" style="display:none; margin-top:12px;" onclick="event.stopPropagation()">
                 <div id="comments-list-${product.id}" style="display:grid; gap:10px; margin-bottom:10px;"></div>
                 <div id="comments-empty-${product.id}" style="color:#6c757d; display:none;">لا توجد تعليقات بعد. كن أول من يعلّق!</div>
-                <form onsubmit="return submitProductComment(event, ${product.id})" style="display:grid; gap:8px; margin-top:10px;">
+                <form onsubmit="return submitProductComment(event, ${product.id})" style="display:grid; gap:8px; margin-top:10px;" onclick="event.stopPropagation()">
                   <input type="text" id="comment-name-${product.id}" placeholder="الاسم" required style="padding:10px; border:1px solid #ddd; border-radius:8px;">
                   <select id="comment-rating-${product.id}" style="padding:10px; border:1px solid #ddd; border-radius:8px;">
                     <option value="">تقييم (اختياري)</option>
@@ -3709,7 +3704,11 @@
     }
 
     // وظيفة إضافة للسلة من نافذة التفاصيل
-    function addToCartFromDetail() {
+    function addToCartFromDetail(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       if (currentProduct) {
         addToCartQuick(currentProduct.id, currentProduct.name_ar || currentProduct.name);
         showNotification(`تم إضافة "${currentProduct.name_ar || currentProduct.name}" للسلة!`, 'success');
@@ -3717,7 +3716,11 @@
     }
 
     // وظيفة إظهار/إخفاء التعليقات
-    function toggleCommentsFromDetail() {
+    function toggleCommentsFromDetail(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       const commentsSection = document.getElementById('detail-comments-section');
       const isHidden = commentsSection.style.display === 'none';
       commentsSection.style.display = isHidden ? 'block' : 'none';
@@ -3818,7 +3821,7 @@
     function addProductClickHandlers() {
       document.addEventListener('click', function(e) {
         const productCard = e.target.closest('.product-card');
-        if (productCard && !e.target.closest('.product-actions')) {
+        if (productCard && !e.target.closest('.product-actions') && !e.target.closest('.comments-block')) {
           const productId = productCard.getAttribute('data-product-id');
           if (productId) {
             // الانتقال إلى صفحة المنتج
@@ -3873,7 +3876,11 @@
         .replace(/'/g, '&#39;');
     }
 
-    function toggleComments(productId) {
+    function toggleComments(productId, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       const block = document.getElementById(`comments-${productId}`);
       if (!block) return;
       const isHidden = block.style.display === 'none' || block.style.display === '';
@@ -3969,7 +3976,11 @@
       return false;
     }
 
-    async function addToCartQuick(productId, productName) {
+    async function addToCartQuick(productId, productName, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       try {
         const res = await fetch('/cart/add', {
           method: 'POST',
@@ -4130,23 +4141,23 @@
           </div>
           
           <div class="product-actions">
-            <button class="btn-primary add-to-cart-btn" onclick="addToCartFromDetail()">
+            <button class="btn-primary add-to-cart-btn" onclick="addToCartFromDetail(event)">
               <i class="fas fa-shopping-cart"></i>
               أضف للسلة
             </button>
-            <button class="btn-outline" onclick="toggleCommentsFromDetail()">
+            <button class="btn-outline" onclick="toggleCommentsFromDetail(event)">
               <i class="fas fa-comments"></i>
               التعليقات
             </button>
           </div>
           
           <!-- قسم التعليقات -->
-          <div id="detail-comments-section" class="comments-section" style="display: none;">
+          <div id="detail-comments-section" class="comments-section" style="display: none;" onclick="event.stopPropagation()">
             <div id="detail-comments-list" class="comments-list"></div>
             <div id="detail-comments-empty" class="comments-empty" style="display: none;">
               لا توجد تعليقات بعد. كن أول من يعلّق!
             </div>
-            <form id="detail-comment-form" class="comment-form" onsubmit="return submitDetailComment(event)">
+            <form id="detail-comment-form" class="comment-form" onsubmit="return submitDetailComment(event)" onclick="event.stopPropagation()">
               <input type="text" id="detail-comment-name" placeholder="الاسم" required>
               <select id="detail-comment-rating">
                 <option value="">تقييم (اختياري)</option>
