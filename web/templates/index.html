@@ -2016,6 +2016,31 @@
     </div>
   </header>
 
+  <!-- شريط التنقل السفلي للهواتف المحمولة -->
+  <nav class="mobile-bottom-nav">
+    <a href="#home" class="nav-item" onclick="showSection('home')">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </a>
+    <a href="#products" class="nav-item" onclick="showSection('products')">
+      <i class="fas fa-box"></i>
+      <span>المنتجات</span>
+    </a>
+    <a href="#about" class="nav-item" onclick="showSection('about')">
+      <i class="fas fa-info-circle"></i>
+      <span>من نحن</span>
+    </a>
+    <a href="#contact" class="nav-item" onclick="showSection('contact')">
+      <i class="fas fa-envelope"></i>
+      <span>اتصل بنا</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span>السلة</span>
+      <span class="cart-count" id="mobile-cart-count">0</span>
+    </a>
+  </nav>
+
   <!-- القسم الرئيسي -->
   <section id="home" class="page-section active">
     <div class="hero-section">
@@ -2570,31 +2595,6 @@
       <p>&copy; 2024 Classique Tempus. جميع الحقوق محفوظة.</p>
     </div>
   </footer>
-
-  <!-- شريط التنقل السفلي للهواتف المحمولة -->
-  <nav class="mobile-bottom-nav">
-    <a href="#home" class="nav-item" onclick="showSection('home')">
-      <i class="fas fa-home"></i>
-      <span>الرئيسية</span>
-    </a>
-    <a href="#products" class="nav-item" onclick="showSection('products')">
-      <i class="fas fa-box"></i>
-      <span>المنتجات</span>
-    </a>
-    <a href="#about" class="nav-item" onclick="showSection('about')">
-      <i class="fas fa-info-circle"></i>
-      <span>من نحن</span>
-    </a>
-    <a href="#contact" class="nav-item" onclick="showSection('contact')">
-      <i class="fas fa-envelope"></i>
-      <span>اتصل بنا</span>
-    </a>
-    <a href="#" class="nav-item" onclick="openCart()">
-      <i class="fas fa-shopping-cart"></i>
-      <span>السلة</span>
-      <span class="cart-count" id="mobile-cart-count">0</span>
-    </a>
-  </nav>
 
   <!-- نموذج الطلب -->
   <div id="order-modal" class="modal">
