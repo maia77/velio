@@ -194,6 +194,8 @@
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   padding: 10px 0;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .mobile-bottom-nav .nav-items {
@@ -216,6 +218,7 @@
   transition: all 0.3s ease;
   min-width: 60px;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 }
 
 .mobile-bottom-nav .nav-item:hover,
@@ -465,7 +468,7 @@
   }
   
   .mobile-bottom-nav {
-    display: block;
+    display: flex;
   }
   
   .main-nav {

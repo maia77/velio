@@ -2442,7 +2442,7 @@
             <i class="fas fa-search"></i>
           </button>
         </div>
-        <a class="cart-btn" href="/cart">
+        <a class="cart-btn" href="/cart" onclick="if(window.innerWidth <= 768) { event.preventDefault(); openMobileCart(); }">
           <i class="fas fa-shopping-cart"></i>
           {{ _('Cart') }} (<span id="cart-count">0</span>)
         </a>
@@ -2539,6 +2539,29 @@
   </div>
 
   <!-- شريط التنقل السفلي للهواتف المحمولة -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </a>
+    <a href="/#products" class="nav-item">
+      <i class="fas fa-box"></i>
+      <span>المنتجات</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openMobileCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span>السلة</span>
+      <span class="cart-count" id="mobile-bottom-cart-count">0</span>
+    </a>
+    <a href="/track-order" class="nav-item">
+      <i class="fas fa-truck"></i>
+      <span>متابعة الطلب</span>
+    </a>
+    <a href="/#contact" class="nav-item">
+      <i class="fas fa-envelope"></i>
+      <span>اتصل بنا</span>
+    </a>
+  </nav>
 
   <!-- القسم الرئيسي -->
   <section id="home" class="page-section active">
@@ -4531,6 +4554,8 @@
         const data = await res.json();
         if (!data.success) throw new Error(data.error || 'فشل إضافة المنتج');
         await updateCartCount(data.cart_count);
+        // Update mobile cart count as well
+        updateMobileCartCount();
       } catch (e) {
         alert('تعذر إضافة المنتج للسلة: ' + e.message);
       }
@@ -4550,8 +4575,14 @@
         if (el) {
           el.textContent = count;
         }
+        
+        // Update mobile cart counts as well
+        cartCount = count;
+        updateMobileCartCount();
       } catch (e) {
         if (el) el.textContent = '0';
+        cartCount = 0;
+        updateMobileCartCount();
       }
     }
     // وظيفة إضافة منتج للسلة (محدثة)
@@ -4571,6 +4602,7 @@
 
       cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
       updateCartDisplay();
+      updateMobileCartCount();
       showNotification(`تم إضافة ${productName} إلى السلة!`, 'success');
     }
 
@@ -4647,49 +4679,76 @@
       document.body.style.overflow = '';
     }
     
-    function loadMobileCartItems() {
+    async function loadMobileCartItems() {
       const cartContent = document.getElementById('mobile-cart-content');
       const cartTotal = document.getElementById('mobile-cart-total');
       
-      if (cartItems.length === 0) {
+      try {
+        // Fetch cart items from server
+        const response = await fetch('/api/cart/items');
+        const data = await response.json();
+        
+        if (data.success && data.items && data.items.length > 0) {
+          let total = 0;
+          cartContent.innerHTML = data.items.map(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            
+            return `
+              <div class="mobile-cart-item">
+                <img src="${item.image || '/static/images/product1.jpg'}" alt="${item.name}" class="mobile-cart-item-image">
+                <div class="mobile-cart-item-info">
+                  <div class="mobile-cart-item-name">${item.name}</div>
+                  <div class="mobile-cart-item-price">${itemTotal.toFixed(2)} $</div>
+                </div>
+                <button class="mobile-cart-item-remove" onclick="removeFromCart(${item.id})">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            `;
+          }).join('');
+          
+          cartTotal.textContent = `${total.toFixed(2)} $`;
+        } else {
+          // Empty cart
+          cartContent.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; color: #666;">
+              <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #DCD5B9; margin-bottom: 15px;"></i>
+              <h4 style="margin: 0 0 10px 0; color: #333;">السلة فارغة</h4>
+              <p style="margin: 0; color: #666;">أضف بعض المنتجات لتبدأ التسوق!</p>
+            </div>
+          `;
+          cartTotal.textContent = '0 $';
+        }
+      } catch (error) {
+        console.error('Error loading cart items:', error);
         cartContent.innerHTML = `
           <div style="text-align: center; padding: 40px 20px; color: #666;">
-            <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #DCD5B9; margin-bottom: 15px;"></i>
-            <h4 style="margin: 0 0 10px 0; color: #333;">السلة فارغة</h4>
-            <p style="margin: 0; color: #666;">أضف بعض المنتجات لتبدأ التسوق!</p>
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc3545; margin-bottom: 15px;"></i>
+            <h4 style="margin: 0 0 10px 0; color: #333;">خطأ في تحميل السلة</h4>
+            <p style="margin: 0; color: #666;">يرجى المحاولة مرة أخرى</p>
           </div>
         `;
         cartTotal.textContent = '0 $';
-        return;
       }
-      
-      let total = 0;
-      cartContent.innerHTML = cartItems.map(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        
-        return `
-          <div class="mobile-cart-item">
-            <img src="${item.image}" alt="${item.name}" class="mobile-cart-item-image">
-            <div class="mobile-cart-item-info">
-              <div class="mobile-cart-item-name">${item.name}</div>
-              <div class="mobile-cart-item-price">${itemTotal.toFixed(2)} $</div>
-            </div>
-            <button class="mobile-cart-item-remove" onclick="removeFromCart(${item.id})">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        `;
-      }).join('');
-      
-      cartTotal.textContent = `${total.toFixed(2)} $`;
     }
     
     // Update mobile cart count
     function updateMobileCartCount() {
       const mobileCartCount = document.getElementById('mobile-cart-count');
+      const mobileBottomCartCount = document.getElementById('mobile-bottom-cart-count');
+      const mainCartCount = document.getElementById('cart-count');
+      
       if (mobileCartCount) {
         mobileCartCount.textContent = cartCount;
+      }
+      
+      if (mobileBottomCartCount) {
+        mobileBottomCartCount.textContent = cartCount;
+      }
+      
+      if (mainCartCount) {
+        mainCartCount.textContent = cartCount;
       }
     }
     

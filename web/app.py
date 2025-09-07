@@ -2382,6 +2382,40 @@ def api_cart_count():
     return jsonify({'success': True, 'count': _cart_total_count(cart)})
 
 
+@app.route('/api/cart/items')
+def api_cart_items():
+    """الحصول على عناصر السلة كـ JSON."""
+    try:
+        cart = _get_session_cart()
+        cart_items = []
+        total = 0
+        
+        for product_id, quantity in cart.items():
+            if quantity > 0:
+                product = Product.query.get(int(product_id))
+                if product and getattr(product, 'is_active', True):
+                    item_total = float(product.price) * quantity
+                    total += item_total
+                    
+                    cart_items.append({
+                        'id': product.id,
+                        'name': product.name,
+                        'price': float(product.price),
+                        'quantity': quantity,
+                        'image': product.image_url or '/static/images/product1.jpg',
+                        'total': item_total
+                    })
+        
+        return jsonify({
+            'success': True, 
+            'items': cart_items, 
+            'total': total,
+            'count': len(cart_items)
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 @app.route('/cart/add', methods=['POST'])
 def cart_add():
     """إضافة منتج إلى السلة من الواجهة (JSON: product_id, quantity)."""
