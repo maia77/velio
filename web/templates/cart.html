@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>سلة المشتريات</title>
   <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
+  <link rel="stylesheet" href="/static/css/mobile-nav.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     body { font-family: Arial, sans-serif; background:#f7f7f7; margin:0; }
@@ -26,7 +28,16 @@
     .summary-row { display:flex; justify-content: space-between; margin: 8px 0; font-size: 16px; color:#333; }
     .note { margin-top: 14px; color:#555; line-height: 1.8; }
     .empty { text-align:center; padding: 40px 10px; color:#777; }
-    @media (max-width: 640px) { .actions { flex-direction: column; align-items: stretch; } .btn-continue { font-size: 16px; } }
+    @media (max-width: 640px) { 
+      .actions { flex-direction: column; align-items: stretch; } 
+      .btn-continue { font-size: 16px; }
+      .container { margin: 10px auto; padding: 16px; }
+      .cart-table { font-size: 14px; }
+      .cart-table th, .cart-table td { padding: 8px 4px; }
+      .quantity-input { width: 50px; }
+      .qty-btn { width: 30px; height: 30px; }
+      h1 { font-size: 1.8em; margin: 20px 0; }
+    }
   </style>
   <script>
     function confirmRemove(){ return confirm('هل تريد إزالة هذا المنتج من السلة؟'); }
@@ -128,6 +139,31 @@
     {% endif %}
   </div>
   <script>
+    // دالة فتح السلة
+    function openCart() {
+      window.location.href = '/cart';
+    }
+    
+    // دالة فتح السلة المحمولة
+    function openMobileCart() {
+      window.location.href = '/cart';
+    }
+    
+    // تحديث عداد السلة
+    function updateCartCount() {
+      fetch('/api/cart/count')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const cartCountElements = document.querySelectorAll('.cart-count, #mobile-cart-count');
+            cartCountElements.forEach(el => {
+              if (el) el.textContent = data.count;
+            });
+          }
+        })
+        .catch(error => console.log('Error updating cart count:', error));
+    }
+    
     // ربط أحداث +/- وتغيير الإدخال
     document.querySelectorAll('.qty-group').forEach(group => {
       const productId = parseInt(group.getAttribute('data-product-id'), 10);
@@ -143,6 +179,20 @@
       input.addEventListener('change', () => {
         let v = parseInt(input.value || '1', 10); if (isNaN(v) || v < 1) v = 1; input.value = v; updateCartAjax(productId, v);
       });
+    });
+    
+    // تحديث عداد السلة عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        updateCartCount();
+      } catch (error) {
+        console.log('Error updating cart count on page load:', error);
+      }
+    });
+    
+    // معالجة الأخطاء العامة
+    window.addEventListener('error', function(e) {
+      console.log('JavaScript error:', e.error);
     });
   </script>
   
