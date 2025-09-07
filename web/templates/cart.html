@@ -37,6 +37,68 @@
       .quantity-input { width: 50px; }
       .qty-btn { width: 30px; height: 30px; }
       h1 { font-size: 1.8em; margin: 20px 0; }
+      
+      /* إخفاء الجدول على الهواتف وعرض بطاقات بدلاً منه */
+      .cart-table { display: none; }
+      .mobile-cart-items { display: block; }
+    }
+    
+    /* عرض الجدول على الشاشات الكبيرة */
+    @media (min-width: 641px) {
+      .cart-table { display: table; }
+      .mobile-cart-items { display: none; }
+    }
+    
+    /* تصميم البطاقات للهواتف */
+    .mobile-cart-items {
+      display: none;
+    }
+    
+    .mobile-cart-item {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .mobile-cart-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .mobile-cart-item-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 16px;
+    }
+    
+    .mobile-cart-item-price {
+      color: #DCD5B9;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .mobile-cart-item-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .mobile-cart-item-quantity {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .mobile-cart-item-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
     }
   </style>
   <script>
@@ -119,6 +181,37 @@
         {% endfor %}
       </tbody>
     </table>
+
+    <!-- عرض محمول للعناصر -->
+    <div class="mobile-cart-items">
+      {% for item in cart_items %}
+      <div class="mobile-cart-item">
+        <div class="mobile-cart-item-header">
+          <div class="mobile-cart-item-name">{{ item.name }}</div>
+          <div class="mobile-cart-item-price">{{ '%.2f'|format(item.price) }} $</div>
+        </div>
+        <div class="mobile-cart-item-details">
+          <div class="mobile-cart-item-quantity">
+            <span>الكمية:</span>
+            <div class="qty-group" data-product-id="{{ item.product_id }}">
+              <button type="button" class="qty-btn qty-dec" aria-label="تقليل">−</button>
+              <input class="quantity-input qty-input" type="number" min="1" value="{{ item.quantity }}" />
+              <button type="button" class="qty-btn qty-inc" aria-label="زيادة">+</button>
+            </div>
+          </div>
+          <div class="mobile-cart-item-total">
+            <strong>{{ '%.2f'|format(item.price * item.quantity) }} $</strong>
+          </div>
+        </div>
+        <div class="mobile-cart-item-actions">
+          <form method="POST" action="/cart/remove" onsubmit="return confirmRemove()" style="display: inline;">
+            <input type="hidden" name="product_id" value="{{ item.product_id }}" />
+            <button class="btn btn-remove" type="submit">حذف</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
 
     <div class="summary">
       <div class="summary-row">
