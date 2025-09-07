@@ -1,0 +1,313 @@
+/* تنسيقات قسم زينة الطبيعة - إصلاح شامل */
+
+/* تنسيق قوي للجوال - إجبار تطبيق موضع الخلفية */
+@media screen and (max-width: 768px) {
+  section.content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #d1ecf1 100%) !important;
+    background-size: 200% 100% !important;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+/* تنسيق قوي للشاشات الصغيرة */
+@media screen and (max-width: 480px) {
+  section.content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #d1ecf1 100%) !important;
+    background-size: 200% 100% !important;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+/* إعادة تعيين التنسيقات */
+.nature-category-grid,
+.unique-category-grid,
+.details-category-grid,
+.heritage-category-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* تنسيق البطاقات */
+.category-product-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  flex: 0 0 280px;
+  min-width: 280px;
+  max-width: 280px;
+  position: relative;
+  overflow: visible;
+}
+
+/* حاوية الصورة الجديدة - تخطيط عمودي */
+.category-product-card .image-container {
+  width: 100%;
+  height: 200px; /* إرجاع الارتفاع الأصلي للعرض العمودي */
+  background-color: #f8f9fa;
+  border-radius: 15px 15px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+/* تنسيق الصور - عرض عمودي */
+.category-product-card .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* إرجاع إلى contain للعرض العمودي الأصلي */
+  object-position: center;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #f8f9fa;
+}
+
+/* تنسيق متجاوب للهواتف */
+@media (max-width: 768px) {
+  .nature-category-grid,
+  .unique-category-grid,
+  .details-category-grid,
+  .heritage-category-grid {
+    gap: 12px;
+    padding: 8px 0;
+    margin: 0 -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .category-product-card {
+    flex: 0 0 200px;
+    min-width: 200px;
+    max-width: 200px;
+    margin-bottom: 15px;
+  }
+
+  .category-product-card .image-container {
+    height: 100px !important; /* ارتفاع أقل للهواتف */
+  }
+  
+  .category-product-card .image-container img {
+    height: 100% !important;
+    object-fit: contain !important;
+    background: #f8f9fa !important;
+  }
+
+  /* تنسيق خلفية قسم زينة الطبيعة للجوال */
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    background-image: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    padding: 20px 0 !important;
+    min-height: 280px !important;
+    width: 100% !important;
+    background-size: cover !important;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+  }
+}
+
+/* تنسيق متجاوب للشاشات الصغيرة جداً */
+@media (max-width: 480px) {
+  .nature-category-grid,
+  .unique-category-grid,
+  .details-category-grid,
+  .heritage-category-grid {
+    gap: 10px;
+    padding: 5px 0;
+    margin: 0 -8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .category-product-card {
+    flex: 0 0 180px;
+    min-width: 180px;
+    max-width: 180px;
+    margin-bottom: 12px;
+  }
+
+  .category-product-card .image-container {
+    height: 80px !important; /* ارتفاع أقل للشاشات الصغيرة */
+  }
+  
+  .category-product-card .image-container img {
+    height: 100% !important;
+    object-fit: contain !important;
+    background: #f8f9fa !important;
+  }
+
+  /* تنسيق خلفية قسم زينة الطبيعة للشاشات الصغيرة */
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    padding: 15px 0 !important;
+    min-height: 280px !important;
+    width: 100% !important;
+    background-size: cover !important;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+/* تحسين التمرير الأفقي */
+.nature-category-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.nature-category-grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.nature-category-grid::-webkit-scrollbar-thumb {
+  background: #DCD5B9;
+  border-radius: 3px;
+}
+
+.nature-category-grid::-webkit-scrollbar-thumb:hover {
+  background: #CBBAB3;
+}
+
+/* تحسينات إضافية */
+.category-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.category-product-card .image-container img {
+  transition: transform 0.3s ease;
+}
+
+.category-product-card:hover .image-container img {
+  transform: scale(1.05);
+}
+
+/* إصلاح قسري للصور */
+.nature-category-grid .category-product-card,
+.unique-category-grid .category-product-card,
+.details-category-grid .category-product-card,
+.heritage-category-grid .category-product-card {
+  overflow: visible !important;
+}
+
+.nature-category-grid .category-product-card .image-container,
+.unique-category-grid .category-product-card .image-container,
+.details-category-grid .category-product-card .image-container,
+.heritage-category-grid .category-product-card .image-container {
+  overflow: visible !important;
+}
+
+.nature-category-grid .category-product-card .image-container img,
+.unique-category-grid .category-product-card .image-container img,
+.details-category-grid .category-product-card .image-container img,
+.heritage-category-grid .category-product-card .image-container img {
+  object-fit: contain !important;
+  object-position: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #f8f9fa !important;
+}
+
+/* تنسيقات إضافية لقسم زينة الطبيعة - تحسينات للجوال */
+@media (max-width: 768px) {
+  /* إجبار تطبيق موضع الخلفية على الجوال */
+  section.content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background-position: right center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+  }
+
+  /* تحسين التمرير الأفقي لقسم زينة الطبيعة */
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar {
+    height: 8px !important;
+  }
+
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar-track {
+    background: rgba(220, 213, 185, 0.2) !important;
+    border-radius: 4px !important;
+  }
+
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar-thumb {
+    background: #DCD5B9 !important;
+    border-radius: 4px !important;
+  }
+
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar-thumb:hover {
+    background: #CBBAB3 !important;
+  }
+}
+
+/* تنسيقات إضافية للشاشات الصغيرة جداً */
+@media (max-width: 480px) {
+  /* إجبار تطبيق موضع الخلفية على الشاشات الصغيرة */
+  section.content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background-position: right center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+  }
+
+  /* تحسين التمرير الأفقي للشاشات الصغيرة */
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar {
+    height: 6px !important;
+  }
+}
+
+/* تنسيقات إضافية للشاشات المتوسطة */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* تنسيق خلفية قسم زينة الطبيعة للتابلت */
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    padding: 25px 0 !important;
+    min-height: 280px !important;
+    width: 100% !important;
+    background-size: cover !important;
+    background-position: 30% center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+/* تنسيقات للشاشات الكبيرة */
+@media (min-width: 1025px) {
+  /* تنسيق خلفية قسم زينة الطبيعة للشاشات الكبيرة */
+  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    padding: 30px 0 !important;
+    min-height: 280px !important;
+    width: 100% !important;
+    background-size: cover !important;
+    background-position: 30% center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+/* تنسيق إضافي قوي للجوال - إجبار تطبيق موضع الخلفية */
+@media screen and (max-width: 768px) {
+  section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #d1ecf1 100%) !important;
+    background-size: 200% 100% !important;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+/* تنسيق إضافي قوي للشاشات الصغيرة */
+@media screen and (max-width: 480px) {
+  section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #d1ecf1 100%) !important;
+    background-size: 200% 100% !important;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+  }
+}

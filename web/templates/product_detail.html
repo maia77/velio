@@ -17,6 +17,7 @@
   <!-- CSS -->
   <link rel="stylesheet" href="/static/style.css">
   <link rel="stylesheet" href="/static/css/translation.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
   
   <style>
     /* تصميم صفحة تفاصيل المنتج */
@@ -86,7 +87,9 @@
     .main-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
+      background: #f8f9fa;
       transition: transform 0.3s ease;
     }
     
@@ -258,6 +261,27 @@
       transform: translateY(-3px);
     }
     
+    /* تحسين زر التعليقات */
+    #comments-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #comments-btn:hover {
+      background: #DCD5B9;
+      color: #333;
+    }
+    
+    #comments-count {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
     /* قسم التعليقات */
     .comments-section {
       margin-top: 40px;
@@ -285,6 +309,25 @@
       border-radius: 15px;
       border-right: 4px solid #DCD5B9;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      animation: slideIn 0.5s ease-out;
+      position: relative;
+    }
+    
+    .comment-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .comment-header {
@@ -298,11 +341,17 @@
       font-weight: 600;
       color: #333;
       font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .comment-rating {
       color: #DCD5B9;
       font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
     
     .comment-content {
@@ -318,6 +367,8 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+      border: 2px solid #DCD5B9;
+      box-shadow: 0 8px 25px rgba(220, 213, 185, 0.2);
     }
     
     .comment-form input,
@@ -327,7 +378,8 @@
       border: 2px solid #ddd;
       border-radius: 10px;
       font-size: 1rem;
-      transition: border-color 0.3s ease;
+      transition: all 0.3s ease;
+      background: white;
     }
     
     .comment-form input:focus,
@@ -335,11 +387,25 @@
     .comment-form textarea:focus {
       outline: none;
       border-color: #DCD5B9;
+      box-shadow: 0 0 0 3px rgba(220, 213, 185, 0.2);
+      transform: scale(1.02);
+    }
+    
+    .comment-form input:hover,
+    .comment-form select:hover,
+    .comment-form textarea:hover {
+      border-color: #DCD5B9;
     }
     
     .form-actions {
       display: flex;
       gap: 15px;
+    }
+    
+    .form-actions .btn-primary,
+    .form-actions .btn-outline {
+      flex: 1;
+      min-width: auto;
     }
     
     /* تصميم متجاوب */
@@ -372,6 +438,15 @@
       .product-actions {
         flex-direction: column;
       }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .form-actions .btn-primary,
+      .form-actions .btn-outline {
+        width: 100%;
+      }
     }
     
     /* تحميل */
@@ -389,6 +464,75 @@
       padding: 40px;
       color: #e74c3c;
       font-size: 1.2rem;
+    }
+    
+    /* تحسينات إضافية للتعليقات */
+    .comments-section {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    .comments-title {
+      position: relative;
+    }
+    
+    .comments-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(135deg, #DCD5B9, #c4b896);
+      border-radius: 2px;
+    }
+    
+    /* تحسينات إضافية للتعليقات */
+    .comment-item {
+      position: relative;
+    }
+    
+    .comment-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(135deg, #DCD5B9, #c4b896);
+      border-radius: 0 15px 15px 0;
+    }
+    
+    /* تحسينات إضافية للتعليقات */
+    .comment-author {
+      font-weight: 600;
+      color: #333;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .comment-author::before {
+      content: '👤';
+      font-size: 1rem;
+    }
+    
+    .comment-rating {
+      color: #DCD5B9;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
   </style>
 </head>
@@ -505,20 +649,28 @@
                 <i class="fas fa-shopping-cart"></i>
                 أضف للسلة
               </button>
-              <button class="btn-outline" onclick="toggleComments()">
+              <button class="btn-outline" onclick="toggleComments()" id="comments-btn">
                 <i class="fas fa-comments"></i>
-                التعليقات
+                <span id="comments-btn-text">التعليقات</span>
+                <span id="comments-count" style="display: none; background: #DCD5B9; color: #333; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; animation: pulse 2s infinite;">0</span>
               </button>
             </div>
             
             <!-- قسم التعليقات -->
             <div id="comments-section" class="comments-section" style="display: none;">
-              <h3 class="comments-title">التعليقات</h3>
+              <h3 class="comments-title">
+                <i class="fas fa-comments"></i> التعليقات
+              </h3>
               <div id="comments-list" class="comments-list"></div>
-              <div id="comments-empty" class="comments-empty" style="display: none;">
-                لا توجد تعليقات بعد. كن أول من يعلّق!
+              <div id="comments-empty" class="comments-empty" style="display: none; text-align: center; padding: 40px; color: #666; background: #f8f9fa; border-radius: 15px; border: 2px dashed #DCD5B9;">
+                <i class="fas fa-comment-slash" style="font-size: 3rem; color: #DCD5B9; margin-bottom: 15px;"></i>
+                <h4 style="margin: 0 0 10px 0; color: #333;">لا توجد تعليقات بعد</h4>
+                <p style="margin: 0; color: #666;">كن أول من يعلّق على هذا المنتج!</p>
               </div>
-              <form id="comment-form" class="comment-form" onsubmit="return submitComment(event)">
+              <form id="comment-form" class="comment-form" enctype="multipart/form-data" onsubmit="return submitComment(event)">
+                <h4 style="margin: 0 0 20px 0; color: #333; font-size: 1.2rem; text-align: center;">
+                  <i class="fas fa-edit"></i> أضف تعليقك
+                </h4>
                 <input type="text" id="comment-name" placeholder="الاسم" required>
                 <select id="comment-rating">
                   <option value="">تقييم (اختياري)</option>
@@ -529,9 +681,57 @@
                   <option value="1">⭐ (1)</option>
                 </select>
                 <textarea id="comment-content" rows="4" placeholder="نص التعليق" required></textarea>
+                
+                <!-- حقل رفع الصورة -->
+                <div class="image-upload-section" style="margin: 15px 0;">
+                  <label for="comment-image" class="image-upload-label" style="display: block; margin-bottom: 10px; color: #333; font-weight: 500;">
+                    <i class="fas fa-camera"></i> إضافة صورة (اختياري)
+                  </label>
+                  <input type="file" id="comment-image" name="image" accept="image/*" style="display: none;" onchange="previewCommentImage(this)">
+                  <div class="image-upload-area" onclick="document.getElementById('comment-image').click()" style="
+                    border: 2px dashed #DCD5B9;
+                    border-radius: 10px;
+                    padding: 20px;
+                    text-align: center;
+                    cursor: pointer;
+                    background: #fafafa;
+                    transition: all 0.3s ease;
+                    min-height: 80px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                  ">
+                    <div id="image-upload-text" style="color: #666;">
+                      <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                      <span>اضغط لاختيار صورة أو اسحبها هنا</span>
+                    </div>
+                    <div id="image-preview" style="display: none; max-width: 100%; max-height: 200px;">
+                      <img id="preview-img" style="max-width: 100%; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                      <button type="button" onclick="removeCommentImage()" style="
+                        background: #dc3545;
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 30px;
+                        height: 30px;
+                        margin-top: 10px;
+                        cursor: pointer;
+                        font-size: 14px;
+                      " title="إزالة الصورة">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
                 <div class="form-actions">
-                  <button type="submit" class="btn-primary">نشر التعليق</button>
-                  <button type="button" class="btn-outline" onclick="resetComment()">إلغاء</button>
+                  <button type="submit" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i> نشر التعليق
+                  </button>
+                  <button type="button" class="btn-outline" onclick="resetComment()">
+                    <i class="fas fa-times"></i> إلغاء
+                  </button>
                 </div>
               </form>
             </div>
@@ -609,11 +809,27 @@
     // إظهار/إخفاء التعليقات
     function toggleComments() {
       const commentsSection = document.getElementById('comments-section');
+      const commentsBtn = document.getElementById('comments-btn');
       const isHidden = commentsSection.style.display === 'none';
-      commentsSection.style.display = isHidden ? 'block' : 'none';
       
-      if (isHidden && currentProduct) {
-        loadComments(currentProduct.id);
+      if (isHidden) {
+        // إظهار التعليقات
+        commentsSection.style.display = 'block';
+        commentsBtn.innerHTML = '<i class="fas fa-comments"></i><span id="comments-btn-text">إخفاء التعليقات</span><span id="comments-count" style="display: none; background: #DCD5B9; color: #333; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; animation: pulse 2s infinite;">0</span>';
+        
+        // تحميل التعليقات
+        if (currentProduct) {
+          loadComments(currentProduct.id);
+        }
+        
+        // التمرير إلى قسم التعليقات
+        setTimeout(() => {
+          commentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      } else {
+        // إخفاء التعليقات
+        commentsSection.style.display = 'none';
+        commentsBtn.innerHTML = '<i class="fas fa-comments"></i><span id="comments-btn-text">التعليقات</span><span id="comments-count" style="display: none; background: #DCD5B9; color: #333; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; animation: pulse 2s infinite;">0</span>';
       }
     }
 
@@ -625,25 +841,53 @@
         
         const commentsList = document.getElementById('comments-list');
         const commentsEmpty = document.getElementById('comments-empty');
+        const commentsCount = document.getElementById('comments-count');
+        const commentsBtnText = document.getElementById('comments-btn-text');
         
         if (data.success && data.comments && data.comments.length > 0) {
           commentsList.innerHTML = data.comments.map(comment => `
             <div class="comment-item">
               <div class="comment-header">
-                <span class="comment-author">${comment.author_name}</span>
+                <span class="comment-author">${comment.name || comment.author_name}</span>
                 <span class="comment-rating">${renderStars(comment.rating)}</span>
               </div>
               <div class="comment-content">${escapeHTML(comment.content)}</div>
+              ${comment.image_url ? `
+                <div class="comment-image" style="margin: 10px 0;">
+                  <img src="${comment.image_url}" alt="صورة التعليق" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); cursor: pointer;" onclick="openImageModal('${comment.image_url}')">
+                </div>
+              ` : ''}
+              <div class="comment-date" style="color: #999; font-size: 0.85em; margin-top: 8px;">
+                ${new Date(comment.created_at).toLocaleDateString('ar-SA')}
+              </div>
             </div>
           `).join('');
           commentsList.style.display = 'block';
           commentsEmpty.style.display = 'none';
+          
+          // تحديث عدد التعليقات
+          commentsCount.textContent = data.comments.length;
+          commentsCount.style.display = 'inline-block';
+          commentsBtnText.textContent = 'إخفاء التعليقات';
+          
+          // إضافة تأثير بصري عند ظهور التعليقات
+          commentsCount.style.animation = 'pulse 2s infinite';
         } else {
           commentsList.style.display = 'none';
           commentsEmpty.style.display = 'block';
+          
+          // إخفاء عدد التعليقات
+          commentsCount.style.display = 'none';
+          commentsBtnText.textContent = 'إخفاء التعليقات';
+          
+          // إزالة التأثير البصري
+          commentsCount.style.animation = 'none';
         }
       } catch (error) {
         console.error('خطأ في تحميل التعليقات:', error);
+        const commentsEmpty = document.getElementById('comments-empty');
+        commentsEmpty.innerHTML = '<div style="color: #e74c3c; text-align: center; padding: 20px;">خطأ في تحميل التعليقات</div>';
+        commentsEmpty.style.display = 'block';
       }
     }
 
@@ -656,28 +900,67 @@
       const name = document.getElementById('comment-name').value;
       const rating = document.getElementById('comment-rating').value;
       const content = document.getElementById('comment-content').value;
+      const imageFile = document.getElementById('comment-image').files[0];
       
       try {
-        const response = await fetch(`/api/products/${currentProduct.id}/comments`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            author_name: name,
-            content: content,
-            rating: rating ? parseInt(rating) : null
-          })
-        });
+        let response;
+        
+        if (imageFile) {
+          // إرسال مع صورة
+          const formData = new FormData();
+          formData.append('name', name);
+          formData.append('content', content);
+          formData.append('rating', rating || '');
+          formData.append('image', imageFile);
+          
+          response = await fetch(`/api/products/${currentProduct.id}/comments`, {
+            method: 'POST',
+            body: formData
+          });
+        } else {
+          // إرسال بدون صورة
+          response = await fetch(`/api/products/${currentProduct.id}/comments`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: name,
+              content: content,
+              rating: rating ? parseInt(rating) : null
+            })
+          });
+        }
         
         const data = await response.json();
         
         if (data.success) {
-          alert('تم نشر التعليق بنجاح!');
+          // إظهار رسالة نجاح
+          const statusDiv = document.createElement('div');
+          statusDiv.style.cssText = 'background: #d4edda; color: #155724; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center; border: 2px solid #c3e6cb; box-shadow: 0 4px 15px rgba(0,0,0,0.1);';
+          statusDiv.innerHTML = '<i class="fas fa-check-circle" style="margin-left: 8px;"></i> تم نشر التعليق بنجاح!';
+          
+          const commentForm = document.getElementById('comment-form');
+          commentForm.parentNode.insertBefore(statusDiv, commentForm);
+          
+          // إضافة تأثير بصري
+          statusDiv.style.animation = 'slideIn 0.5s ease-out';
+          
+          // إخفاء الرسالة بعد 3 ثوان
+          setTimeout(() => {
+            statusDiv.style.animation = 'fadeOut 0.5s ease-in';
+            setTimeout(() => {
+              statusDiv.remove();
+            }, 500);
+          }, 3000);
+          
           resetComment();
-          loadComments(currentProduct.id);
+          // إعادة تحميل التعليقات لتحديث العدد
+          setTimeout(() => {
+            loadComments(currentProduct.id);
+          }, 500);
         } else {
-          alert('فشل في نشر التعليق');
+          alert('فشل في نشر التعليق: ' + (data.error || 'خطأ غير معروف'));
         }
       } catch (error) {
         console.error('خطأ في إرسال التعليق:', error);
@@ -690,6 +973,107 @@
       document.getElementById('comment-name').value = '';
       document.getElementById('comment-rating').value = '';
       document.getElementById('comment-content').value = '';
+      removeCommentImage();
+    }
+
+    // معاينة صورة التعليق
+    function previewCommentImage(input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewImg = document.getElementById('preview-img');
+          const imagePreview = document.getElementById('image-preview');
+          const imageUploadText = document.getElementById('image-upload-text');
+          
+          previewImg.src = e.target.result;
+          imagePreview.style.display = 'block';
+          imageUploadText.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // إزالة صورة التعليق
+    function removeCommentImage() {
+      const imageInput = document.getElementById('comment-image');
+      const imagePreview = document.getElementById('image-preview');
+      const imageUploadText = document.getElementById('image-upload-text');
+      
+      imageInput.value = '';
+      imagePreview.style.display = 'none';
+      imageUploadText.style.display = 'block';
+    }
+
+    // فتح صورة التعليق في نافذة منبثقة
+    function openImageModal(imageUrl) {
+      // إنشاء نافذة منبثقة للصورة
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        cursor: pointer;
+      `;
+      
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.style.cssText = `
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      `;
+      
+      const closeBtn = document.createElement('button');
+      closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      closeBtn.style.cssText = `
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+      `;
+      
+      closeBtn.onmouseover = () => closeBtn.style.background = 'rgba(255, 255, 255, 0.3)';
+      closeBtn.onmouseout = () => closeBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+      
+      modal.appendChild(img);
+      modal.appendChild(closeBtn);
+      document.body.appendChild(modal);
+      
+      // إغلاق النافذة عند النقر
+      modal.onclick = (e) => {
+        if (e.target === modal || e.target === closeBtn) {
+          document.body.removeChild(modal);
+        }
+      };
+      
+      // إغلاق بالضغط على Escape
+      const handleKeyPress = (e) => {
+        if (e.key === 'Escape') {
+          document.body.removeChild(modal);
+          document.removeEventListener('keydown', handleKeyPress);
+        }
+      };
+      document.addEventListener('keydown', handleKeyPress);
     }
 
     // دعم لوحة المفاتيح

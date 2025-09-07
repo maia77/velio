@@ -1702,16 +1702,31 @@ def get_product_comments(product_id):
 
 @app.route('/api/products/<int:product_id>/comments', methods=['POST'])
 def add_product_comment(product_id):
-    """إضافة تعليق جديد لمنتج"""
+    """إضافة تعليق جديد لمنتج مع إمكانية رفع صورة"""
     try:
         product = Product.query.get(product_id)
         if not product:
             return jsonify({'success': False, 'error': 'المنتج غير موجود'}), 404
 
-        data = request.get_json(silent=True) or {}
-        name = (data.get('name') or '').strip()
-        content = (data.get('content') or '').strip()
-        rating = data.get('rating')
+        # التحقق من نوع الطلب
+        if request.content_type and 'multipart/form-data' in request.content_type:
+            # طلب مع ملف (صورة)
+            name = (request.form.get('name') or '').strip()
+            content = (request.form.get('content') or '').strip()
+            rating = request.form.get('rating')
+            image_file = request.files.get('image')
+            
+            # حفظ الصورة إذا تم رفعها
+            image_url = None
+            if image_file and image_file.filename:
+                image_url = save_uploaded_file(image_file)
+        else:
+            # طلب JSON عادي
+            data = request.get_json(silent=True) or {}
+            name = (data.get('name') or '').strip()
+            content = (data.get('content') or '').strip()
+            rating = data.get('rating')
+            image_url = None
 
         if not name or not content:
             return jsonify({'success': False, 'error': 'الاسم والمحتوى مطلوبان'}), 400
@@ -1723,7 +1738,13 @@ def add_product_comment(product_id):
         except Exception:
             rating_value = None
 
-        comment = Comment(product_id=product_id, name=name, content=content, rating=rating_value)
+        comment = Comment(
+            product_id=product_id, 
+            name=name, 
+            content=content, 
+            rating=rating_value,
+            image_url=image_url
+        )
         db.session.add(comment)
         db.session.commit()
 

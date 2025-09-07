@@ -83,7 +83,7 @@
       direction: rtl;
       background-image: url('img_1.jpg');
       background-size: cover;
-      background-position: center top;
+      background-position: center center; /* تغيير من center top إلى center center */
       background-attachment: fixed;
       background-repeat: no-repeat;
       min-height: 100vh;
@@ -91,6 +91,12 @@
       -moz-osx-font-smoothing: grayscale;
       -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
+    }
+
+    /* الصفحات الأخرى بدون الصورة الرئيسية */
+    body:not(.home-page) {
+      background-image: none;
+      background-color: #f8f9fa;
     }
 
     /* شريط الإعلانات العلوي */
@@ -128,6 +134,8 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .header-container {
@@ -137,6 +145,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px 20px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .logo {
@@ -235,7 +245,7 @@
 
     /* القسم الرئيسي (Hero) */
     .hero-section {
-      background: url("img_1.jpg") center top/cover;
+      background: url("img_1.jpg") center center/cover; /* تغيير من center top إلى center center */
       min-height: 70vh;
       display: flex;
       align-items: center;
@@ -243,6 +253,8 @@
       text-align: center;
       position: relative;
       color: white;
+      background-attachment: fixed; /* إضافة fixed للخلفية */
+      background-repeat: no-repeat; /* منع تكرار الصورة */
     }
 
     .hero-content {
@@ -318,10 +330,13 @@
 
     /* شبكة المنتجات */
     .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      gap: 20px !important;
       margin-top: 40px;
+      justify-content: center !important;
+      align-items: stretch !important;
     }
 
     .product-card {
@@ -331,6 +346,9 @@
       box-shadow: 0 5px 20px #ddd;
       transition: all 0.3s ease;
       position: relative;
+      flex: 0 0 calc(25% - 15px) !important;
+      min-width: 280px !important;
+      max-width: 320px !important;
     }
 
     .product-card:hover {
@@ -341,7 +359,9 @@
     .product-image {
       width: 100%;
       height: 250px;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
+      background: #f8f9fa;
       transition: transform 0.3s ease;
     }
 
@@ -509,19 +529,139 @@
       text-align: center;
     }
 
-    /* التصميم المتجاوب */
+    /* تنسيقات للشاشات الكبيرة */
+    @media (min-width: 1200px) {
+      .hero-section {
+        min-height: 80vh; /* زيادة الارتفاع للشاشات الكبيرة */
+        background-position: center center;
+      }
+      
+      body {
+        background-position: center center;
+      }
+    }
+
+    /* التصميم المتجاوب - محسن */
     @media (max-width: 768px) {
       .header-container {
         flex-direction: column;
         gap: 15px;
+        padding: 15px 20px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        text-align: center;
+        width: 100%;
       }
 
       .main-nav {
         gap: 15px;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
       }
 
       .search-input {
         width: 200px;
+        font-size: 16px;
+        min-height: 44px;
+      }
+
+      .cart-btn, .login-btn, .lang-btn, .track-order-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+        min-height: 44px;
+        min-width: 44px;
+      }
+
+      .nav-link {
+        font-size: 16px;
+        padding: 10px 15px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* تحسينات إضافية للهواتف */
+      .hero-section {
+        background-attachment: scroll;
+        min-height: 60vh;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+        line-height: 1.2;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+        line-height: 1.5;
+      }
+      
+      .products-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 15px;
+      }
+      
+      .product-card {
+        max-width: 100%;
+      }
+      
+      .product-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .btn-primary, .btn-outline {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* للهواتف الصغيرة جداً */
+    @media (max-width: 480px) {
+      .header-container {
+        padding: 10px 15px;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      .search-input {
+        width: 180px;
+        font-size: 16px;
+      }
+
+      .cart-btn {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+
+      .main-nav {
+        gap: 10px;
+      }
+
+      .nav-link {
+        font-size: 14px;
+        padding: 8px 12px;
       }
 
       .hero-title {
@@ -537,7 +677,13 @@
       }
 
       .products-grid {
-        grid-template-columns: 1fr;
+        gap: 15px !important;
+      }
+      
+      .product-card {
+        flex: 0 0 calc(50% - 10px) !important;
+        min-width: 200px !important;
+        max-width: none !important;
       }
 
       .product-image {
@@ -980,8 +1126,9 @@
       touch-action: manipulation;
     }
 
+
     /* تحسين الروابط لللمس */
-    .nav-link, .mobile-bottom-nav .nav-item {
+    .nav-link {
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
       -webkit-user-select: none;
@@ -1021,6 +1168,8 @@
       .form-group input, .form-group textarea, .form-group select {
         font-size: 16px; /* منع التكبير التلقائي في iOS */
         -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
         border-radius: 8px;
       }
       
@@ -1046,10 +1195,12 @@
       
       .hero-section {
         background-attachment: scroll;
+        background-position: center center; /* ضمان المحاذاة الوسطى على الأجهزة النقالة */
       }
       
       body {
         background-attachment: scroll;
+        background-position: center center; /* ضمان المحاذاة الوسطى على الأجهزة النقالة */
       }
     }
 
@@ -1143,5 +1294,3 @@
         font-weight: 600;
       }
     }
-  </style>
-</head>

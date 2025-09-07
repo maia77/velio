@@ -142,6 +142,84 @@
       transform: translateY(-2px);
     }
     
+    .product-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #DCD5B9;
+      color: #DCD5B9;
+    }
+    
+    .btn-outline:hover {
+      background: #DCD5B9;
+      color: #333;
+    }
+    
+    .comment-item {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-right: 4px solid #DCD5B9;
+    }
+    
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      color: #333;
+      font-size: 1.1rem;
+    }
+    
+    .comment-rating {
+      color: #ffc107;
+      font-size: 1.2rem;
+    }
+    
+    .comment-content {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 10px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .comment-image {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .comment-date {
+      font-size: 0.9rem;
+      color: #999;
+    }
+    
+    .rating-input input[type="radio"] {
+      display: none;
+    }
+    
+    .rating-input label:hover,
+    .rating-input input[type="radio"]:checked ~ label {
+      color: #ffc107;
+    }
+    
+    .rating-input input[type="radio"]:checked ~ label ~ label {
+      color: #ddd;
+    }
+    
     @media (max-width: 768px) {
       .product-container {
         grid-template-columns: 1fr;
@@ -154,6 +232,21 @@
       
       .main-image {
         height: 300px;
+      }
+      
+      .product-actions {
+        flex-direction: column;
+      }
+      
+      .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .comment-image {
+        max-width: 150px;
+        max-height: 150px;
       }
     }
   </style>
@@ -236,11 +329,84 @@
             <h1 class="product-title">${product.name_ar || product.name}</h1>
             <p class="product-description">${product.description_ar || product.description}</p>
             <div class="price">${product.price} $</div>
-            <button class="btn" onclick="addToCart()">
-              <i class="fas fa-shopping-cart"></i>
-              أضف للسلة
-            </button>
+            <div class="product-actions">
+              <button class="btn" onclick="addToCart()">
+                <i class="fas fa-shopping-cart"></i>
+                أضف للسلة
+              </button>
+              <button class="btn btn-outline" id="comments-btn" onclick="toggleComments()">
+                <i class="fas fa-comments"></i>
+                التعليقات (<span id="comments-count">0</span>)
+              </button>
+            </div>
           </div>
+        </div>
+        
+        <!-- قسم التعليقات -->
+        <div id="comments-section" style="display: none; margin-top: 30px; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+          <h3 class="comments-title" style="font-size: 1.8rem; font-weight: 600; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-comments"></i>
+            تعليقات العملاء
+          </h3>
+          
+          <div id="comments-list" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+            <div id="comments-empty" style="text-align: center; padding: 40px; color: #666; font-style: italic;">
+              <i class="fas fa-comment-slash" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+              لا توجد تعليقات بعد. كن أول من يعلق على هذا المنتج!
+            </div>
+          </div>
+          
+          <form id="comment-form" style="background: #f8f9fa; padding: 20px; border-radius: 15px; border: 2px dashed #DCD5B9;">
+            <h4 style="margin-bottom: 15px; color: #333; font-size: 1.2rem;">أضف تعليقك</h4>
+            
+            <div style="display: grid; gap: 15px;">
+              <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">الاسم *</label>
+                <input type="text" id="comment-name" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s ease;" placeholder="أدخل اسمك">
+              </div>
+              
+              <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">التقييم (اختياري)</label>
+                <div class="rating-input" style="display: flex; gap: 5px; direction: ltr;">
+                  <input type="radio" id="star5" name="rating" value="5">
+                  <label for="star5" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
+                  <input type="radio" id="star4" name="rating" value="4">
+                  <label for="star4" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
+                  <input type="radio" id="star3" name="rating" value="3">
+                  <label for="star3" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
+                  <input type="radio" id="star2" name="rating" value="2">
+                  <label for="star2" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
+                  <input type="radio" id="star1" name="rating" value="1">
+                  <label for="star1" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
+                </div>
+              </div>
+              
+              <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">التعليق *</label>
+                <textarea id="comment-content" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; min-height: 100px; resize: vertical; transition: border-color 0.3s ease;" placeholder="اكتب تعليقك هنا..."></textarea>
+              </div>
+              
+              <div>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">صورة (اختياري)</label>
+                <input type="file" id="comment-image" accept="image/*" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem;">
+                <div id="image-preview" style="margin-top: 10px; display: none;">
+                  <img id="preview-img" style="max-width: 200px; max-height: 200px; border-radius: 10px; border: 2px solid #DCD5B9;">
+                  <button type="button" onclick="removeCommentImage()" style="margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-trash"></i> إزالة الصورة
+                  </button>
+                </div>
+              </div>
+              
+              <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button type="button" onclick="resetComment()" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 1rem;">
+                  <i class="fas fa-times"></i> إلغاء
+                </button>
+                <button type="submit" style="background: #DCD5B9; color: #333; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                  <i class="fas fa-paper-plane"></i> نشر التعليق
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       `;
 
@@ -254,6 +420,21 @@
             changeImage(index);
           });
         });
+        
+        // إضافة معالج نموذج التعليقات
+        const commentForm = document.getElementById('comment-form');
+        if (commentForm) {
+          commentForm.addEventListener('submit', submitComment);
+        }
+        
+        // إضافة معالج رفع الصور
+        const imageInput = document.getElementById('comment-image');
+        if (imageInput) {
+          imageInput.addEventListener('change', previewCommentImage);
+        }
+        
+        // تحميل التعليقات
+        loadComments();
       }, 100);
     }
 
@@ -301,6 +482,167 @@
     }
 
     let currentProduct = null;
+    let selectedImage = null;
+
+    // دوال التعليقات
+    function toggleComments() {
+      const commentsSection = document.getElementById('comments-section');
+      const commentsBtn = document.getElementById('comments-btn');
+      
+      if (commentsSection.style.display === 'none') {
+        commentsSection.style.display = 'block';
+        commentsBtn.innerHTML = '<i class="fas fa-comments"></i> إخفاء التعليقات';
+        loadComments();
+      } else {
+        commentsSection.style.display = 'none';
+        commentsBtn.innerHTML = '<i class="fas fa-comments"></i> التعليقات (<span id="comments-count">0</span>)';
+      }
+    }
+
+    async function loadComments() {
+      if (!currentProduct) return;
+      
+      try {
+        const response = await fetch(`/api/comments/${currentProduct.id}`);
+        const data = await response.json();
+        
+        const commentsList = document.getElementById('comments-list');
+        const commentsCount = document.getElementById('comments-count');
+        const commentsEmpty = document.getElementById('comments-empty');
+        
+        if (data.success && data.comments.length > 0) {
+          commentsEmpty.style.display = 'none';
+          commentsList.innerHTML = data.comments.map(comment => `
+            <div class="comment-item">
+              <div class="comment-header">
+                <div class="comment-author">${comment.name}</div>
+                <div class="comment-rating">
+                  ${comment.rating ? '★'.repeat(comment.rating) + '☆'.repeat(5 - comment.rating) : ''}
+                </div>
+              </div>
+              <div class="comment-content">${comment.content}</div>
+              ${comment.image_url ? `<img src="${comment.image_url}" alt="صورة التعليق" class="comment-image" onclick="openImageModal('${comment.image_url}')">` : ''}
+              <div class="comment-date">${new Date(comment.created_at).toLocaleDateString('ar-SA')}</div>
+            </div>
+          `).join('');
+          
+          commentsCount.textContent = data.comments.length;
+        } else {
+          commentsEmpty.style.display = 'block';
+          commentsList.innerHTML = '';
+          commentsCount.textContent = '0';
+        }
+      } catch (error) {
+        console.error('خطأ في تحميل التعليقات:', error);
+      }
+    }
+
+    async function submitComment(e) {
+      e.preventDefault();
+      
+      if (!currentProduct) {
+        alert('خطأ: لم يتم تحميل بيانات المنتج');
+        return;
+      }
+      
+      const name = document.getElementById('comment-name').value.trim();
+      const content = document.getElementById('comment-content').value.trim();
+      const rating = document.querySelector('input[name="rating"]:checked')?.value;
+      
+      if (!name || !content) {
+        alert('يرجى ملء جميع الحقول المطلوبة');
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('product_id', currentProduct.id);
+      formData.append('name', name);
+      formData.append('content', content);
+      if (rating) formData.append('rating', rating);
+      if (selectedImage) formData.append('image', selectedImage);
+      
+      try {
+        const response = await fetch('/api/comments', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('تم نشر التعليق بنجاح!');
+          resetComment();
+          loadComments();
+        } else {
+          alert('خطأ في نشر التعليق: ' + (data.message || 'خطأ غير معروف'));
+        }
+      } catch (error) {
+        console.error('خطأ في إرسال التعليق:', error);
+        alert('خطأ في إرسال التعليق');
+      }
+    }
+
+    function resetComment() {
+      document.getElementById('comment-name').value = '';
+      document.getElementById('comment-content').value = '';
+      document.querySelectorAll('input[name="rating"]').forEach(radio => radio.checked = false);
+      document.getElementById('comment-image').value = '';
+      selectedImage = null;
+      document.getElementById('image-preview').style.display = 'none';
+    }
+
+    function previewCommentImage(e) {
+      const file = e.target.files[0];
+      if (file) {
+        selectedImage = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview-img').src = e.target.result;
+          document.getElementById('image-preview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeCommentImage() {
+      selectedImage = null;
+      document.getElementById('comment-image').value = '';
+      document.getElementById('image-preview').style.display = 'none';
+    }
+
+    function openImageModal(imageUrl) {
+      // إنشاء نافذة منبثقة لعرض الصورة
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        cursor: pointer;
+      `;
+      
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.style.cssText = `
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      `;
+      
+      modal.appendChild(img);
+      document.body.appendChild(modal);
+      
+      modal.addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+    }
   </script>
 </body>
 </html>

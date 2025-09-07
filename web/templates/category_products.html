@@ -2,9 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#DCD5B9">
     <title>{{ category_title }} - Velio</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <style>
         .category-header {
             background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat;
@@ -15,11 +21,22 @@
             position: relative;
             min-height: 500px;
             display: block;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            overflow: hidden;
         }
         
         .category-header > * {
             position: relative;
             z-index: 1;
+        }
+        
+        .category-header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px 20px;
         }
         
         .category-title {
@@ -42,9 +59,45 @@
         
         /* تخصيص خاص لقسم زينة الطبيعة */
         .nature-category .category-header {
-            background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat;
+            background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat !important;
             min-height: 550px;
             padding: 0;
+            background-size: cover !important;
+            background-position: center center !important;
+            background-attachment: fixed;
+            background-repeat: no-repeat !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* حل احتياطي للهواتف المحمولة */
+        .nature-category .category-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat;
+            background-size: cover;
+            background-position: center center;
+            z-index: -1;
+            opacity: 1;
+        }
+        
+        /* حل إضافي باستخدام pseudo-element */
+        .nature-category .category-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat;
+            background-size: cover;
+            background-position: center center;
+            z-index: -2;
+            opacity: 1;
         }
         
         /* تخصيص خاص لقسم تفاصيل مميزة */
@@ -334,34 +387,126 @@
         
         @media (max-width: 768px) {
             .category-header {
-                min-height: 400px;
-                padding: 0;
+                min-height: 300px;
+                padding: 20px;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
             }
             
             .nature-category .category-header {
-                min-height: 450px;
-                padding: 0;
+                min-height: 350px;
+                padding: 20px;
+                background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
+                background-repeat: no-repeat !important;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            /* حل إضافي للهواتف المحمولة */
+            .nature-category .category-header::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('/static/images/IMG_9626.JPG') 85% center/cover no-repeat;
+                background-size: cover;
+                background-position: 85% center;
+                z-index: -1;
+                opacity: 1;
             }
             
             .details-category .category-header {
                 min-height: 450px;
                 padding: 0;
+                background: url('/static/images/IMG_968.jpg') center center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
             }
             
             .authenticity-category .category-header {
                 min-height: 450px;
                 padding: 0;
+                background: url('/static/images/IMG_9726.JPG') center center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
             }
             
             .unique-touches-category .category-header {
                 min-height: 450px;
                 padding: 0;
+                background: url('/static/images/IMG_97.JPG') center center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
             }
             
             .products-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
                 padding: 0 15px;
+            }
+            
+            /* تحسين تخطيط المنتجات للهواتف */
+            .product-card {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                min-height: auto;
+            }
+            
+            .product-image-container {
+                height: 200px;
+                min-height: 200px;
+            }
+            
+            .product-image {
+                height: 200px;
+                object-fit: contain;
+                object-position: center;
+            }
+            
+            .product-images-slider {
+                height: 200px;
+            }
+            
+            .product-images-slider .product-image {
+                height: 200px;
+            }
+            
+            .product-info {
+                padding: 15px;
+                flex: 1;
+            }
+            
+            .product-name {
+                font-size: 1.2em;
+                margin-bottom: 8px;
+            }
+            
+            .product-description {
+                font-size: 0.9em;
+                margin-bottom: 10px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+            }
+            
+            .product-price {
+                font-size: 1.4em;
             }
             
             .stats-bar {
@@ -371,6 +516,121 @@
             
             .product-actions {
                 flex-direction: column;
+            }
+        }
+        
+        /* تحسينات خاصة للأجهزة التي لا تدعم background-attachment: fixed */
+        @media (max-width: 768px) and (max-device-width: 1024px) {
+            .category-header,
+            .nature-category .category-header,
+            .details-category .category-header,
+            .authenticity-category .category-header,
+            .unique-touches-category .category-header {
+                background-attachment: scroll !important;
+                background-size: cover !important;
+                background-position: center center !important;
+            }
+        }
+        
+        /* تحسينات إضافية للشاشات الصغيرة جداً */
+        @media (max-width: 480px) {
+            .category-header {
+                min-height: 250px !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
+                padding: 15px;
+            }
+            
+            .category-header-content {
+                padding: 20px 15px;
+            }
+            
+            .category-title {
+                font-size: 2.5em !important;
+                margin-bottom: 15px;
+            }
+            
+            .category-description {
+                font-size: 1.2em !important;
+            }
+            
+            .nature-category .category-header {
+                min-height: 400px !important;
+                background: url('/static/images/IMG_9626.JPG') 85% center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: 85% center !important;
+                background-attachment: scroll !important;
+                background-repeat: no-repeat !important;
+                position: relative;
+            }
+            
+            /* حل إضافي للشاشات الصغيرة جداً */
+            .nature-category .category-header::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('/static/images/IMG_9626.JPG') 85% center/cover no-repeat;
+                background-size: cover;
+                background-position: 85% center;
+                z-index: -1;
+                opacity: 1;
+            }
+            
+            .details-category .category-header {
+                min-height: 400px !important;
+                background: url('/static/images/IMG_968.jpg') center center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
+            }
+            
+            .authenticity-category .category-header {
+                min-height: 400px !important;
+                background: url('/static/images/IMG_9726.JPG') center center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
+            }
+            
+            .unique-touches-category .category-header {
+                min-height: 400px !important;
+                background: url('/static/images/IMG_97.JPG') center center/cover no-repeat !important;
+                background-size: cover !important;
+                background-position: center center !important;
+                background-attachment: scroll !important;
+            }
+        }
+        
+        /* تحسينات إضافية لضمان عرض الخلفية بشكل صحيح */
+        @media (max-width: 768px) {
+            .category-header::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: inherit;
+                background-size: cover;
+                background-position: center center;
+                z-index: -1;
+            }
+            
+            /* عرض الصورة كخلفية على الهواتف المحمولة */
+            .nature-category .mobile-background-image {
+                display: block !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+                z-index: -1;
             }
         }
         
@@ -410,7 +670,10 @@
 </head>
 <body class="{% if 'زينة الطبيعة' in category_title %}nature-category{% elif 'تفاصيل مميزة' in category_title %}details-category{% elif 'أصالة معاصرة' in category_title %}authenticity-category{% elif 'لمسات فريدة' in category_title %}unique-touches-category{% endif %}">
     <div class="category-header">
-        <!-- تم إخفاء النص لعرض الصورة فقط -->
+        <div class="category-header-content">
+            <h1 class="category-title">{{ category_title }}</h1>
+            <p class="category-description">{{ category_description }}</p>
+        </div>
     </div>
     
     <div class="breadcrumb">
@@ -433,6 +696,7 @@
                                         <img src="{{ image.image_url }}" 
                                              alt="{{ product.name_ar or product.name }}" 
                                              class="product-image {% if loop.first %}active{% endif %}"
+                                             style="object-fit: contain; object-position: center; background: #f8f9fa;"
                                              onerror="this.src='{{ url_for('static', filename='images/product1.jpg') }}'">
                                     {% endfor %}
                                     <div class="image-indicators">
@@ -446,6 +710,7 @@
                                 <img src="{{ product.image_url or url_for('static', filename='images/product1.jpg') }}" 
                                      alt="{{ product.name_ar or product.name }}" 
                                      class="product-image"
+                                     style="object-fit: contain; object-position: center; background: #f8f9fa;"
                                      onerror="this.src='{{ url_for('static', filename='images/product1.jpg') }}'">
                             {% endif %}
                         </div>
@@ -597,6 +862,56 @@
                     // الانتقال إلى صفحة المنتج
                     window.location.href = `/product?id=${productId}`;
                 }
+            }
+        });
+        
+        // إصلاح خلفية زينة الطبيعة على الهواتف المحمولة
+        document.addEventListener('DOMContentLoaded', function() {
+            // التحقق من أننا في صفحة زينة الطبيعة
+            if (document.body.classList.contains('nature-category')) {
+                const categoryHeader = document.querySelector('.category-header');
+                const mobileImage = document.querySelector('.mobile-background-image');
+                
+                // التحقق من عرض الخلفية
+                setTimeout(() => {
+                    const computedStyle = window.getComputedStyle(categoryHeader);
+                    const backgroundImage = computedStyle.backgroundImage;
+                    
+                    // إذا لم تظهر الخلفية، استخدم الصورة كخلفية
+                    if (backgroundImage === 'none' || backgroundImage === '') {
+                        console.log('إصلاح خلفية زينة الطبيعة للهاتف المحمول');
+                        if (mobileImage) {
+                            mobileImage.style.display = 'block';
+                        }
+                        
+                        // إضافة خلفية مباشرة
+                        categoryHeader.style.background = 'url(/static/images/IMG_9626.JPG) center center/cover no-repeat';
+                        categoryHeader.style.backgroundSize = 'cover';
+                        categoryHeader.style.backgroundPosition = 'center center';
+                    }
+                }, 100);
+            }
+            
+            // تحسينات للهواتف المحمولة
+            if (window.innerWidth <= 768) {
+                // تحسين الأزرار للمس
+                const buttons = document.querySelectorAll('.btn-primary, .btn-secondary');
+                buttons.forEach(button => {
+                    button.style.minHeight = '44px';
+                    button.style.minWidth = '44px';
+                });
+                
+                // تحسين النقر على المنتجات
+                const productCards = document.querySelectorAll('.product-card');
+                productCards.forEach(card => {
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('touchstart', function() {
+                        this.style.transform = 'scale(0.98)';
+                    });
+                    card.addEventListener('touchend', function() {
+                        this.style.transform = 'scale(1)';
+                    });
+                });
             }
         });
         

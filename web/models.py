@@ -95,6 +95,7 @@ class Comment(db.Model):
     name = db.Column('customer_name', db.String(100), nullable=False)  # Map to actual column name
     content = db.Column('comment_text', db.Text, nullable=False)  # Map to actual column name
     rating = db.Column(db.Integer, nullable=True)  # 1..5 اختياري
+    image_url = db.Column(db.String(500), nullable=True)  # رابط صورة التعليق
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_approved = db.Column(db.Boolean, default=True)
 
@@ -105,6 +106,7 @@ class Comment(db.Model):
             'name': self.name,
             'content': self.content,
             'rating': self.rating,
+            'image_url': self.image_url,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'is_approved': self.is_approved,
         }
