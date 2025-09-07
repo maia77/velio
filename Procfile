@@ -1,2 +1,2 @@
-web: cd web && python app.py
-admin: cd admin-app && python admin_app_fixed.py
+web: python app.py
+admin: python admin_app.py

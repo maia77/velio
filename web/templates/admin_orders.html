@@ -431,6 +431,9 @@
                 <button class="filter-btn" onclick="loadOrders()">
                     <i class="fas fa-search"></i> بحث
                 </button>
+                <button class="filter-btn" onclick="deleteAllOrders()" style="background: #dc3545; margin-right: 10px;">
+                    <i class="fas fa-trash"></i> حذف جميع الطلبات
+                </button>
             </div>
         </div>
 
@@ -704,6 +707,43 @@
             const modal = document.getElementById('statusModal');
             if (event.target === modal) {
                 closeModal();
+            }
+        }
+
+        // حذف جميع الطلبات
+        async function deleteAllOrders() {
+            const confirmed = confirm('⚠️ تحذير: سيتم حذف جميع الطلبات نهائياً!\n\nهل أنت متأكد من المتابعة؟');
+            
+            if (!confirmed) {
+                return;
+            }
+            
+            const doubleConfirm = confirm('⚠️ تأكيد نهائي: هذا الإجراء لا يمكن التراجع عنه!\n\nهل أنت متأكد 100%؟');
+            
+            if (!doubleConfirm) {
+                return;
+            }
+            
+            try {
+                showLoading();
+                
+                const response = await fetch('/api/admin/orders/delete-all', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`✅ تم حذف ${data.deleted_count} طلب بنجاح!`);
+                    loadOrders(); // إعادة تحميل الطلبات
+                } else {
+                    showError(data.error || 'حدث خطأ في حذف الطلبات');
+                }
+            } catch (error) {
+                showError('حدث خطأ في الاتصال بالخادم');
             }
         }
     </script>

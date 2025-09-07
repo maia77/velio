@@ -1478,6 +1478,36 @@ def update_order_status(order_id):
         db.session.rollback()
         return jsonify({'success': False, 'error': 'حدث خطأ في تحديث حالة الطلب'}), 500
 
+@app.route('/api/admin/orders/delete-all', methods=['DELETE'])
+@require_admin_auth
+def delete_all_orders():
+    """
+    حذف جميع الطلبات (للمدير)
+    """
+    try:
+        # حذف تاريخ حالة الطلبات أولاً
+        OrderStatusHistory.query.delete()
+        
+        # حذف جميع الطلبات
+        deleted_count = Order.query.count()
+        Order.query.delete()
+        
+        # حفظ التغييرات
+        db.session.commit()
+        
+        print(f"🗑️ تم حذف {deleted_count} طلب بواسطة المدير")
+        
+        return jsonify({
+            'success': True,
+            'message': f'تم حذف {deleted_count} طلب بنجاح',
+            'deleted_count': deleted_count
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"❌ خطأ في حذف الطلبات: {e}")
+        return jsonify({'success': False, 'error': 'حدث خطأ في حذف الطلبات'}), 500
+
 
 def send_customer_email(customer_email, subject, body):
     """

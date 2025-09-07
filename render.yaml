@@ -3,7 +3,7 @@ services:
     name: web-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: cd web && python app.py
+    startCommand: python app.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
@@ -20,7 +20,7 @@ services:
     name: admin-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: cd admin-app && python admin_app_fixed.py
+    startCommand: python admin_app.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0

@@ -2813,6 +2813,35 @@ def get_order_details_api(order_id):
         print(f"❌ خطأ في الحصول على تفاصيل الطلب: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
+@app.route('/api/admin/orders/delete-all', methods=['DELETE'])
+def delete_all_orders():
+    """
+    حذف جميع الطلبات (للمدير)
+    """
+    try:
+        # حذف تاريخ حالة الطلبات أولاً
+        OrderStatusHistory.query.delete()
+        
+        # حذف جميع الطلبات
+        deleted_count = Order.query.count()
+        Order.query.delete()
+        
+        # حفظ التغييرات
+        db.session.commit()
+        
+        print(f"🗑️ تم حذف {deleted_count} طلب بواسطة المدير")
+        
+        return jsonify({
+            'success': True,
+            'message': f'تم حذف {deleted_count} طلب بنجاح',
+            'deleted_count': deleted_count
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"❌ خطأ في حذف الطلبات: {e}")
+        return jsonify({'success': False, 'error': 'حدث خطأ في حذف الطلبات'}), 500
+
 if __name__ == '__main__':
     print("🚀 بدء تشغيل تطبيق إدارة المنتجات...")
     print("📍 السيرفر سيكون متاحًا على: http://127.0.0.1:5007")
