@@ -197,9 +197,10 @@ body {
 }
 
 .logo {
-  font-size: 2rem;
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: #DCD5B9;
+  color: #666666 !important;
   text-decoration: none;
   display: flex;
   align-items: center;

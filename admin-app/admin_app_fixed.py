@@ -543,7 +543,7 @@ def index():
         <body>
             <div class="container">
                 <h1>إدارة المنتجات - الإصلاح النهائي</h1>
-                <div class="success">✅ تم إصلاح مشكلة 404 بنجاح!</div>
+                <div class="success"></div>
                 <div class="stats">
                     <p><strong>إجمالي المنتجات:</strong> {len(products)}</p>
                     <p><strong>إجمالي القيمة:</strong> {sum(p.price for p in products):.2f} $</p>
@@ -561,22 +561,22 @@ def index():
                     <h3 style="color: #333; margin-bottom: 20px;">🏪 تصفح المنتجات حسب القسم</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
                         <a href="/category/اصالة-معاصرة" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 20px;">
-                            <span style="font-size: 2rem; margin-bottom: 10px;">🏛️</span>
+                            <span style="font-size: 2rem; margin-bottom: 10px;"></span>
                             <strong>أصالة معاصرة</strong>
                             <small style="opacity: 0.8; margin-top: 5px;">جمع بين الأصالة والحداثة</small>
                         </a>
                         <a href="/category/تفاصيل-مميزة" class="btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 20px;">
-                            <span style="font-size: 2rem; margin-bottom: 10px;">🎨</span>
+                            <span style="font-size: 2rem; margin-bottom: 10px;"></span>
                             <strong>تفاصيل مميزة</strong>
                             <small style="opacity: 0.8; margin-top: 5px;">اهتم بالتفاصيل الصغيرة</small>
                         </a>
                         <a href="/category/لمسات-فريدة" class="btn" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 20px;">
-                            <span style="font-size: 2rem; margin-bottom: 10px;">✨</span>
+                            <span style="font-size: 2rem; margin-bottom: 10px;"></span>
                             <strong>لمسات فريدة</strong>
                             <small style="opacity: 0.8; margin-top: 5px;">قطع مميزة وخاصة</small>
                         </a>
                         <a href="/category/زينة-الطبيعة" class="btn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); text-decoration: none; display: flex; flex-direction: column; align-items: center; padding: 20px;">
-                            <span style="font-size: 2rem; margin-bottom: 10px;">🌿</span>
+                            <span style="font-size: 2rem; margin-bottom: 10px;"></span>
                             <strong>زينة الطبيعة</strong>
                             <small style="opacity: 0.8; margin-top: 5px;">لمسة من الطبيعة</small>
                         </a>
@@ -1595,32 +1595,32 @@ def category_products(category_name):
         # تحديد معلومات القسم
         category_info = {
             'اصالة-معاصرة': {
-                'title': '🏛️ أصالة معاصرة',
+                'title': ' أصالة معاصرة',
                 'title_ar': 'أصالة معاصرة',
                 'description': 'جمع بين الأصالة والحداثة في تصميم منزلك',
                 'filter': 'أصالة معاصرة',
-                'icon': '🏛️'
+                'icon': ''
             },
             'تفاصيل-مميزة': {
-                'title': '🎨 تفاصيل مميزة',
+                'title': ' تفاصيل مميزة',
                 'title_ar': 'تفاصيل مميزة',
                 'description': 'اهتم بالتفاصيل الصغيرة التي تحدث فرقاً كبيراً',
                 'filter': 'تفاصيل مميزة',
-                'icon': '🎨'
+                'icon': ''
             },
             'لمسات-فريدة': {
-                'title': '✨ لمسات فريدة',
+                'title': ' لمسات فريدة',
                 'title_ar': 'لمسات فريدة',
                 'description': 'قطع مميزة تضيف لمسة خاصة لمنزلك',
                 'filter': 'لمسات فريدة',
-                'icon': '✨'
+                'icon': ''
             },
             'زينة-الطبيعة': {
                 'title': 'زينة الطبيعة',
                 'title_ar': 'زينة الطبيعة',
                 'description': 'أضف لمسة من الطبيعة إلى منزلك مع مجموعتنا المميزة',
                 'filter': 'زينة الطبيعة',
-                'icon': '🌿'
+                'icon': ''
             }
         }
         

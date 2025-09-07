@@ -150,10 +150,10 @@
     }
 
     .logo {
-      font-family: 'Poppins', sans-serif;
-      font-size: 2rem;
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-size: 2.5rem;
       font-weight: 700;
-      color: #DCD5B9;
+      color: #666666 !important;
       text-decoration: none;
       display: flex;
       align-items: center;
@@ -1293,4 +1293,16 @@
         background-color: #f8f9fa;
         font-weight: 600;
       }
+    }
+
+    /* Force gray color and serif font for Velio logo */
+    .logo, .mobile-nav-logo {
+      color: #666666 !important;
+      font-family: 'Times New Roman', 'Georgia', serif !important;
+      font-weight: 700 !important;
+      font-size: 2.5rem !important;
+    }
+    
+    .mobile-nav-logo {
+      font-size: 1.8rem !important;
     }
