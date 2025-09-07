@@ -32,7 +32,10 @@ def setup_admin_database():
     try:
         print("🔧 إعداد قاعدة البيانات لتطبيق الإدارة...")
         
-        from admin_app.admin_app_fixed import app, db
+        import sys
+        import os
+        sys.path.append(os.path.join(os.path.dirname(__file__), 'admin-app'))
+        from admin_app_fixed import app, db
         with app.app_context():
             db.create_all()
             print("✅ تم إنشاء جداول تطبيق الإدارة بنجاح")

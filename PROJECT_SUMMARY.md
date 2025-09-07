@@ -16,9 +16,7 @@ postgresql://username:password@host:port/database
 ## 🔧 التحديثات المنجزة
 
 ### 1. ملفات التكوين الجديدة
-- `shared_database_config.py` - تكوين قاعدة البيانات المشتركة
-- `web/database_config.py` - تكوين قاعدة البيانات البعيدة
-- `admin-app/database_config.py` - تكوين قاعدة البيانات البعيدة
+- `shared_database_config_fallback.py` - تكوين قاعدة البيانات مع نظام احتياطي
 
 ### 2. ملفات التشغيل
 - `run_apps.py` - تشغيل التطبيقين معاً
@@ -27,8 +25,7 @@ postgresql://username:password@host:port/database
 ### 3. التحديثات على الملفات الموجودة
 - `web/app.py` - تحديث إعدادات قاعدة البيانات
 - `admin-app/admin_app_fixed.py` - تحديث إعدادات قاعدة البيانات
-- `web/requirements.txt` - إضافة psycopg2-binary و Flask-Session
-- `admin-app/requirements.txt` - إضافة psycopg2-binary و Flask-Session
+- `requirements.txt` - إضافة psycopg2-binary و Flask-Session
 
 ## 🚀 كيفية التشغيل
 
@@ -90,7 +87,7 @@ cd admin-app && python3 admin_app_fixed.py
 ### للتشغيل
 - `start_apps.sh` - تشغيل سريع
 - `run_apps.py` - تشغيل متقدم
-- `shared_database_config.py` - تكوين قاعدة البيانات
+- `shared_database_config_fallback.py` - تكوين قاعدة البيانات
 
 ### للتوثيق
 - `README_DATABASE.md` - دليل شامل

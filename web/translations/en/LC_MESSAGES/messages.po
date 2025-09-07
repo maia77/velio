@@ -64,7 +64,7 @@ msgid "Comfortable and modern chair that adds an aesthetic touch to your home."
 msgstr "Comfortable and modern chair that adds an aesthetic touch to your home."
 
 msgid "SAR"
-msgstr "SAR"
+msgstr "USD"
 
 msgid "Order Now"
 msgstr "Order Now"
@@ -214,7 +214,7 @@ msgid "Shipping Policy:"
 msgstr "Shipping Policy:"
 
 msgid "Free shipping for orders over 500 SAR"
-msgstr "Free shipping for orders over 500 SAR"
+msgstr "Free shipping for orders over 500 USD"
 
 msgid "Delivery time: 3-7 business days"
 msgstr "Delivery time: 3-7 business days"

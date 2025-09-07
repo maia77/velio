@@ -16,7 +16,6 @@ pip install -r requirements.txt
 # Create necessary directories
 echo "📁 Creating necessary directories..."
 mkdir -p web/static/uploads
-mkdir -p admin-app/static/uploads
 mkdir -p web/instance/flask_session
 
 # Set permissions

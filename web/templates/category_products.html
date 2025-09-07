@@ -109,9 +109,10 @@
         
         /* تخصيص خاص لقسم أصالة معاصرة */
         .authenticity-category .category-header {
-            background: url('/static/images/IMG_9726.JPG') center center/cover no-repeat;
+            background: url('/static/images/IMG_9726.JPG') center 30%/cover no-repeat;
             min-height: 550px;
             padding: 0;
+            background-position: center 30%;
         }
         
         /* تخصيص خاص لقسم لمسات فريدة */
@@ -440,9 +441,9 @@
             .authenticity-category .category-header {
                 min-height: 450px;
                 padding: 0;
-                background: url('/static/images/IMG_9726.JPG') center center/cover no-repeat !important;
+                background: url('/static/images/IMG_9726.JPG') center 30%/cover no-repeat !important;
                 background-size: cover !important;
-                background-position: center center !important;
+                background-position: center 30% !important;
                 background-attachment: scroll !important;
             }
             
@@ -590,9 +591,9 @@
             
             .authenticity-category .category-header {
                 min-height: 400px !important;
-                background: url('/static/images/IMG_9726.JPG') center center/cover no-repeat !important;
+                background: url('/static/images/IMG_9726.JPG') center 30%/cover no-repeat !important;
                 background-size: cover !important;
-                background-position: center center !important;
+                background-position: center 30% !important;
                 background-attachment: scroll !important;
             }
             
@@ -670,16 +671,12 @@
 </head>
 <body class="{% if 'زينة الطبيعة' in category_title %}nature-category{% elif 'تفاصيل مميزة' in category_title %}details-category{% elif 'أصالة معاصرة' in category_title %}authenticity-category{% elif 'لمسات فريدة' in category_title %}unique-touches-category{% endif %}">
     <div class="category-header">
-        <div class="category-header-content">
-            <h1 class="category-title">{{ category_title }}</h1>
-            <p class="category-description">{{ category_description }}</p>
-        </div>
     </div>
     
     <div class="breadcrumb">
-        <a href="{{ url_for('index') }}" style="color: #000000;">🏠 الرئيسية</a> 
-        <span style="margin: 0 10px;">›</span>
-        <span>{{ category_title }}</span>
+        <a href="{{ url_for('index') }}" style="color: #000000;">الرئيسية</a>
+        <span style="margin: 0 10px; color: #666;">›</span>
+        <span style="color: #333; font-weight: 600;">{{ category_title }}</span>
     </div>
     
     <div class="products-container">

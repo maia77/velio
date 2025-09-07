@@ -20,7 +20,6 @@ COPY . .
 
 # Create necessary directories
 RUN mkdir -p web/static/uploads
-RUN mkdir -p admin-app/static/uploads
 RUN mkdir -p web/instance/flask_session
 
 # Set environment variables

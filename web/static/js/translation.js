@@ -100,7 +100,7 @@ class TranslationManager {
                     'دعم 24/7': '24/7 Support',
                     'كرسي بتصميم مودرن': 'Modern Design Chair',
                     'كرسي مريح وعصري يضيف لمسة جمالية لمنزلك.': 'Comfortable and modern chair that adds an aesthetic touch to your home.',
-                    '$': 'SAR',
+                    '$': 'USD',
                     'طاولة قهوة خشبية': 'Wooden Coffee Table',
                     'طاولة قهوة أنيقة وعملية تناسب جميع الديكورات.': 'Elegant and practical coffee table that suits all decorations.',
                     'نوصل طلبك في أسرع وقت ممكن إلى باب منزلك': 'We deliver your order as quickly as possible to your doorstep',

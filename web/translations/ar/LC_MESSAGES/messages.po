@@ -65,7 +65,7 @@ msgid "Comfortable and modern chair that adds an aesthetic touch to your home."
 msgstr "كرسي مريح وعصري يضيف لمسة جمالية لمنزلك."
 
 msgid "SAR"
-msgstr "ريال"
+msgstr "دولار"
 
 msgid "Order Now"
 msgstr "اطلب الآن"
@@ -215,7 +215,7 @@ msgid "Shipping Policy:"
 msgstr "سياسة الشحن:"
 
 msgid "Free shipping for orders over 500 SAR"
-msgstr "شحن مجاني للطلبات التي تزيد عن 500 ريال"
+msgstr "شحن مجاني للطلبات التي تزيد عن 500 دولار"
 
 msgid "Delivery time: 3-7 business days"
 msgstr "مدة التوصيل: 3-7 أيام عمل"

@@ -368,16 +368,16 @@
               <div>
                 <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">التقييم (اختياري)</label>
                 <div class="rating-input" style="display: flex; gap: 5px; direction: ltr;">
-                  <input type="radio" id="star5" name="rating" value="5">
-                  <label for="star5" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
-                  <input type="radio" id="star4" name="rating" value="4">
-                  <label for="star4" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
-                  <input type="radio" id="star3" name="rating" value="3">
-                  <label for="star3" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
-                  <input type="radio" id="star2" name="rating" value="2">
-                  <label for="star2" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
-                  <input type="radio" id="star1" name="rating" value="1">
-                  <label for="star1" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">★</label>
+                  <input type="radio" id="star5" name="rating" value="5" style="display: none;">
+                  <label for="star5" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(5)" onmouseout="resetStars()" onclick="selectRating(5)">★</label>
+                  <input type="radio" id="star4" name="rating" value="4" style="display: none;">
+                  <label for="star4" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(4)" onmouseout="resetStars()" onclick="selectRating(4)">★</label>
+                  <input type="radio" id="star3" name="rating" value="3" style="display: none;">
+                  <label for="star3" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(3)" onmouseout="resetStars()" onclick="selectRating(3)">★</label>
+                  <input type="radio" id="star2" name="rating" value="2" style="display: none;">
+                  <label for="star2" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(2)" onmouseout="resetStars()" onclick="selectRating(2)">★</label>
+                  <input type="radio" id="star1" name="rating" value="1" style="display: none;">
+                  <label for="star1" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(1)" onmouseout="resetStars()" onclick="selectRating(1)">★</label>
                 </div>
               </div>
               
@@ -503,7 +503,7 @@
       if (!currentProduct) return;
       
       try {
-        const response = await fetch(`/api/comments/${currentProduct.id}`);
+        const response = await fetch(`/api/products/${currentProduct.id}/comments`);
         const data = await response.json();
         
         const commentsList = document.getElementById('comments-list');
@@ -517,7 +517,7 @@
               <div class="comment-header">
                 <div class="comment-author">${comment.name}</div>
                 <div class="comment-rating">
-                  ${comment.rating ? '★'.repeat(comment.rating) + '☆'.repeat(5 - comment.rating) : ''}
+                  ${renderStars(comment.rating)}
                 </div>
               </div>
               <div class="comment-content">${comment.content}</div>
@@ -558,11 +558,11 @@
       formData.append('product_id', currentProduct.id);
       formData.append('name', name);
       formData.append('content', content);
-      if (rating) formData.append('rating', rating);
+      formData.append('rating', rating || '');
       if (selectedImage) formData.append('image', selectedImage);
       
       try {
-        const response = await fetch('/api/comments', {
+        const response = await fetch(`/api/products/${currentProduct.id}/comments`, {
           method: 'POST',
           body: formData
         });
@@ -589,6 +589,51 @@
       document.getElementById('comment-image').value = '';
       selectedImage = null;
       document.getElementById('image-preview').style.display = 'none';
+      
+      // إعادة تعيين النجوم
+      const stars = document.querySelectorAll('.rating-input label');
+      stars.forEach(star => {
+        star.style.color = '#ddd';
+      });
+    }
+
+    function renderStars(rating) {
+      if (!rating) return '';
+      const r = Math.max(1, Math.min(5, parseInt(rating)));
+      return '⭐'.repeat(r) + (r < 5 ? '☆'.repeat(5 - r) : '');
+    }
+
+    // دوال تفاعل النجوم
+    function highlightStars(rating) {
+      const stars = document.querySelectorAll('.rating-input label');
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.style.color = '#ffd700'; // ذهبي للنجوم المحددة
+        } else {
+          star.style.color = '#ddd'; // رمادي للنجوم غير المحددة
+        }
+      });
+    }
+
+    function resetStars() {
+      const selectedRating = document.querySelector('input[name="rating"]:checked');
+      if (selectedRating) {
+        highlightStars(parseInt(selectedRating.value));
+      } else {
+        const stars = document.querySelectorAll('.rating-input label');
+        stars.forEach(star => {
+          star.style.color = '#ddd';
+        });
+      }
+    }
+
+    function selectRating(rating) {
+      // تحديد الراديو button
+      const radio = document.getElementById(`star${rating}`);
+      radio.checked = true;
+      
+      // إظهار النجوم المحددة
+      highlightStars(rating);
     }
 
     function previewCommentImage(e) {

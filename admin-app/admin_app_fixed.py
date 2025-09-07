@@ -39,7 +39,7 @@ Session(app)
 os.makedirs(os.path.join(basedir, 'instance', 'flask_session'), exist_ok=True)
 
 # إعدادات رفع الملفات
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = '../web/static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
@@ -1248,10 +1248,10 @@ def add_product():
                 <div class="form-group">
                     <label>القسم الرئيسي:</label>
                     <select name="main_category" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                        <option value="أصالة معاصرة">🏛️ أصالة معاصرة</option>
-                        <option value="تفاصيل مميزة">🎨 تفاصيل مميزة</option>
-                        <option value="لمسات فريدة">✨ لمسات فريدة</option>
-                        <option value="زينة الطبيعة">🌿 زينة الطبيعة</option>
+                        <option value="أصالة معاصرة">أصالة معاصرة</option>
+                        <option value="تفاصيل مميزة">تفاصيل مميزة</option>
+                        <option value="لمسات فريدة">لمسات فريدة</option>
+                        <option value="زينة الطبيعة">زينة الطبيعة</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1571,12 +1571,12 @@ def admin_products():
                 </div>
                 
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <a href="/add" class="btn">➕ إضافة منتج جديد</a>
-                    <a href="/" class="btn">🏠 الصفحة الرئيسية</a>
-                    <a href="/category/اصالة-معاصرة" class="btn">🏛️ أصالة معاصرة</a>
-                    <a href="/category/تفاصيل-مميزة" class="btn">🎨 تفاصيل مميزة</a>
-                    <a href="/category/لمسات-فريدة" class="btn">✨ لمسات فريدة</a>
-                    <a href="/category/زينة-الطبيعة" class="btn">🌿 زينة الطبيعة</a>
+                    <a href="/add" class="btn">إضافة منتج جديد</a>
+                    <a href="/" class="btn">الصفحة الرئيسية</a>
+                    <a href="/category/اصالة-معاصرة" class="btn">أصالة معاصرة</a>
+                    <a href="/category/تفاصيل-مميزة" class="btn">تفاصيل مميزة</a>
+                    <a href="/category/لمسات-فريدة" class="btn">لمسات فريدة</a>
+                    <a href="/category/زينة-الطبيعة" class="btn">زينة الطبيعة</a>
                 </div>
                 
                 {products_html}
@@ -1616,7 +1616,7 @@ def category_products(category_name):
                 'icon': '✨'
             },
             'زينة-الطبيعة': {
-                'title': '🌿 زينة الطبيعة',
+                'title': 'زينة الطبيعة',
                 'title_ar': 'زينة الطبيعة',
                 'description': 'أضف لمسة من الطبيعة إلى منزلك مع مجموعتنا المميزة',
                 'filter': 'زينة الطبيعة',

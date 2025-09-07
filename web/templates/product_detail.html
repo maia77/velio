@@ -672,14 +672,21 @@
                   <i class="fas fa-edit"></i> أضف تعليقك
                 </h4>
                 <input type="text" id="comment-name" placeholder="الاسم" required>
-                <select id="comment-rating">
-                  <option value="">تقييم (اختياري)</option>
-                  <option value="5">⭐⭐⭐⭐⭐ (5)</option>
-                  <option value="4">⭐⭐⭐⭐ (4)</option>
-                  <option value="3">⭐⭐⭐ (3)</option>
-                  <option value="2">⭐⭐ (2)</option>
-                  <option value="1">⭐ (1)</option>
-                </select>
+                <div style="margin: 10px 0;">
+                  <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">التقييم (اختياري)</label>
+                  <div class="rating-input" style="display: flex; gap: 5px; direction: ltr;">
+                    <input type="radio" id="star5" name="rating" value="5" style="display: none;">
+                    <label for="star5" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(5)" onmouseout="resetStars()" onclick="selectRating(5)">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" style="display: none;">
+                    <label for="star4" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(4)" onmouseout="resetStars()" onclick="selectRating(4)">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" style="display: none;">
+                    <label for="star3" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(3)" onmouseout="resetStars()" onclick="selectRating(3)">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" style="display: none;">
+                    <label for="star2" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(2)" onmouseout="resetStars()" onclick="selectRating(2)">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" style="display: none;">
+                    <label for="star1" style="font-size: 1.5rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;" onmouseover="highlightStars(1)" onmouseout="resetStars()" onclick="selectRating(1)">★</label>
+                  </div>
+                </div>
                 <textarea id="comment-content" rows="4" placeholder="نص التعليق" required></textarea>
                 
                 <!-- حقل رفع الصورة -->
@@ -898,7 +905,7 @@
       if (!currentProduct) return;
       
       const name = document.getElementById('comment-name').value;
-      const rating = document.getElementById('comment-rating').value;
+      const rating = document.querySelector('input[name="rating"]:checked')?.value;
       const content = document.getElementById('comment-content').value;
       const imageFile = document.getElementById('comment-image').files[0];
       
@@ -927,7 +934,7 @@
             body: JSON.stringify({
               name: name,
               content: content,
-              rating: rating ? parseInt(rating) : null
+              rating: rating && rating !== '' ? parseInt(rating) : null
             })
           });
         }
@@ -971,9 +978,15 @@
     // إعادة تعيين نموذج التعليق
     function resetComment() {
       document.getElementById('comment-name').value = '';
-      document.getElementById('comment-rating').value = '';
+      document.querySelectorAll('input[name="rating"]').forEach(radio => radio.checked = false);
       document.getElementById('comment-content').value = '';
       removeCommentImage();
+      
+      // إعادة تعيين النجوم
+      const stars = document.querySelectorAll('.rating-input label');
+      stars.forEach(star => {
+        star.style.color = '#ddd';
+      });
     }
 
     // معاينة صورة التعليق
@@ -1096,6 +1109,39 @@
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
+    }
+
+    // دوال تفاعل النجوم
+    function highlightStars(rating) {
+      const stars = document.querySelectorAll('.rating-input label');
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.style.color = '#ffd700'; // ذهبي للنجوم المحددة
+        } else {
+          star.style.color = '#ddd'; // رمادي للنجوم غير المحددة
+        }
+      });
+    }
+
+    function resetStars() {
+      const selectedRating = document.querySelector('input[name="rating"]:checked');
+      if (selectedRating) {
+        highlightStars(parseInt(selectedRating.value));
+      } else {
+        const stars = document.querySelectorAll('.rating-input label');
+        stars.forEach(star => {
+          star.style.color = '#ddd';
+        });
+      }
+    }
+
+    function selectRating(rating) {
+      // تحديد الراديو button
+      const radio = document.getElementById(`star${rating}`);
+      radio.checked = true;
+      
+      // إظهار النجوم المحددة
+      highlightStars(rating);
     }
   </script>
   

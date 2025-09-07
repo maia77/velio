@@ -106,16 +106,16 @@ with app.app_context():
                         print('🆕 تم إضافة العمود is_new_arrival')
                     if 'main_category' not in cols:
                         conn.execute(text('ALTER TABLE products ADD COLUMN main_category VARCHAR(100) DEFAULT \'أصالة معاصرة\''))
-                        print('🆕 تم إضافة العمود main_category')
+                        print('تم إضافة العمود main_category')
                     if 'main_category_ar' not in cols:
                         conn.execute(text('ALTER TABLE products ADD COLUMN main_category_ar VARCHAR(100) DEFAULT \'أصالة معاصرة\''))
-                        print('🆕 تم إضافة العمود main_category_ar')
+                        print('تم إضافة العمود main_category_ar')
                     conn.commit()
-                    print('✅ تم التأكد من وجود الأعمدة الجديدة (SQLite)')
+                    print('تم التأكد من وجود الأعمدة الجديدة (SQLite)')
         except Exception as e:
-            print(f"⚠️ تعذر التحقق/إضافة الأعمدة الجديدة: {e}")
+            print(f"تعذر التحقق/إضافة الأعمدة الجديدة: {e}")
     except Exception as e:
-        print(f"❌ فشل إنشاء الجداول: {e}")
+        print(f"فشل إنشاء الجداول: {e}")
 
 # إعدادات Babel المحسنة
 def get_locale():
@@ -148,7 +148,7 @@ def redirect_to_arabic():
     session['lang'] = 'ar'
     session['user_preference'] = 'ar'
     session['auto_translate'] = False
-    print("🔄 إعادة توجيه للعربية")
+    print("إعادة توجيه للعربية")
     return redirect(url_for('index'))
 
 # صفحة اختبار اللغة العربية الافتراضية
@@ -256,14 +256,14 @@ def change_language(lang_code):
         # تفعيل الترجمة التلقائية إذا كانت الخدمة متاحة
         if translate_service.is_available():
             session['auto_translate'] = True
-            print(f"✅ تم تفعيل الترجمة التلقائية للغة: {lang_code}")
+            print(f"تم تفعيل الترجمة التلقائية للغة: {lang_code}")
         else:
             session['auto_translate'] = False
-            print("⚠️ خدمة الترجمة غير متاحة")
+            print("خدمة الترجمة غير متاحة")
         
         # إذا تم تغيير اللغة إلى العربية، توجيه إلى الصفحة الرئيسية
         if lang_code == 'ar':
-            print("🏠 توجيه إلى الصفحة الرئيسية باللغة العربية")
+            print("توجيه إلى الصفحة الرئيسية باللغة العربية")
             return redirect(url_for('index'))
     
     return redirect(request.referrer or url_for('index'))
@@ -287,7 +287,7 @@ def reset_language():
     session['lang'] = 'ar'
     session['user_preference'] = 'ar'
     session['auto_translate'] = False
-    print("🔄 تم إعادة ضبط اللغة إلى العربية")
+    print("تم إعادة ضبط اللغة إلى العربية")
     return jsonify({
         'success': True,
         'message': 'تم إعادة ضبط اللغة إلى العربية',
@@ -570,7 +570,7 @@ def save_image(file):
 
 @app.route('/test-admin')
 def test_admin():
-    return "لوحة الإدارة تعمل! 🎉"
+    return "لوحة الإدارة تعمل!"
 
 @app.route('/test-database')
 def test_database():
@@ -738,7 +738,7 @@ def add_product_simple():
                     
                     print(f"✅ تم تجهيز الحقول العربية للمنتج '{name}'")
                 except Exception as e:
-                    print(f"⚠️ خطأ في تجهيز الحقول العربية: {e}")
+                    print(f"خطأ في تجهيز الحقول العربية: {e}")
                     # استخدام النص الأصلي في حالة أي خطأ
                     product.name_ar = name
                     product.description_ar = description
@@ -847,7 +847,7 @@ def add_product_simple():
                 </div>
                 
                 <div class="form-group">
-                    <label>🏷️ اسم المنتج (باللغة الإنجليزية):</label>
+                    <label>اسم المنتج (باللغة الإنجليزية):</label>
                     <input type="text" name="name" required placeholder="مثال: Modern Chair">
                     <div class="help-text">سيتم ترجمته تلقائياً للعربية</div>
                 </div>
@@ -859,12 +859,12 @@ def add_product_simple():
                 </div>
                 
                 <div class="form-group">
-                    <label>💰 السعر ($):</label>
+                    <label>السعر ($):</label>
                     <input type="number" name="price" step="0.01" required placeholder="مثال: 150.00">
                 </div>
                 
                 <div class="form-group">
-                    <label>📂 الفئة (اختياري):</label>
+                    <label>الفئة (اختياري):</label>
                     <select name="category">
                         <option value="">اختر الفئة</option>
                         <option value="أثاث">أثاث</option>
@@ -880,7 +880,7 @@ def add_product_simple():
                 </div>
                 
                 <div class="form-group">
-                    <label>🏢 العلامة التجارية (اختياري):</label>
+                    <label>العلامة التجارية (اختياري):</label>
                     <input type="text" name="brand" placeholder="مثال: IKEA, Samsung, Nike">
                 </div>
                 <div class="form-group">
@@ -896,9 +896,9 @@ def add_product_simple():
                     </label>
                 </div>
                 
-                <button type="submit">💾 إضافة المنتج</button>
+                <button type="submit">إضافة المنتج</button>
             </form>
-            <a href="/admin" class="btn btn-back">↩️ العودة للوحة الإدارة</a>
+            <a href="/admin" class="btn btn-back">العودة للوحة الإدارة</a>
         </div>
         
         <script>
@@ -959,23 +959,23 @@ else:
 
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', '')  # يجب إضافة البريد الإلكتروني من متغيرات البيئة
 SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD', '') # يجب إضافة كلمة مرور التطبيقات من متغيرات البيئة
-RECEIVER_EMAIL = 'velio.contact@yahoo.com'  # البريد المطلوب لاستقبال الإشعارات
+RECEIVER_EMAIL = os.environ.get('RECEIVER_EMAIL', SENDER_EMAIL)  # البريد المطلوب لاستقبال الإشعارات (نفس المرسل إذا لم يتم تحديد مستقبل)
 
 def send_email(subject, body, from_name="Velio Store"):
     """
     دالة لإرسال إشعار عبر البريد الإلكتروني مع دعم متعدد المزودين.
     """
     print(f"📧 محاولة إرسال بريد إلكتروني: {subject}")
-    print(f"🔧 إعدادات البريد: SENDER_EMAIL={SENDER_EMAIL}, RECEIVER_EMAIL={RECEIVER_EMAIL}")
-    print(f"🌐 المزود: {EMAIL_PROVIDER}, الخادم: {SMTP_SERVER}:{SMTP_PORT}")
+    print(f"إعدادات البريد: SENDER_EMAIL={SENDER_EMAIL}, RECEIVER_EMAIL={RECEIVER_EMAIL}")
+    print(f"المزود: {EMAIL_PROVIDER}, الخادم: {SMTP_SERVER}:{SMTP_PORT}")
     
     if not SENDER_EMAIL or not SENDER_PASSWORD:
-        print("⚠️ إعدادات البريد الإلكتروني غير مكتملة. يرجى إضافة SENDER_EMAIL و SENDER_PASSWORD")
-        print("💡 يمكنك تخطي إرسال البريد الإلكتروني والمتابعة مع إنشاء الطلب")
+        print("إعدادات البريد الإلكتروني غير مكتملة. يرجى إضافة SENDER_EMAIL و SENDER_PASSWORD")
+        print("يمكنك تخطي إرسال البريد الإلكتروني والمتابعة مع إنشاء الطلب")
         return False
     
     if not RECEIVER_EMAIL:
-        print("⚠️ عنوان البريد المستقبل غير محدد")
+        print("عنوان البريد المستقبل غير محدد")
         return False
     
     try:
@@ -1020,15 +1020,15 @@ Content-Type: text/plain; charset=UTF-8
         
     except smtplib.SMTPAuthenticationError as e:
         print(f"❌ خطأ في المصادقة: {e}")
-        print("💡 تأكد من صحة اسم المستخدم وكلمة المرور")
+        print("تأكد من صحة اسم المستخدم وكلمة المرور")
         return False
     except smtplib.SMTPRecipientsRefused as e:
         print(f"❌ رفض المستقبل: {e}")
-        print("💡 تأكد من صحة عنوان البريد المستقبل")
+        print("تأكد من صحة عنوان البريد المستقبل")
         return False
     except smtplib.SMTPServerDisconnected as e:
         print(f"❌ انقطع الاتصال بالخادم: {e}")
-        print("💡 تحقق من إعدادات SMTP")
+        print("تحقق من إعدادات SMTP")
         return False
     except Exception as e:
         print(f"❌ فشل في إرسال إشعار البريد الإلكتروني: {e}")
@@ -1163,12 +1163,16 @@ def receive_contact_message():
         contact_messages.append(data)
 
         # إرسال إشعار محسن
+        subject = data.get('subject', 'لا يوجد موضوع')
+        phone = data.get('phone', 'غير محدد')
         email_subject = f"📧 رسالة تواصل جديدة من {data['name']}"
         email_body = f"""🔔 إشعار جديد من موقع Velio Store
 
 👤 معلومات المرسل:
 الاسم: {data['name']}
 البريد الإلكتروني: {data['email']}
+رقم الهاتف: {phone}
+الموضوع: {subject}
 التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 📝 محتوى الرسالة:
@@ -1179,11 +1183,11 @@ def receive_contact_message():
             import urllib.parse
             encoded_location = urllib.parse.quote_plus(data['location'])
             map_link = f"https://www.google.com/maps/search/?api=1&query={encoded_location}"
-            email_body += f"\n\n📍 الموقع:\n{data['location']}\n🗺️ رابط الخريطة: {map_link}"
+            email_body += f"\n\nالموقع:\n{data['location']}\nرابط الخريطة: {map_link}"
         
         email_body += f"""
 
-📞 للرد على العميل:
+للرد على العميل:
 - البريد الإلكتروني: {data['email']}
 - الوقت: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -1251,10 +1255,10 @@ def create_order():
         db.session.commit()
 
         # إرسال إشعار بالبريد الإلكتروني محسن
-        email_subject = f"🛒 طلب جديد #{new_order.order_number} - {product.name}"
-        email_body = f"""🛒 إشعار طلب جديد من موقع Velio Store
+        email_subject = f"طلب جديد #{new_order.order_number} - {product.name}"
+        email_body = f"""إشعار طلب جديد من موقع Velio Store
 
-📋 تفاصيل الطلب:
+تفاصيل الطلب:
 رقم الطلب: #{new_order.order_number}
 المنتج: {product.name}
 الكمية: {quantity}
@@ -1275,13 +1279,13 @@ def create_order():
                         import urllib.parse
                         encoded_address = urllib.parse.quote_plus(str(value))
                         map_link = f"https://www.google.com/maps/search/?api=1&query={encoded_address}"
-                        email_body += f"\n🗺️ رابط الخريطة: {map_link}"
+                        email_body += f"\nرابط الخريطة: {map_link}"
         else:
             email_body += "\nلم يتم توفير معلومات العميل"
         
         email_body += f"""
 
-📞 للتواصل مع العميل:
+للتواصل مع العميل:
 - رقم الطلب: #{new_order.order_number}
 - الوقت: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -1305,7 +1309,7 @@ def create_order():
 السعر الإجمالي: {new_order.total_price} $
 الحالة الحالية: {new_order.get_status_display('ar')}
 
-📞 للاستفسارات، يرجى التواصل معنا على:
+للاستفسارات، يرجى التواصل معنا على:
 - البريد الإلكتروني: velio.contact@yahoo.com
 - رقم الطلب: #{new_order.order_number}
 
@@ -1562,7 +1566,7 @@ def send_order_status_notification(order, new_status):
 
 {message}
 
-📋 تفاصيل الطلب:
+تفاصيل الطلب:
 رقم الطلب: #{order.order_number}
 المنتج: {order.product_name}
 الكمية: {order.quantity}
@@ -1732,15 +1736,19 @@ def add_product_comment(product_id):
             return jsonify({'success': False, 'error': 'الاسم والمحتوى مطلوبان'}), 400
 
         try:
-            rating_value = int(rating) if rating is not None else None
-            if rating_value is not None and (rating_value < 1 or rating_value > 5):
-                return jsonify({'success': False, 'error': 'التقييم يجب أن يكون بين 1 و 5'}), 400
-        except Exception:
+            # معالجة التقييم - تحويل السلسلة الفارغة إلى None
+            if rating is None or rating == '' or rating == 'null':
+                rating_value = None
+            else:
+                rating_value = int(rating)
+                if rating_value < 1 or rating_value > 5:
+                    return jsonify({'success': False, 'error': 'التقييم يجب أن يكون بين 1 و 5'}), 400
+        except (ValueError, TypeError):
             rating_value = None
 
         comment = Comment(
             product_id=product_id, 
-            name=name, 
+            name=name,
             content=content, 
             rating=rating_value,
             image_url=image_url
@@ -1774,22 +1782,22 @@ def category_products(category_name):
         # تحديد معلومات القسم
         category_info = {
             'اصالة-معاصرة': {
-                'title': '🏛️ أصالة معاصرة',
+                'title': 'أصالة معاصرة',
                 'description': 'جمع بين الأصالة والحداثة في تصميم منزلك',
                 'filter': 'أصالة معاصرة'
             },
             'تفاصيل-مميزة': {
-                'title': '🎨 تفاصيل مميزة',
+                'title': 'تفاصيل مميزة',
                 'description': 'اهتم بالتفاصيل الصغيرة التي تحدث فرقاً كبيراً',
                 'filter': 'تفاصيل مميزة'
             },
             'لمسات-فريدة': {
-                'title': '✨ لمسات فريدة',
+                'title': 'لمسات فريدة',
                 'description': 'قطع مميزة تضيف لمسة خاصة لمنزلك',
                 'filter': 'لمسات فريدة'
             },
             'زينة-الطبيعة': {
-                'title': '🌿 زينة الطبيعة',
+                'title': 'زينة الطبيعة',
                 'description': 'أضف لمسة من الطبيعة إلى منزلك مع مجموعتنا المميزة',
                 'filter': 'زينة الطبيعة'
             }
@@ -1927,7 +1935,7 @@ def add_product():
                     
                     print(f"✅ تم تجهيز الحقول العربية للمنتج '{name}'")
                 except Exception as e:
-                    print(f"⚠️ خطأ في تجهيز الحقول العربية: {e}")
+                    print(f"خطأ في تجهيز الحقول العربية: {e}")
                     product.name_ar = name
                     product.description_ar = description
                     product.category_ar = category
@@ -1951,7 +1959,7 @@ def add_product():
             db.session.commit()
             # لا حاجة لتفريغ الكاش بعد إزالته
             
-            return "تم إضافة المنتج بنجاح! 🎉"
+            return "تم إضافة المنتج بنجاح!"
             
         except Exception as e:
             return f"خطأ في إضافة المنتج: {str(e)}", 500
@@ -2170,7 +2178,7 @@ def edit_product(product_id):
     </head>
     <body>
         <div class="container">
-            <h1>✏️ تعديل المنتج</h1>
+            <h1>تعديل المنتج</h1>
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>اسم المنتج:</label>
@@ -2441,7 +2449,7 @@ def cart_remove():
 def checkout_page():
     """عرض صفحة إتمام الشراء واستلام بيانات العميل وإنشاء الطلب."""
     try:
-        print("🛒 بدء عملية checkout...")
+        print("بدء عملية checkout...")
         
         # بناء ملخص السلة من الجلسة
         cart = _get_session_cart()
@@ -2468,7 +2476,7 @@ def checkout_page():
                 print(f"❌ خطأ في معالجة منتج {key}: {e}")
                 continue
             if quantity <= 0:
-                print(f"⚠️ كمية غير صحيحة للمنتج {pid}: {quantity}")
+                print(f"كمية غير صحيحة للمنتج {pid}: {quantity}")
                 continue
             product = Product.query.get(pid)
             if not product:
@@ -2486,14 +2494,14 @@ def checkout_page():
             print(f"✅ تمت إضافة المنتج: {name} - السعر: {price} - الكمية: {quantity}")
         
         deposit = total * 0.5
-        print(f"💰 الإجمالي: {total}, المطلوب الآن: {deposit}")
-        print(f"🛒 عدد العناصر في السلة: {len(cart_items)}")
+        print(f"الإجمالي: {total}, المطلوب الآن: {deposit}")
+        print(f"عدد العناصر في السلة: {len(cart_items)}")
 
         if request.method == 'POST':
             print("📝 معالجة طلب POST...")
             print(f"📦 السلة قبل POST: {cart}")
-            print(f"🛒 عدد العناصر قبل POST: {len(cart_items)}")
-            print(f"💰 الإجمالي قبل POST: {total}")
+            print(f"عدد العناصر قبل POST: {len(cart_items)}")
+            print(f"الإجمالي قبل POST: {total}")
             
             # استلام بيانات العميل
             name = request.form.get('name', '').strip()
@@ -2519,7 +2527,7 @@ def checkout_page():
             order_items = []
             
             for item in cart_items:
-                print(f"🛍️ إنشاء طلب للمنتج: {item['name']}")
+                print(f"إنشاء طلب للمنتج: {item['name']}")
                 product = Product.query.get(item['product_id'])
                 if not product:
                     print(f"❌ المنتج {item['product_id']} غير موجود")
@@ -2590,8 +2598,8 @@ def checkout_page():
                 print("📧 محاولة إرسال إشعار البريد الإلكتروني...")
                 try:
                     first_order = created_orders[0]
-                    email_subject = f"🛒 طلب شامل جديد #{first_order.order_number} - {len(order_items)} منتج"
-                    email_body = f"""🛒 إشعار طلب شامل جديد من موقع Velio Store
+                    email_subject = f"طلب شامل جديد #{first_order.order_number} - {len(order_items)} منتج"
+                    email_body = f"""إشعار طلب شامل جديد من موقع Velio Store
 
 📋 ملخص الطلب:
 رقم الطلب: #{first_order.order_number}
@@ -2602,7 +2610,7 @@ def checkout_page():
 التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 الحالة: {first_order.get_status_display('ar')}
 
-🛍️ تفاصيل المنتجات:"""
+تفاصيل المنتجات:"""
                     
                     for i, order in enumerate(order_items, 1):
                         email_body += f"""
@@ -2625,7 +2633,7 @@ def checkout_page():
 📍 موقع العميل على الخريطة: {map_link}
 طريقة الدفع: {payment_method}
 
-📞 للتواصل مع العميل:
+للتواصل مع العميل:
 - رقم الطلب: #{first_order.order_number}
 - البريد الإلكتروني: {email}
 - الهاتف: {phone}
@@ -2655,7 +2663,7 @@ def checkout_page():
 المبلغ المتبقي عند التسليم: {total - deposit} $
 الحالة الحالية: {first_order.get_status_display('ar')}
 
-🛍️ تفاصيل المنتجات:"""
+تفاصيل المنتجات:"""
                         
                         for i, order in enumerate(order_items, 1):
                             customer_body += f"""
@@ -2665,7 +2673,7 @@ def checkout_page():
                         
                         customer_body += f"""
 
-📞 للاستفسارات، يرجى التواصل معنا على:
+للاستفسارات، يرجى التواصل معنا على:
 - البريد الإلكتروني: velio.contact@yahoo.com
 - رقم الطلب: #{first_order.order_number}
 
@@ -2692,7 +2700,7 @@ Velio Store"""
 
             # تفريغ السلة بعد الإرسال
             _save_session_cart({})
-            print("🗑️ تم تفريغ السلة")
+            print("تم تفريغ السلة")
 
             # حساب تفاصيل الشكر
             first_order = created_orders[0]
@@ -2702,12 +2710,12 @@ Velio Store"""
                 'deposit_paid_now': deposit,
                 'remaining_on_delivery': total - deposit
             }
-            print(f"🎉 تم إنشاء الطلب بنجاح: {thank_you_order['order_id']}")
+            print(f"تم إنشاء الطلب بنجاح: {thank_you_order['order_id']}")
 
             # إضافة رسالة نجاح
             flash(f'تم إنشاء طلبك بنجاح! رقم الطلب: {thank_you_order["order_id"]}')
             
-            print(f"🎯 التوجه إلى صفحة الشكر مع البيانات: {thank_you_order}")
+            print(f"التوجه إلى صفحة الشكر مع البيانات: {thank_you_order}")
             return render_template('thank_you.html', order=thank_you_order)
 
         # GET: عرض صفحة الدفع مع الملخص
@@ -2732,12 +2740,12 @@ def thank_you_page():
 
 # --- تشغيل السيرفر ---
 if __name__ == '__main__':
-    print("✅ تم إنشاء قاعدة البيانات بنجاح")
-    print("🚀 بدء تشغيل سيرفر Flask مع دعم تعدد اللغات...")
-    print("📍 تم تفعيل خدمة GPS لتتبع المواقع")
-    print("🌍 الموقع يدعم اللغتين العربية والإنجليزية")
-    print("📡 السيرفر سيكون متاحًا على: http://127.0.0.1:5003")
-    print("📱 للوصول من الهاتف: http://192.168.0.72:5003")
+    print("تم إنشاء قاعدة البيانات بنجاح")
+    print("بدء تشغيل سيرفر Flask مع دعم تعدد اللغات...")
+    print("تم تفعيل خدمة GPS لتتبع المواقع")
+    print("الموقع يدعم اللغتين العربية والإنجليزية")
+    print("السيرفر سيكون متاحًا على: http://127.0.0.1:5003")
+    print("للوصول من الهاتف: http://192.168.0.72:5003")
     print("لوحة إدارة المنتجات: http://127.0.0.1:5003/admin/products")
     print("لوحة إدارة المنتجات (الهاتف): http://192.168.0.72:5003/admin/products")
     app.run(debug=True, host='0.0.0.0', port=5003, use_reloader=False)

@@ -29,7 +29,7 @@ def test():
 def install():
     """تثبيت المكتبات المطلوبة"""
     print("📦 تثبيت المكتبات المطلوبة...")
-    subprocess.run([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+    subprocess.run([sys.executable, '-m', 'pip', 'install', '-r', '../requirements.txt'])
 
 @cli.command()
 def translate():
@@ -71,7 +71,7 @@ def setup():
     
     # تثبيت المكتبات
     print("📦 تثبيت المكتبات...")
-    subprocess.run([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+    subprocess.run([sys.executable, '-m', 'pip', 'install', '-r', '../requirements.txt'])
     
     # إنشاء المجلدات المطلوبة
     print("📁 إنشاء المجلدات...")
