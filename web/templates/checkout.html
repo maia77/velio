@@ -111,15 +111,15 @@
           <div class="field">
             <label>العنوان</label>
             <div style="margin-bottom: 8px;">
-              <button type="button" id="gpsBtn" style="background: #f8f9fa; border: 1px solid #dee2e6; color: #000; cursor: pointer; font-size: 12px; padding: 4px 10px; border-radius: 4px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;">
+              <button type="button" id="gpsBtn" style="background: #f8f9fa; border: 1px solid #dee2e6; color: #000; cursor: pointer; font-size: 12px; padding: 6px 12px; border-radius: 6px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; margin-right: 8px;">
                 📍 تحديد موقعي
               </button>
-              <div id="locationStatus" style="margin-top: 5px; font-size: 11px; color: #666; display: none;">
+              <div id="locationStatus" style="margin-top: 8px; font-size: 12px; color: #666; display: none; padding: 8px; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #007bff;">
                 <!-- ستظهر هنا حالة الموقع -->
               </div>
             </div>
             <textarea name="address" rows="3" required style="width: 100%;"></textarea>
-            <div class="hint">اضغط على زر GPS لتحديد موقعك (يعمل على المواقع الآمنة فقط)</div>
+            <div class="hint">💡 اضغط "تحديد موقعي" لتحديد موقعك تلقائياً أو اكتب العنوان يدوياً في الخانة</div>
           </div>
           <div class="field">
             <label>اختر الموقع</label>
@@ -194,16 +194,37 @@
 
   <script>
     document.getElementById('gpsBtn').addEventListener('click', function() {
-      if (navigator.geolocation) {
-        // إظهار رسالة "جاري تحديد الموقع..."
-        this.textContent = '📍 جاري التحديد...';
-        this.disabled = true;
-        
-        // إظهار حالة التحديد
+      console.log('🔍 بدء فحص تحديد الموقع...');
+      console.log('🌐 البروتوكول:', location.protocol);
+      console.log('🏠 المضيف:', location.hostname);
+      console.log('📍 دعم Geolocation:', !!navigator.geolocation);
+      console.log('📱 User Agent:', navigator.userAgent);
+      console.log('🔒 Secure Context:', window.isSecureContext);
+      
+      // فحص دعم تحديد الموقع
+      if (!navigator.geolocation) {
+        console.log('❌ المتصفح لا يدعم تحديد الموقع');
         const statusDiv = document.getElementById('locationStatus');
-        statusDiv.innerHTML = '🔄 جاري تحديد موقعك...';
-        statusDiv.style.color = '#007bff';
+        statusDiv.innerHTML = '⚠️ متصفحك لا يدعم تحديد الموقع - يرجى كتابة العنوان يدوياً';
+        statusDiv.style.color = '#856404';
         statusDiv.style.display = 'block';
+        return;
+      }
+
+      // محاولة تحديد الموقع مباشرة بدون فحوصات معقدة
+      
+      console.log('✅ بدء طلب إذن الموقع...');
+
+      // إظهار رسالة "جاري تحديد الموقع..."
+      this.textContent = '📍 جاري التحديد...';
+      this.disabled = true;
+      
+      // إظهار حالة التحديد
+      const statusDiv = document.getElementById('locationStatus');
+      statusDiv.innerHTML = '🔄 جاري تحديد موقعك...<br><small>📱 سيظهر إشعار من الهاتف - اضغط "السماح"</small>';
+      statusDiv.style.color = '#007bff';
+      statusDiv.style.display = 'block';
+      
         
         // طلب إذن الموقع - هذا سيظهر نافذة طلب الإذن
         navigator.geolocation.getCurrentPosition(
@@ -211,12 +232,30 @@
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             
-            // استخدام خدمة Geocoding لتحويل الإحداثيات إلى عنوان
+            // كتابة العنوان مباشرة في المربع
+            const address = `الموقع: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+            document.querySelector('textarea[name="address"]').value = address;
+            
+            // إظهار رسالة النجاح
+            const statusDiv = document.getElementById('locationStatus');
+            statusDiv.innerHTML = '✅ تم تحديد الموقع بنجاح!';
+            statusDiv.style.color = '#155724';
+            statusDiv.style.borderLeftColor = '#28a745';
+            statusDiv.style.display = 'block';
+            
+            // محاولة الحصول على عنوان أكثر تفصيلاً من خدمة Geocoding
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=ar`)
               .then(response => response.json())
               .then(data => {
-                const address = data.display_name || `العنوان: ${latitude}, ${longitude}`;
-                document.querySelector('textarea[name="address"]').value = address;
+                if (data && data.display_name) {
+                  document.querySelector('textarea[name="address"]').value = data.display_name;
+                  // تحديث رسالة النجاح
+                  const statusDiv = document.getElementById('locationStatus');
+                  statusDiv.innerHTML = '✅ تم تحديد الموقع بنجاح مع العنوان المفصل!';
+                  statusDiv.style.color = '#155724';
+                  statusDiv.style.borderLeftColor = '#28a745';
+                  statusDiv.style.display = 'block';
+                }
                 
                 // إرسال الموقع إلى الخادم
                 fetch('/api/gps/location', {
@@ -234,9 +273,6 @@
                 .then(response => response.json())
                 .then(result => {
                   if (result.success) {
-                    // إظهار رسالة نجاح للعميل
-                    alert('✅ تم تحديد موقعك بنجاح!\n\nسيتم إرسال طلبك إلى هذا الموقع.');
-                    
                     // تغيير لون الزر لإظهار النجاح
                     document.getElementById('gpsBtn').textContent = '✅ تم تحديد الموقع';
                     document.getElementById('gpsBtn').style.background = '#d4edda';
@@ -250,7 +286,6 @@
                     statusDiv.style.display = 'block';
                   } else {
                     console.error('خطأ في حفظ الموقع:', result.error);
-                    alert('تم تحديد الموقع محلياً، لكن حدث خطأ في الحفظ على الخادم.');
                     
                     // إظهار حالة الخطأ
                     const statusDiv = document.getElementById('locationStatus');
@@ -261,7 +296,6 @@
                 })
                 .catch(error => {
                   console.error('خطأ في إرسال الموقع:', error);
-                  alert('تم تحديد الموقع محلياً، لكن حدث خطأ في الاتصال بالخادم.');
                   
                   // إظهار حالة الخطأ
                   const statusDiv = document.getElementById('locationStatus');
@@ -274,7 +308,7 @@
               })
               .catch(error => {
                 console.error('خطأ في تحديد العنوان:', error);
-                document.querySelector('textarea[name="address"]').value = `الموقع: ${latitude}, ${longitude}`;
+                // العنوان مكتوب بالفعل في المربع، لا نحتاج لكتابته مرة أخرى
                 
                 // إرسال الموقع إلى الخادم حتى لو فشل تحديد العنوان
                 fetch('/api/gps/location', {
@@ -292,7 +326,6 @@
                 .then(response => response.json())
                 .then(result => {
                   if (result.success) {
-                    alert('✅ تم تحديد موقعك بنجاح!\n\nسيتم إرسال طلبك إلى هذا الموقع.');
                     document.getElementById('gpsBtn').textContent = '✅ تم تحديد الموقع';
                     document.getElementById('gpsBtn').style.background = '#d4edda';
                     document.getElementById('gpsBtn').style.border = '1px solid #c3e6cb';
@@ -305,7 +338,6 @@
                     statusDiv.style.display = 'block';
                   } else {
                     console.error('خطأ في حفظ الموقع:', result.error);
-                    alert('تم تحديد الموقع محلياً، لكن حدث خطأ في الحفظ على الخادم.');
                     document.getElementById('gpsBtn').textContent = '📍 تحديد موقعي الحالي';
                     
                     // إظهار حالة الخطأ
@@ -317,7 +349,6 @@
                 })
                 .catch(error => {
                   console.error('خطأ في إرسال الموقع:', error);
-                  alert('تم تحديد الموقع محلياً، لكن حدث خطأ في الاتصال بالخادم.');
                   document.getElementById('gpsBtn').textContent = '📍 تحديد موقعي الحالي';
                   
                   // إظهار حالة الخطأ
@@ -331,37 +362,53 @@
               });
           },
           function(error) {
-            console.error('خطأ في تحديد الموقع:', error);
-            let errorMessage = 'فشل في تحديد الموقع';
+            console.error('❌ خطأ في تحديد الموقع:', error);
+            console.log('🔍 كود الخطأ:', error.code);
+            console.log('📝 رسالة الخطأ:', error.message);
+            
+            // إظهار رسالة هادئة في الصفحة بدلاً من الإشعار المنبثق
+            const statusDiv = document.getElementById('locationStatus');
             
             switch(error.code) {
               case error.PERMISSION_DENIED:
-                errorMessage = 'تم رفض إذن الموقع\n\nيرجى:\n1. النقر على "السماح" في نافذة الإذن\n2. أو كتابة عنوانك يدوياً أدناه';
+                statusDiv.innerHTML = '🚫 لم يتم السماح بالوصول للموقع<br><small>اضغط على أيقونة الموقع في شريط العنوان واختر "السماح"</small>';
+                statusDiv.style.color = '#dc3545';
+                statusDiv.style.borderLeftColor = '#dc3545';
                 break;
               case error.POSITION_UNAVAILABLE:
-                errorMessage = 'معلومات الموقع غير متوفرة\n\nيرجى كتابة عنوانك يدوياً';
+                statusDiv.innerHTML = '📡 معلومات الموقع غير متوفرة<br><small>تأكد من تشغيل GPS على الهاتف</small>';
+                statusDiv.style.color = '#fd7e14';
+                statusDiv.style.borderLeftColor = '#fd7e14';
                 break;
               case error.TIMEOUT:
-                errorMessage = 'انتهت مهلة تحديد الموقع\n\nيرجى المحاولة مرة أخرى أو كتابة العنوان يدوياً';
+                statusDiv.innerHTML = '⏰ انتهت مهلة تحديد الموقع<br><small>جرب المحاولة مرة أخرى</small>';
+                statusDiv.style.color = '#ffc107';
+                statusDiv.style.borderLeftColor = '#ffc107';
                 break;
+              default:
+                statusDiv.innerHTML = '❌ فشل في تحديد الموقع<br><small>استخدم "اختر من الخريطة" أو "كتابة يدوية"</small>';
+                statusDiv.style.color = '#6c757d';
+                statusDiv.style.borderLeftColor = '#6c757d';
             }
             
-            alert(errorMessage);
+            statusDiv.style.display = 'block';
             
             // إعادة تعيين الزر
-            document.getElementById('gpsBtn').textContent = '📍 تحديد موقعي الحالي';
+            document.getElementById('gpsBtn').textContent = '📍 تحديد موقعي';
             document.getElementById('gpsBtn').disabled = false;
           },
           {
             enableHighAccuracy: true,
-            timeout: 15000,
+            timeout: 30000,
             maximumAge: 0
           }
         );
-      } else {
-        alert('متصفحك لا يدعم تحديد الموقع');
-      }
     });
+
+
+
+
+
   </script>
   
   
