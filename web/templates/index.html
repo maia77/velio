@@ -3051,13 +3051,61 @@
       // تم إزالة عداد السلة - الآن نعرض أيقونة السلة فقط
     }
 
-    // وظيفة إظهار الإشعارات (معطلة حسب الطلب)
+    // وظيفة إظهار الإشعارات
     function showNotification(message, type = 'success') {
-      return; // تعطيل جميع الإشعارات في هذه الصفحة
+      // إنشاء عنصر الإشعار
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.textContent = message;
+      
+      // إضافة الأنماط
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        z-index: 10000;
+        max-width: 400px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      `;
+      
+      // تحديد لون الإشعار حسب النوع
+      if (type === 'success') {
+        notification.style.backgroundColor = '#4CAF50';
+      } else if (type === 'error') {
+        notification.style.backgroundColor = '#f44336';
+      } else if (type === 'info') {
+        notification.style.backgroundColor = '#2196F3';
+      } else {
+        notification.style.backgroundColor = '#333';
+      }
+      
+      // إضافة الإشعار إلى الصفحة
+      document.body.appendChild(notification);
+      
+      // إظهار الإشعار
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 100);
+      
+      // إخفاء الإشعار بعد 5 ثوان
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 5000);
     }
 
     // وظيفة إرسال نموذج الاتصال
-    function submitContactForm(event) {
+    async function submitContactForm(event) {
       event.preventDefault();
       
       const formData = new FormData(event.target);
@@ -3074,9 +3122,37 @@
         return;
       }
 
-      // محاكاة إرسال البيانات
-      showNotification('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.', 'success');
-      event.target.reset();
+      // إظهار رسالة تحميل
+      showNotification('جاري إرسال رسالتك...', 'info');
+
+      try {
+        // إرسال البيانات إلى الخادم
+        const response = await fetch('/api/contact/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: countryCode + phone,
+            subject: subject,
+            message: message
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showNotification('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.', 'success');
+          event.target.reset();
+        } else {
+          showNotification(result.error || 'حدث خطأ في إرسال الرسالة. يرجى المحاولة مرة أخرى.', 'error');
+        }
+      } catch (error) {
+        console.error('خطأ في إرسال الرسالة:', error);
+        showNotification('حدث خطأ في الاتصال. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.', 'error');
+      }
     }
 
     // وظيفة فتح نموذج الطلب
@@ -3295,60 +3371,89 @@
 
     // وظيفة تحديد الموقع الحالي
     function getCurrentLocation() {
-      if (navigator.geolocation) {
-        showNotification('جاري تحديد موقعك...', 'success');
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            
-            // محاكاة الحصول على العنوان من الإحداثيات
-            const address = `العنوان التقريبي: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-            document.getElementById('orderAddress').value = address;
-            
-            // إرسال الموقع إلى الخادم
-            fetch('/api/gps/location', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                latitude: lat,
-                longitude: lng,
-                source: 'order',
-                timestamp: new Date().toISOString()
-              })
-            })
-            .then(response => response.json())
-            .then(result => {
-              if (result.success) {
-                showNotification('✅ تم تحديد موقعك بنجاح! سيتم إرسال طلبك إلى هذا الموقع.', 'success');
-                
-                // تغيير لون الزر لإظهار النجاح
-                const gpsBtn = document.querySelector('.gps-btn');
-                if (gpsBtn) {
-                  gpsBtn.innerHTML = '<i class="fas fa-check"></i> تم تحديد الموقع';
-                  gpsBtn.style.background = '#d4edda';
-                  gpsBtn.style.border = '1px solid #c3e6cb';
-                  gpsBtn.style.color = '#155724';
-                }
-              } else {
-                console.error('خطأ في حفظ الموقع:', result.error);
-                showNotification('تم تحديد الموقع محلياً، لكن حدث خطأ في الحفظ على الخادم.', 'error');
-              }
-            })
-            .catch(error => {
-              console.error('خطأ في إرسال الموقع:', error);
-              showNotification('تم تحديد الموقع محلياً، لكن حدث خطأ في الاتصال بالخادم.', 'error');
-            });
-          },
-          function(error) {
-            showNotification('لم نتمكن من تحديد موقعك. يرجى إدخال العنوان يدوياً.', 'error');
-          }
-        );
-      } else {
-        showNotification('متصفحك لا يدعم تحديد الموقع.', 'error');
+      // فحص دعم تحديد الموقع
+      if (!navigator.geolocation) {
+        showNotification('متصفحك لا يدعم تحديد الموقع. يرجى إدخال العنوان يدوياً.', 'error');
+        return;
       }
+
+      // فحص السياق الآمن (HTTPS)
+      if (!window.isSecureContext && location.hostname !== 'localhost') {
+        showNotification('الموقع غير آمن. يرجى استخدام HTTPS أو إدخال العنوان يدوياً.', 'error');
+        return;
+      }
+
+      showNotification('جاري تحديد موقعك... اضغط "السماح" عند ظهور الإشعار', 'success');
+      
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          
+          // محاكاة الحصول على العنوان من الإحداثيات
+          const address = `العنوان التقريبي: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+          document.getElementById('orderAddress').value = address;
+          
+          // إرسال الموقع إلى الخادم
+          fetch('/api/gps/location', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              latitude: lat,
+              longitude: lng,
+              source: 'order',
+              timestamp: new Date().toISOString()
+            })
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (result.success) {
+              showNotification('✅ تم تحديد موقعك بنجاح! سيتم إرسال طلبك إلى هذا الموقع.', 'success');
+              
+              // تغيير لون الزر لإظهار النجاح
+              const gpsBtn = document.querySelector('.gps-btn');
+              if (gpsBtn) {
+                gpsBtn.innerHTML = '<i class="fas fa-check"></i> تم تحديد الموقع';
+                gpsBtn.style.background = '#d4edda';
+                gpsBtn.style.border = '1px solid #c3e6cb';
+                gpsBtn.style.color = '#155724';
+              }
+            } else {
+              console.error('خطأ في حفظ الموقع:', result.error);
+              showNotification('تم تحديد الموقع محلياً، لكن حدث خطأ في الحفظ على الخادم.', 'error');
+            }
+          })
+          .catch(error => {
+            console.error('خطأ في إرسال الموقع:', error);
+            showNotification('تم تحديد الموقع محلياً، لكن حدث خطأ في الاتصال بالخادم.', 'error');
+          });
+        },
+        function(error) {
+          console.error('خطأ في تحديد الموقع:', error);
+          let errorMessage = 'لم نتمكن من تحديد موقعك. يرجى إدخال العنوان يدوياً.';
+          
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = 'تم رفض إذن الموقع. ابحث عن أيقونة 🔒 في شريط العنوان واختر "السماح" أو اكتب العنوان يدوياً.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = 'GPS غير متاح. تأكد من تشغيل GPS في إعدادات الهاتف أو اكتب العنوان يدوياً.';
+              break;
+            case error.TIMEOUT:
+              errorMessage = 'انتهت المهلة الزمنية. جرب مرة أخرى أو اكتب العنوان يدوياً.';
+              break;
+          }
+          
+          showNotification(errorMessage, 'error');
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 20000,  // مهلة زمنية أطول للهواتف
+          maximumAge: 300000  // السماح بالاستخدام لمدة 5 دقائق
+        }
+      );
     }
 
     // إغلاق النوافذ المنبثقة عند النقر خارجها

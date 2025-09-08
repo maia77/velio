@@ -111,7 +111,7 @@
           <div class="field">
             <label>العنوان</label>
             <div style="margin-bottom: 8px;">
-              <button type="button" id="gpsBtn" style="background: #f8f9fa; border: 1px solid #dee2e6; color: #000; cursor: pointer; font-size: 12px; padding: 6px 12px; border-radius: 6px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; margin-right: 8px;">
+              <button type="button" id="gpsBtn" style="background: #007bff; border: 1px solid #007bff; color: #fff; cursor: pointer; font-size: 14px; padding: 8px 16px; border-radius: 8px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; margin-right: 8px; font-weight: 500;" onmouseover="this.style.background='#0056b3'" onmouseout="this.style.background='#007bff'">
                 📍 تحديد موقعي
               </button>
               <div id="locationStatus" style="margin-top: 8px; font-size: 12px; color: #666; display: none; padding: 8px; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #007bff;">
@@ -119,7 +119,7 @@
               </div>
             </div>
             <textarea name="address" rows="3" required style="width: 100%;"></textarea>
-            <div class="hint">💡 اضغط "تحديد موقعي" لتحديد موقعك تلقائياً أو اكتب العنوان يدوياً في الخانة</div>
+            <div class="hint">💡 اضغط "تحديد موقعي" لتحديد موقعك تلقائياً أو اكتب العنوان يدوياً في الخانة<br><small style="color: #666;">📱 على الهاتف: تأكد من السماح للموقع عند ظهور الإشعار<br>🔒 إذا لم يظهر إشعار، ابحث عن أيقونة 🔒 في شريط العنوان</small></div>
           </div>
           <div class="field">
             <label>اختر الموقع</label>
@@ -211,7 +211,15 @@
         return;
       }
 
-      // محاولة تحديد الموقع مباشرة بدون فحوصات معقدة
+      // فحص السياق الآمن (HTTPS)
+      if (!window.isSecureContext && location.hostname !== 'localhost') {
+        console.log('⚠️ الموقع غير آمن - قد لا يعمل تحديد الموقع بشكل صحيح على بعض الهواتف');
+        const statusDiv = document.getElementById('locationStatus');
+        statusDiv.innerHTML = '⚠️ الموقع غير آمن - يرجى استخدام HTTPS أو كتابة العنوان يدوياً';
+        statusDiv.style.color = '#856404';
+        statusDiv.style.display = 'block';
+        return;
+      }
       
       console.log('✅ بدء طلب إذن الموقع...');
 
@@ -219,21 +227,22 @@
       this.textContent = '📍 جاري التحديد...';
       this.disabled = true;
       
-      // إظهار حالة التحديد
+      // إظهار حالة التحديد مع تعليمات محسنة للهواتف
       const statusDiv = document.getElementById('locationStatus');
-      statusDiv.innerHTML = '🔄 جاري تحديد موقعك...<br><small>📱 إذا لم يظهر إشعار، تأكد من:<br>• تشغيل GPS على الهاتف<br>• الاتصال بالإنترنت<br>• السماح للموقع في إعدادات المتصفح</small>';
+      statusDiv.innerHTML = '🔄 جاري تحديد موقعك...<br><small>📱 تعليمات للهواتف:<br>• تأكد من تشغيل GPS<br>• اضغط "السماح" عند ظهور الإشعار<br>• إذا لم يظهر إشعار، ابحث عن أيقونة 🔒 في شريط العنوان</small>';
       statusDiv.style.color = '#007bff';
       statusDiv.style.display = 'block';
       
-      // إضافة رسالة إضافية بعد 3 ثوانٍ
+      // إضافة رسالة إضافية بعد 5 ثوانٍ
       setTimeout(() => {
         if (statusDiv.innerHTML.includes('جاري تحديد موقعك')) {
-          statusDiv.innerHTML += '<br><small>⏰ إذا لم يظهر إشعار بعد، جرب:<br>• إعادة تحميل الصفحة<br>• استخدام متصفح آخر<br>• أو اكتب العنوان يدوياً</small>';
+          statusDiv.innerHTML += '<br><small>⏰ إذا لم يظهر إشعار بعد 5 ثوانٍ:<br>• ابحث عن أيقونة 🔒 أو 📍 في شريط العنوان<br>• اضغط عليها واختر "السماح"<br>• أو اكتب العنوان يدوياً</small>';
         }
-      }, 3000);
+      }, 5000);
       
         
         // طلب إذن الموقع - هذا سيظهر نافذة طلب الإذن
+        // محاولة تحديد الموقع مع إعدادات محسنة للهواتف
         navigator.geolocation.getCurrentPosition(
           function(position) {
             const latitude = position.coords.latitude;
@@ -378,22 +387,22 @@
             
             switch(error.code) {
               case error.PERMISSION_DENIED:
-                statusDiv.innerHTML = '🚫 تم رفض إذن الموقع سابقاً<br><small>📱 الحل:<br>1️⃣ ابحث عن أيقونة 🔒 أو 📍 في شريط العنوان<br>2️⃣ اضغط عليها<br>3️⃣ اختر "السماح" أو "Allow"<br>4️⃣ جرب مرة أخرى</small>';
+                statusDiv.innerHTML = '🚫 تم رفض إذن الموقع<br><small>📱 الحل السريع:<br>1️⃣ ابحث عن أيقونة 🔒 في شريط العنوان<br>2️⃣ اضغط عليها واختر "السماح"<br>3️⃣ أو اكتب العنوان يدوياً في الأسفل</small>';
                 statusDiv.style.color = '#dc3545';
                 statusDiv.style.borderLeftColor = '#dc3545';
                 break;
               case error.POSITION_UNAVAILABLE:
-                statusDiv.innerHTML = '📡 معلومات الموقع غير متوفرة<br><small>تأكد من تشغيل GPS على الهاتف</small>';
+                statusDiv.innerHTML = '📡 GPS غير متاح<br><small>📱 تأكد من:<br>• تشغيل GPS في إعدادات الهاتف<br>• الاتصال بالإنترنت<br>• أو اكتب العنوان يدوياً</small>';
                 statusDiv.style.color = '#fd7e14';
                 statusDiv.style.borderLeftColor = '#fd7e14';
                 break;
               case error.TIMEOUT:
-                statusDiv.innerHTML = '⏰ انتهت مهلة تحديد الموقع<br><small>جرب المحاولة مرة أخرى</small>';
+                statusDiv.innerHTML = '⏰ انتهت المهلة الزمنية<br><small>📱 جرب مرة أخرى أو اكتب العنوان يدوياً</small>';
                 statusDiv.style.color = '#ffc107';
                 statusDiv.style.borderLeftColor = '#ffc107';
                 break;
               default:
-                statusDiv.innerHTML = '❌ فشل في تحديد الموقع<br><small>استخدم "اختر من الخريطة" أو "كتابة يدوية"</small>';
+                statusDiv.innerHTML = '❌ فشل في تحديد الموقع<br><small>📱 يرجى كتابة العنوان يدوياً في الخانة أدناه</small>';
                 statusDiv.style.color = '#6c757d';
                 statusDiv.style.borderLeftColor = '#6c757d';
             }
@@ -406,8 +415,8 @@
           },
           {
             enableHighAccuracy: true,
-            timeout: 30000,
-            maximumAge: 0
+            timeout: 20000,  // مهلة زمنية أطول للهواتف
+            maximumAge: 300000  // السماح بالاستخدام لمدة 5 دقائق
           }
         );
     });
