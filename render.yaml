@@ -17,11 +17,11 @@ services:
       - key: EMAIL_PROVIDER
         value: yahoo
       - key: SENDER_EMAIL
-        value: your-email@yahoo.com
+        value: velio.contact@yahoo.com
       - key: SENDER_PASSWORD
-        value: your-app-password
+        value: rhpctpddhclirxqp
       - key: RECEIVER_EMAIL
-        value: your-email@yahoo.com
+        value: velio.contact@yahoo.com
       - key: SMTP_SERVER
         value: smtp.mail.yahoo.com
       - key: SMTP_PORT
@@ -47,11 +47,11 @@ services:
       - key: EMAIL_PROVIDER
         value: yahoo
       - key: SENDER_EMAIL
-        value: your-email@yahoo.com
+        value: velio.contact@yahoo.com
       - key: SENDER_PASSWORD
-        value: your-app-password
+        value: rhpctpddhclirxqp
       - key: RECEIVER_EMAIL
-        value: your-email@yahoo.com
+        value: velio.contact@yahoo.com
       - key: SMTP_SERVER
         value: smtp.mail.yahoo.com
       - key: SMTP_PORT
