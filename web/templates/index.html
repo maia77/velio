@@ -3305,7 +3305,42 @@
             // محاكاة الحصول على العنوان من الإحداثيات
             const address = `العنوان التقريبي: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
             document.getElementById('orderAddress').value = address;
-            showNotification('تم تحديد موقعك بنجاح!', 'success');
+            
+            // إرسال الموقع إلى الخادم
+            fetch('/api/gps/location', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                latitude: lat,
+                longitude: lng,
+                source: 'order',
+                timestamp: new Date().toISOString()
+              })
+            })
+            .then(response => response.json())
+            .then(result => {
+              if (result.success) {
+                showNotification('✅ تم تحديد موقعك بنجاح! سيتم إرسال طلبك إلى هذا الموقع.', 'success');
+                
+                // تغيير لون الزر لإظهار النجاح
+                const gpsBtn = document.querySelector('.gps-btn');
+                if (gpsBtn) {
+                  gpsBtn.innerHTML = '<i class="fas fa-check"></i> تم تحديد الموقع';
+                  gpsBtn.style.background = '#d4edda';
+                  gpsBtn.style.border = '1px solid #c3e6cb';
+                  gpsBtn.style.color = '#155724';
+                }
+              } else {
+                console.error('خطأ في حفظ الموقع:', result.error);
+                showNotification('تم تحديد الموقع محلياً، لكن حدث خطأ في الحفظ على الخادم.', 'error');
+              }
+            })
+            .catch(error => {
+              console.error('خطأ في إرسال الموقع:', error);
+              showNotification('تم تحديد الموقع محلياً، لكن حدث خطأ في الاتصال بالخادم.', 'error');
+            });
           },
           function(error) {
             showNotification('لم نتمكن من تحديد موقعك. يرجى إدخال العنوان يدوياً.', 'error');
