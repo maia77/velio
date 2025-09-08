@@ -1004,18 +1004,24 @@ def send_email(subject, body, from_name="Velio Store"):
         return False
     
     try:
-        # إنشاء رسالة محسنة
-        message = f"""From: {from_name} <{SENDER_EMAIL}>
-To: {RECEIVER_EMAIL}
-Subject: {subject}
-Content-Type: text/plain; charset=UTF-8
-
-{body}
+        # إنشاء رسالة محسنة مع الترميز الصحيح
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        
+        msg = MIMEMultipart()
+        msg['From'] = f'{from_name} <{SENDER_EMAIL}>'
+        msg['To'] = RECEIVER_EMAIL
+        msg['Subject'] = subject
+        
+        # إضافة النص مع الترميز الصحيح
+        full_body = f"""{body}
 
 ---
 تم إرسال هذه الرسالة تلقائياً من موقع Velio Store
-التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-        """.encode('utf-8')
+التاريخ: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
+        
+        msg.attach(MIMEText(full_body, 'plain', 'utf-8'))
+        message = msg.as_string()
         
         print(f"📧 محاولة الإرسال عبر {EMAIL_PROVIDER.upper()}: {SMTP_SERVER}:{SMTP_PORT}")
         
@@ -1550,13 +1556,17 @@ def send_customer_email(customer_email, subject, body):
         return False
     
     try:
-        # إنشاء رسالة محسنة
-        message = f"""From: Velio Store <{SENDER_EMAIL}>
-To: {customer_email}
-Subject: {subject}
-Content-Type: text/plain; charset=UTF-8
-
-{body}"""
+        # إنشاء رسالة محسنة مع الترميز الصحيح
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        
+        msg = MIMEMultipart()
+        msg['From'] = f'Velio Store <{SENDER_EMAIL}>'
+        msg['To'] = customer_email
+        msg['Subject'] = subject
+        
+        msg.attach(MIMEText(body, 'plain', 'utf-8'))
+        message = msg.as_string()
 
         # إعداد السياق الأمني
         context = ssl.create_default_context()
