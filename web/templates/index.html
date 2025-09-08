@@ -133,7 +133,7 @@
     .product-images-slider .product-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain; object-position: center; background: #f8f9fa;
       flex-shrink: 0;
       display: block;
     }
@@ -273,7 +273,9 @@
     .main-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
+      background: #f8f9fa;
       transition: transform 0.3s ease;
     }
     
@@ -343,7 +345,7 @@
     .thumbnail-item img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain; object-position: center; background: #f8f9fa;
     }
     
     /* معلومات المنتج */
@@ -930,7 +932,7 @@
     .product-image {
       width: 100%;
       height: 250px;
-      object-fit: cover;
+      object-fit: contain; object-position: center; background: #f8f9fa;
       transition: transform 0.3s ease;
     }
 
@@ -1400,7 +1402,7 @@
         .product-image {
           width: 100%;
           height: 150px;
-          object-fit: cover;
+          object-fit: contain; object-position: center; background: #f8f9fa;
           border-radius: 8px;
         }
         
@@ -1617,7 +1619,7 @@
       height: 100px;
       border-radius: 50%;
       margin-bottom: 20px;
-      object-fit: cover;
+      object-fit: contain; object-position: center; background: #f8f9fa;
     }
 
     .team-member h4 {
@@ -3618,7 +3620,7 @@
         
         productsHTML += `
           <div class="category-product-card" data-product-id="${product.id}" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: cover;">
+            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: contain; object-position: center; background: #f8f9fa;">
             <div style="padding: 20px;">
               <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">${productName}</h3>
               <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${productDescription}</p>
@@ -3670,7 +3672,7 @@
         
         productsHTML += `
           <div class="category-product-card" data-product-id="${product.id}" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: cover;">
+            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: contain; object-position: center; background: #f8f9fa;">
             <div style="padding: 20px;">
               <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">${productName}</h3>
               <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${productDescription}</p>
@@ -3720,7 +3722,7 @@
         
         productsHTML += `
           <div class="category-product-card" data-product-id="${product.id}" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: cover;">
+            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: contain; object-position: center; background: #f8f9fa;">
             <div style="padding: 20px;">
               <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">${productName}</h3>
               <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${productDescription}</p>
@@ -3770,7 +3772,7 @@
         
         productsHTML += `
           <div class="category-product-card" data-product-id="${product.id}" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: cover;">
+            <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: contain; object-position: center; background: #f8f9fa;">
             <div style="padding: 20px;">
               <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">${productName}</h3>
               <p style="color: 666; font-size: 0.9rem; margin-bottom: 15px;">${productDescription}</p>
@@ -3828,7 +3830,7 @@
                     <img src="${image.image_url}" 
                          alt="${productName}" 
                          class="product-image ${index === 0 ? 'active' : ''}"
-                         style="width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; top: 0; left: 0;"
+                         style="width: 100%; height: 100%; object-fit: contain; object-position: center; background: #f8f9fa; display: block; position: absolute; top: 0; left: 0;"
                          onload="console.log('تم تحميل الصورة ${index + 1} للمنتج ${product.id}')"
                          onerror="console.error('خطأ في تحميل الصورة ${index + 1} للمنتج ${product.id}'); this.src='https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
                   </div>
@@ -3849,7 +3851,7 @@
             <img src="${imageUrl}" 
                  alt="${productName}" 
                  class="product-image"
-                 style="width: 100%; height: 200px; object-fit: cover;"
+                 style="width: 100%; height: 200px; object-fit: contain; object-position: center; background: #f8f9fa;"
                  onerror="this.src='https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
           `;
         }
@@ -3858,7 +3860,7 @@
         if (containerId === 'home-essentials-products' || containerId === 'featured-products' || containerId === 'all-products') {
           productsHTML += `
             <div class="category-product-card" data-product-id="${product.id}" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease;">
-              <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: cover;">
+              <img src="${imageUrl}" alt="${productName}" style="width: 100%; height: 200px; object-fit: contain; object-position: center; background: #f8f9fa;">
               <div style="padding: 20px;">
                 <h3 style="color: #333; margin-bottom: 10px; font-size: 1.2rem;">${productName}</h3>
                 <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">${productDescription}</p>
