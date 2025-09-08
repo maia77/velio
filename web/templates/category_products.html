@@ -2,15 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#DCD5B9">
     <title>{{ category_title }} - Velio</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .category-header {
             background: url('/static/images/IMG_9626.JPG') center center/cover no-repeat;
@@ -164,8 +160,8 @@
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
             margin-bottom: 50px;
         }
         
@@ -292,11 +288,11 @@
         }
         
         .btn-primary {
-            background: white;
-            color: #374151;
-            border: 2px solid #374151;
+            background: linear-gradient(135deg, #F5F1E8, #E8E0D6);
+            color: black;
+            border: none;
             padding: 12px 20px;
-            border-radius: 8px;
+            border-radius: 20px;
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
@@ -307,14 +303,17 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(55, 65, 81, 0.3);
+            box-shadow: 0 5px 15px #F5F1E8;
         }
         
+        .btn-primary i {
+            color: black !important;
+        }
         
         .btn-secondary {
             background: #6c757d;
@@ -386,6 +385,48 @@
             margin-top: 5px;
         }
         
+        /* تحسينات للشاشات المتوسطة */
+        @media (max-width: 1024px) {
+            .category-header {
+                min-height: 400px;
+            }
+            
+            .category-title {
+                font-size: 3.5em;
+            }
+            
+            .category-description {
+                font-size: 1.4em;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 8px;
+                padding: 0 5px;
+            }
+            
+            .product-card {
+                max-width: 100%;
+            }
+            
+            .product-image-container {
+                height: 250px;
+            }
+            
+            .product-image {
+                height: 250px;
+            }
+            
+            .product-images-slider {
+                height: 250px;
+            }
+            
+            .product-images-slider .product-image {
+                height: 250px;
+            }
+        }
+
+        /* تحسينات للهواتف */
         @media (max-width: 768px) {
             .category-header {
                 min-height: 300px;
@@ -397,6 +438,20 @@
                 align-items: center;
                 justify-content: center;
                 text-align: center;
+            }
+            
+            .category-header-content {
+                padding: 30px 20px;
+            }
+            
+            .category-title {
+                font-size: 2.5em;
+                margin-bottom: 20px;
+            }
+            
+            .category-description {
+                font-size: 1.2em;
+                line-height: 1.5;
             }
             
             .nature-category .category-header {
@@ -412,6 +467,14 @@
                 align-items: center;
                 justify-content: center;
                 text-align: center;
+            }
+            
+            .nature-category .category-title {
+                font-size: 3em;
+            }
+            
+            .nature-category .category-description {
+                font-size: 1.3em;
             }
             
             /* حل إضافي للهواتف المحمولة */
@@ -430,8 +493,8 @@
             }
             
             .details-category .category-header {
-                min-height: 450px;
-                padding: 0;
+                min-height: 350px;
+                padding: 20px;
                 background: url('/static/images/IMG_968.jpg') center center/cover no-repeat !important;
                 background-size: cover !important;
                 background-position: center center !important;
@@ -439,8 +502,8 @@
             }
             
             .authenticity-category .category-header {
-                min-height: 450px;
-                padding: 0;
+                min-height: 350px;
+                padding: 20px;
                 background: url('/static/images/IMG_9726.JPG') center 30%/cover no-repeat !important;
                 background-size: cover !important;
                 background-position: center 30% !important;
@@ -448,18 +511,28 @@
             }
             
             .unique-touches-category .category-header {
-                min-height: 450px;
-                padding: 0;
+                min-height: 350px;
+                padding: 20px;
                 background: url('/static/images/IMG_97.JPG') center center/cover no-repeat !important;
                 background-size: cover !important;
                 background-position: center center !important;
                 background-attachment: scroll !important;
             }
             
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            .breadcrumb {
+                margin: 0 15px 25px;
+                padding: 12px 15px;
+                border-radius: 8px;
+            }
+            
+            .products-container {
                 padding: 0 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+                gap: 6px;
+                padding: 0 3px;
             }
             
             /* تحسين تخطيط المنتجات للهواتف */
@@ -468,6 +541,7 @@
                 flex-direction: column;
                 height: auto;
                 min-height: auto;
+                border-radius: 15px;
             }
             
             .product-image-container {
@@ -497,26 +571,60 @@
             .product-name {
                 font-size: 1.2em;
                 margin-bottom: 8px;
+                line-height: 1.3;
             }
             
             .product-description {
                 font-size: 0.9em;
                 margin-bottom: 10px;
-                -webkit-line-clamp: 2;
-                line-clamp: 2;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+                line-height: 1.4;
             }
             
             .product-price {
                 font-size: 1.4em;
             }
             
+            .product-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .product-category {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+            
             .stats-bar {
                 flex-direction: column;
                 text-align: center;
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .stat-item {
+                margin-bottom: 15px;
+            }
+            
+            .stat-number {
+                font-size: 1.8em;
+            }
+            
+            .stat-label {
+                font-size: 0.9em;
             }
             
             .product-actions {
                 flex-direction: column;
+            }
+            
+            .btn-primary {
+                padding: 12px 20px;
+                font-size: 1em;
+                min-height: 44px;
+                justify-content: center;
             }
         }
         
@@ -533,7 +641,7 @@
             }
         }
         
-        /* تحسينات إضافية للشاشات الصغيرة جداً */
+        /* تحسينات إضافية للهواتف الصغيرة */
         @media (max-width: 480px) {
             .category-header {
                 min-height: 250px !important;
@@ -548,22 +656,32 @@
             }
             
             .category-title {
-                font-size: 2.5em !important;
+                font-size: 2.2em !important;
                 margin-bottom: 15px;
+                line-height: 1.2;
             }
             
             .category-description {
-                font-size: 1.2em !important;
+                font-size: 1.1em !important;
+                line-height: 1.4;
             }
             
             .nature-category .category-header {
-                min-height: 400px !important;
+                min-height: 300px !important;
                 background: url('/static/images/IMG_9626.JPG') 85% center/cover no-repeat !important;
                 background-size: cover !important;
                 background-position: 85% center !important;
                 background-attachment: scroll !important;
                 background-repeat: no-repeat !important;
                 position: relative;
+            }
+            
+            .nature-category .category-title {
+                font-size: 2.5em !important;
+            }
+            
+            .nature-category .category-description {
+                font-size: 1.2em !important;
             }
             
             /* حل إضافي للشاشات الصغيرة جداً */
@@ -582,7 +700,7 @@
             }
             
             .details-category .category-header {
-                min-height: 400px !important;
+                min-height: 300px !important;
                 background: url('/static/images/IMG_968.jpg') center center/cover no-repeat !important;
                 background-size: cover !important;
                 background-position: center center !important;
@@ -590,7 +708,7 @@
             }
             
             .authenticity-category .category-header {
-                min-height: 400px !important;
+                min-height: 300px !important;
                 background: url('/static/images/IMG_9726.JPG') center 30%/cover no-repeat !important;
                 background-size: cover !important;
                 background-position: center 30% !important;
@@ -598,11 +716,244 @@
             }
             
             .unique-touches-category .category-header {
-                min-height: 400px !important;
+                min-height: 300px !important;
                 background: url('/static/images/IMG_97.JPG') center center/cover no-repeat !important;
                 background-size: cover !important;
                 background-position: center center !important;
                 background-attachment: scroll !important;
+            }
+            
+            .breadcrumb {
+                margin: 0 10px 20px;
+                padding: 10px 12px;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+            
+            .products-container {
+                padding: 0 10px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+                gap: 5px;
+            }
+            
+            .product-card {
+                border-radius: 12px;
+            }
+            
+            .product-image-container {
+                height: 180px;
+                min-height: 180px;
+            }
+            
+            .product-image {
+                height: 180px;
+            }
+            
+            .product-images-slider {
+                height: 180px;
+            }
+            
+            .product-images-slider .product-image {
+                height: 180px;
+            }
+            
+            .product-info {
+                padding: 12px;
+            }
+            
+            .product-name {
+                font-size: 1.1em;
+                margin-bottom: 6px;
+            }
+            
+            .product-description {
+                font-size: 0.85em;
+                margin-bottom: 8px;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            }
+            
+            .product-price {
+                font-size: 1.3em;
+            }
+            
+            .product-category {
+                font-size: 0.75em;
+                padding: 4px 10px;
+            }
+            
+            .stats-bar {
+                padding: 15px;
+                margin-bottom: 25px;
+            }
+            
+            .stat-number {
+                font-size: 1.6em;
+            }
+            
+            .stat-label {
+                font-size: 0.85em;
+            }
+            
+            .btn-primary {
+                padding: 10px 16px;
+                font-size: 0.9em;
+                min-height: 40px;
+            }
+        }
+
+        /* تحسينات للشاشات الكبيرة */
+        @media (min-width: 1200px) {
+            .category-header {
+                min-height: 600px;
+            }
+            
+            .category-title {
+                font-size: 5em;
+                margin-bottom: 30px;
+            }
+            
+            .category-description {
+                font-size: 1.8em;
+                max-width: 900px;
+            }
+            
+            .nature-category .category-title {
+                font-size: 5.5em;
+            }
+            
+            .nature-category .category-description {
+                font-size: 2em;
+                max-width: 1000px;
+            }
+            
+            .breadcrumb {
+                margin: 0 40px 40px;
+                padding: 20px 25px;
+                border-radius: 12px;
+            }
+            
+            .products-container {
+                max-width: 1400px;
+                padding: 0 40px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                gap: 10px;
+            }
+            
+            .product-card {
+                border-radius: 25px;
+            }
+            
+            .product-image-container {
+                height: 320px;
+            }
+            
+            .product-image {
+                height: 320px;
+            }
+            
+            .product-images-slider {
+                height: 320px;
+            }
+            
+            .product-images-slider .product-image {
+                height: 320px;
+            }
+            
+            .product-info {
+                padding: 30px;
+            }
+            
+            .product-name {
+                font-size: 1.6em;
+                margin-bottom: 15px;
+            }
+            
+            .product-description {
+                font-size: 1.1em;
+                margin-bottom: 20px;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            }
+            
+            .product-price {
+                font-size: 1.8em;
+            }
+            
+            .product-category {
+                font-size: 1em;
+                padding: 10px 18px;
+            }
+            
+            .stats-bar {
+                padding: 35px;
+                margin-bottom: 50px;
+            }
+            
+            .stat-number {
+                font-size: 2.8em;
+            }
+            
+            .stat-label {
+                font-size: 1.2em;
+            }
+            
+            .btn-primary {
+                padding: 15px 25px;
+                font-size: 1.1em;
+                min-height: 50px;
+            }
+        }
+
+        /* تحسينات للشاشات الكبيرة جداً */
+        @media (min-width: 1400px) {
+            .category-header {
+                min-height: 700px;
+            }
+            
+            .category-title {
+                font-size: 6em;
+            }
+            
+            .category-description {
+                font-size: 2em;
+                max-width: 1100px;
+            }
+            
+            .nature-category .category-title {
+                font-size: 6.5em;
+            }
+            
+            .nature-category .category-description {
+                font-size: 2.2em;
+                max-width: 1200px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
+            }
+            
+            .product-image-container {
+                height: 350px;
+            }
+            
+            .product-image {
+                height: 350px;
+            }
+            
+            .product-images-slider {
+                height: 350px;
+            }
+            
+            .product-images-slider .product-image {
+                height: 350px;
             }
         }
         
@@ -620,19 +971,6 @@
                 background-position: center center;
                 z-index: -1;
             }
-            
-            /* عرض الصورة كخلفية على الهواتف المحمولة */
-            .nature-category .mobile-background-image {
-                display: block !important;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                object-position: center;
-                z-index: -1;
-            }
         }
         
         /* تنسيق الإشعارات */
@@ -644,9 +982,12 @@
             border-radius: 8px;
             color: white;
             font-weight: bold;
-            z-index: 1000;
+            z-index: 9999;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             animation: slideIn 0.3s ease;
+            min-width: 200px;
+            text-align: center;
+            font-size: 16px;
         }
         
         .success {
@@ -655,6 +996,10 @@
         
         .error {
             background: #dc3545;
+        }
+        
+        .info {
+            background: #17a2b8;
         }
         
         @keyframes slideIn {
@@ -725,7 +1070,12 @@
                             
                             <div class="product-actions">
                                 <button class="btn-primary" onclick="addToCart({{ product.id }})">
-                                    🛒 أضف للسلة
+                                    <i class="fas fa-shopping-basket"></i>
+                                    أضف للسلة
+                                </button>
+                                <button class="btn-primary" onclick="toggleComments({{ product.id }})">
+                                    <i class="fas fa-comments"></i>
+                                    التعليقات
                                 </button>
                             </div>
                         </div>
@@ -764,24 +1114,37 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    showNotification('تم إضافة المنتج إلى السلة بنجاح! 🛒', 'success');
                     // تحديث عداد السلة إذا كان موجوداً
                     updateCartCount(data.cart_count);
-                } else {
-                    showNotification('فشل في إضافة المنتج إلى السلة', 'error');
                 }
             } catch (error) {
                 console.error('خطأ في إضافة المنتج:', error);
-                showNotification('خطأ في الاتصال بالخادم', 'error');
             }
+        }
+        
+        // تبديل التعليقات
+        function toggleComments(productId) {
+            console.log('تم الضغط على التعليقات للمنتج:', productId);
+            // يمكن إضافة منطق التعليقات هنا لاحقاً
         }
         
         // عرض الإشعارات
         function showNotification(message, type) {
+            console.log('محاولة عرض الإشعار:', message, type);
             const notification = document.getElementById('notification');
+            
+            if (!notification) {
+                console.error('عنصر الإشعار غير موجود!');
+                alert(message); // استخدام alert كبديل
+                return;
+            }
+            
             notification.textContent = message;
             notification.className = `notification ${type}`;
             notification.style.display = 'block';
+            notification.style.zIndex = '9999';
+            
+            console.log('تم عرض الإشعار');
             
             // إخفاء الإشعار بعد 3 ثواني
             setTimeout(() => {
@@ -867,7 +1230,6 @@
             // التحقق من أننا في صفحة زينة الطبيعة
             if (document.body.classList.contains('nature-category')) {
                 const categoryHeader = document.querySelector('.category-header');
-                const mobileImage = document.querySelector('.mobile-background-image');
                 
                 // التحقق من عرض الخلفية
                 setTimeout(() => {
@@ -876,10 +1238,6 @@
                     
                     // إذا لم تظهر الخلفية، استخدم الصورة كخلفية
                     if (backgroundImage === 'none' || backgroundImage === '') {
-                        console.log('إصلاح خلفية زينة الطبيعة للهاتف المحمول');
-                        if (mobileImage) {
-                            mobileImage.style.display = 'block';
-                        }
                         
                         // إضافة خلفية مباشرة
                         categoryHeader.style.background = 'url(/static/images/IMG_9626.JPG) center center/cover no-repeat';

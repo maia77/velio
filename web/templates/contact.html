@@ -2,11 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no"/>
-  <meta name="format-detection" content="telephone=no">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#DCD5B9">
   <title>Classique Tempus - اتصل بنا</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -39,7 +35,6 @@
         <a href="#" class="cart-link" onclick="openCart()">
           <i class="fas fa-shopping-cart"></i>
           <span>السلة</span>
-          <span class="cart-count" id="header-cart-count">0</span>
         </a>
         <a href="/track-order" class="track-order-link">
           <i class="fas fa-truck"></i>
@@ -63,30 +58,6 @@
   <!-- النماذج المنبثقة (Modal) والإشعارات -->
   <!-- انسخ هنا النماذج المنبثقة -->
 
-  <!-- شريط التنقل السفلي للهواتف المحمولة -->
-  <nav class="mobile-bottom-nav">
-    <a href="/" class="nav-item">
-      <i class="fas fa-home"></i>
-      <span>الرئيسية</span>
-    </a>
-    <a href="/#products" class="nav-item">
-      <i class="fas fa-box"></i>
-      <span>المنتجات</span>
-    </a>
-    <a href="/#about" class="nav-item">
-      <i class="fas fa-info-circle"></i>
-      <span>من نحن</span>
-    </a>
-    <a href="/#contact" class="nav-item">
-      <i class="fas fa-envelope"></i>
-      <span>اتصل بنا</span>
-    </a>
-    <a href="#" class="nav-item" onclick="openCart()">
-      <i class="fas fa-shopping-cart"></i>
-      <span>السلة</span>
-      <span class="cart-count" id="mobile-cart-count">0</span>
-    </a>
-  </nav>
 
   <script>
     // دالة فتح السلة
@@ -99,7 +70,6 @@
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
       const count = cart.reduce((total, item) => total + item.quantity, 0);
       document.getElementById('header-cart-count').textContent = count;
-      document.getElementById('mobile-cart-count').textContent = count;
     }
     
     // تحديث العداد عند تحميل الصفحة

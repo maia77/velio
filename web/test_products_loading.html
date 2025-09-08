@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تحميل المنتجات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .loading { background: #e3f2fd; color: #1976d2; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        .error { background: #ffebee; color: #c62828; }
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .product h3 {
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+        .product p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .product .price {
+            color: #DCD5B9;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+        }
+        .section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        button {
+            background: #DCD5B9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #CBBAB3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 اختبار تحميل المنتجات</h1>
+        
+        <div class="section">
+            <h2>حالة الاتصال</h2>
+            <div id="connection-status" class="status loading">جاري فحص الاتصال...</div>
+            <button onclick="testConnection()">إعادة فحص الاتصال</button>
+        </div>
+
+        <div class="section">
+            <h2>المنتجات الجديدة (وصل حديثاً)</h2>
+            <div id="new-arrivals-status" class="status loading">جاري تحميل المنتجات الجديدة...</div>
+            <div id="new-arrivals"></div>
+            <button onclick="loadNewArrivals()">تحميل المنتجات الجديدة</button>
+        </div>
+
+        <div class="section">
+            <h2>منتجات المنزل</h2>
+            <div id="home-essentials-status" class="status loading">جاري تحميل منتجات المنزل...</div>
+            <div id="home-essentials"></div>
+            <button onclick="loadHomeEssentials()">تحميل منتجات المنزل</button>
+        </div>
+
+        <div class="section">
+            <h2>جميع المنتجات</h2>
+            <div id="all-products-status" class="status loading">جاري تحميل جميع المنتجات...</div>
+            <div id="all-products"></div>
+            <button onclick="loadAllProducts()">تحميل جميع المنتجات</button>
+        </div>
+
+        <div class="section">
+            <h2>منتجات زينة الطبيعة</h2>
+            <div id="nature-products-status" class="status loading">جاري تحميل منتجات زينة الطبيعة...</div>
+            <div id="nature-products"></div>
+            <button onclick="loadNatureProducts()">تحميل منتجات زينة الطبيعة</button>
+        </div>
+    </div>
+
+    <script>
+        // اختبار الاتصال
+        async function testConnection() {
+            const statusEl = document.getElementById('connection-status');
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'جاري فحص الاتصال...';
+            
+            try {
+                const response = await fetch('/api/products-simple');
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = `✅ الاتصال ناجح - تم العثور على ${data.products.length} منتج`;
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = `❌ خطأ في API: ${data.error || 'خطأ غير معروف'}`;
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ خطأ في الاتصال: ${error.message}`;
+            }
+        }
+
+        // تحميل المنتجات الجديدة
+        async function loadNewArrivals() {
+            const statusEl = document.getElementById('new-arrivals-status');
+            const containerEl = document.getElementById('new-arrivals');
+            
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'جاري تحميل المنتجات الجديدة...';
+            
+            try {
+                const response = await fetch('/api/products-simple');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const newArrivals = data.products.filter(p => p.is_new_arrival);
+                    const productsToShow = newArrivals.length > 0 ? newArrivals : data.products.slice(0, 4);
+                    
+                    statusEl.className = 'status success';
+                    statusEl.textContent = `✅ تم تحميل ${productsToShow.length} منتج جديد`;
+                    
+                    displayProducts(productsToShow, containerEl);
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = `❌ خطأ: ${data.error}`;
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ خطأ: ${error.message}`;
+            }
+        }
+
+        // تحميل منتجات المنزل
+        async function loadHomeEssentials() {
+            const statusEl = document.getElementById('home-essentials-status');
+            const containerEl = document.getElementById('home-essentials');
+            
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'جاري تحميل منتجات المنزل...';
+            
+            try {
+                const response = await fetch('/api/products-simple');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const homeEssentials = data.products.filter(p => p.is_home_essentials);
+                    const productsToShow = homeEssentials.length > 0 ? homeEssentials : data.products.slice(0, 8);
+                    
+                    statusEl.className = 'status success';
+                    statusEl.textContent = `✅ تم تحميل ${productsToShow.length} منتج للمنزل`;
+                    
+                    displayProducts(productsToShow, containerEl);
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = `❌ خطأ: ${data.error}`;
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ خطأ: ${error.message}`;
+            }
+        }
+
+        // تحميل جميع المنتجات
+        async function loadAllProducts() {
+            const statusEl = document.getElementById('all-products-status');
+            const containerEl = document.getElementById('all-products');
+            
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'جاري تحميل جميع المنتجات...';
+            
+            try {
+                const response = await fetch('/api/products-simple');
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = `✅ تم تحميل ${data.products.length} منتج`;
+                    
+                    displayProducts(data.products, containerEl);
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = `❌ خطأ: ${data.error}`;
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ خطأ: ${error.message}`;
+            }
+        }
+
+        // تحميل منتجات زينة الطبيعة
+        async function loadNatureProducts() {
+            const statusEl = document.getElementById('nature-products-status');
+            const containerEl = document.getElementById('nature-products');
+            
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'جاري تحميل منتجات زينة الطبيعة...';
+            
+            try {
+                const response = await fetch('/api/products-simple');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const natureProducts = data.products.filter(p => 
+                        p.main_category === 'زينة الطبيعة' || p.main_category_ar === 'زينة الطبيعة'
+                    );
+                    
+                    statusEl.className = 'status success';
+                    statusEl.textContent = `✅ تم العثور على ${natureProducts.length} منتج في زينة الطبيعة`;
+                    
+                    if (natureProducts.length > 0) {
+                        displayProducts(natureProducts, containerEl);
+                    } else {
+                        containerEl.innerHTML = '<p>لا توجد منتجات في قسم زينة الطبيعة</p>';
+                    }
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = `❌ خطأ: ${data.error}`;
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ خطأ: ${error.message}`;
+            }
+        }
+
+        // عرض المنتجات
+        function displayProducts(products, container) {
+            if (products.length === 0) {
+                container.innerHTML = '<p>لا توجد منتجات متاحة</p>';
+                return;
+            }
+
+            let html = '';
+            products.forEach(product => {
+                const imageUrl = product.image_url || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+                const productName = product.name_ar || product.name || 'منتج بدون اسم';
+                const productDescription = product.description_ar || product.description || 'لا يوجد وصف';
+                const productPrice = product.price || 0;
+                
+                html += `
+                    <div class="product">
+                        <img src="${imageUrl}" alt="${productName}" style="width: 100px; height: 100px; object-fit: cover; float: right; margin-left: 15px; border-radius: 5px;">
+                        <h3>${productName}</h3>
+                        <p><strong>السعر:</strong> <span class="price">${productPrice} $</span></p>
+                        <p><strong>الفئة:</strong> ${product.main_category_ar || product.main_category || 'غير محدد'}</p>
+                        <p><strong>وصف:</strong> ${productDescription}</p>
+                        <p><strong>وصل حديثاً:</strong> ${product.is_new_arrival ? 'نعم' : 'لا'}</p>
+                        <p><strong>منتجات المنزل:</strong> ${product.is_home_essentials ? 'نعم' : 'لا'}</p>
+                        <p><strong>معرف المنتج:</strong> ${product.id}</p>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // تشغيل الاختبارات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('تم تحميل صفحة الاختبار');
+            testConnection();
+            loadNewArrivals();
+            loadHomeEssentials();
+            loadAllProducts();
+            loadNatureProducts();
+        });
+    </script>
+</body>
+</html>

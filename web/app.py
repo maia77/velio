@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 # تحميل متغيرات البيئة
 load_dotenv()
 
-from models import db, Product, Comment, ProductImage, Order, OrderStatusHistory
 from sqlalchemy import text
 from config import Config
 from amazon_translate import translate_service
@@ -41,6 +40,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 db_config, is_postgresql = get_database_config()
 app.config.update(db_config)
 use_remote = is_postgresql
+
+# سيتم استيراد db من models.py
 
 # إعدادات الجلسة
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -73,6 +74,9 @@ Session(app)
 # إعادة ضبط إعدادات قاعدة البيانات بعد تحميل Config لضمان عدم استبدالها
 # استخدام قاعدة البيانات المختارة
 app.config.update(db_config)
+
+# استيراد النماذج قبل تهيئة قاعدة البيانات
+from models import db, Product, Comment, ProductImage, Order, OrderStatusHistory
 
 # تهيئة الإضافات
 babel = Babel(app)
@@ -601,6 +605,27 @@ def debug_console():
 def test_simple():
     """صفحة اختبار بسيطة"""
     return send_from_directory('.', 'test_simple.html')
+
+@app.route('/test-cart')
+def test_cart():
+    """صفحة اختبار السلة"""
+    return send_from_directory('.', 'test_cart.html')
+
+@app.route('/test-simple-cart')
+def test_simple_cart():
+    """صفحة اختبار السلة البسيطة"""
+    return send_from_directory('.', 'test_simple_cart.html')
+
+@app.route('/test-cart-simple')
+def test_cart_simple():
+    """صفحة اختبار السلة البسيطة الجديدة"""
+    return send_from_directory('.', 'test_cart_simple.html')
+
+@app.route('/test-products-loading')
+def test_products_loading():
+    """صفحة اختبار تحميل المنتجات"""
+    return send_from_directory('.', 'test_products_loading.html')
+
 
 
 @app.route('/api/products-simple')
@@ -2804,12 +2829,24 @@ def thank_you_page():
 
 # --- تشغيل السيرفر ---
 if __name__ == '__main__':
+    import os
+    import sys
+    
+    # تحديد المنفذ من المعاملات أو متغير البيئة
+    port = 5001  # المنفذ الافتراضي الجديد
+    if len(sys.argv) > 1 and '--port' in sys.argv:
+        port_index = sys.argv.index('--port')
+        if port_index + 1 < len(sys.argv):
+            port = int(sys.argv[port_index + 1])
+    else:
+        port = int(os.environ.get('PORT', 5001))
+    
     print("تم إنشاء قاعدة البيانات بنجاح")
     print("بدء تشغيل سيرفر Flask مع دعم تعدد اللغات...")
     print("تم تفعيل خدمة GPS لتتبع المواقع")
     print("الموقع يدعم اللغتين العربية والإنجليزية")
-    print("السيرفر سيكون متاحًا على: http://127.0.0.1:5003")
-    print("للوصول من الهاتف: http://192.168.0.72:5003")
-    print("لوحة إدارة المنتجات: http://127.0.0.1:5003/admin/products")
-    print("لوحة إدارة المنتجات (الهاتف): http://192.168.0.72:5003/admin/products")
-    app.run(debug=True, host='0.0.0.0', port=5003, use_reloader=False)
+    print(f"السيرفر سيكون متاحًا على: http://127.0.0.1:{port}")
+    print(f"للوصول من الهاتف: http://192.168.0.240:{port}")
+    print(f"لوحة إدارة المنتجات: http://127.0.0.1:{port}/admin/products")
+    print(f"لوحة إدارة المنتجات (الهاتف): http://192.168.0.240:{port}/admin/products")
+    app.run(debug=True, host='0.0.0.0', port=port, use_reloader=False)

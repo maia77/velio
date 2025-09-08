@@ -60,7 +60,6 @@ class TranslationManager {
                     'Search products...': 'ابحث عن المنتجات...',
                     'Cart': 'السلة',
                     'Login': 'تسجيل الدخول',
-                    'Everything your home needs': 'كل ما يحتاجه منزلك',
                     'From classic to modern designs': 'من التصاميم الكلاسيكية إلى العصرية',
                     'Shop Now': 'تسوق الآن',
                     'Latest Arrivals': 'وصل حديثاً',

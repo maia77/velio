@@ -2,11 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no"/>
-  <meta name="format-detection" content="telephone=no">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#DCD5B9">
   <title>إتمام الطلب</title>
   <link rel="stylesheet" href="/static/style.css" />
@@ -14,7 +10,7 @@
   <style>
     body { font-family: Arial, sans-serif; background:#f7f7f7; margin:0; }
     .container { max-width: 1100px; margin: 20px auto; background:#fff; padding: 24px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
-    h1 { margin-top: 0; }
+    h1 { margin-top: 0; text-align: center !important; }
     .grid { display:grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
     .card { border:1px solid #eee; border-radius: 12px; padding: 18px; background:#fafafa; }
     .field { margin-bottom: 12px; }
@@ -92,7 +88,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>🧾 إتمام الطلب</h1>
+    <h1 style="text-align: center !important;">إتمام الطلب</h1>
     <form method="POST">
       <div class="grid">
         <div class="card">
@@ -120,7 +116,7 @@
               </button>
             </div>
             <textarea name="address" rows="3" required style="width: 100%;"></textarea>
-            <div class="hint">اضغط على زر GPS لتحديد موقعك الحالي تلقائياً</div>
+            <div class="hint">اضغط على زر GPS لتحديد موقعك (يعمل على المواقع الآمنة فقط)</div>
           </div>
           <div class="field">
             <label>اختر الموقع</label>
@@ -200,6 +196,7 @@
         this.textContent = '📍 جاري التحديد...';
         this.disabled = true;
         
+        // طلب إذن الموقع - هذا سيظهر نافذة طلب الإذن
         navigator.geolocation.getCurrentPosition(
           function(position) {
             const latitude = position.coords.latitude;
@@ -234,13 +231,13 @@
             
             switch(error.code) {
               case error.PERMISSION_DENIED:
-                errorMessage = 'تم رفض إذن الموقع';
+                errorMessage = 'تم رفض إذن الموقع\n\nيرجى:\n1. النقر على "السماح" في نافذة الإذن\n2. أو كتابة عنوانك يدوياً أدناه';
                 break;
               case error.POSITION_UNAVAILABLE:
-                errorMessage = 'معلومات الموقع غير متوفرة';
+                errorMessage = 'معلومات الموقع غير متوفرة\n\nيرجى كتابة عنوانك يدوياً';
                 break;
               case error.TIMEOUT:
-                errorMessage = 'انتهت مهلة تحديد الموقع';
+                errorMessage = 'انتهت مهلة تحديد الموقع\n\nيرجى المحاولة مرة أخرى أو كتابة العنوان يدوياً';
                 break;
             }
             
@@ -252,8 +249,8 @@
           },
           {
             enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 60000
+            timeout: 15000,
+            maximumAge: 0
           }
         );
       } else {
@@ -262,30 +259,6 @@
     });
   </script>
   
-  <!-- شريط التنقل السفلي للهواتف المحمولة -->
-  <nav class="mobile-bottom-nav">
-    <a href="/" class="nav-item">
-      <i class="fas fa-home"></i>
-      <span>الرئيسية</span>
-    </a>
-    <a href="/#products" class="nav-item">
-      <i class="fas fa-box"></i>
-      <span>المنتجات</span>
-    </a>
-    <a href="/#about" class="nav-item">
-      <i class="fas fa-info-circle"></i>
-      <span>من نحن</span>
-    </a>
-    <a href="/#contact" class="nav-item">
-      <i class="fas fa-envelope"></i>
-      <span>اتصل بنا</span>
-    </a>
-    <a href="#" class="nav-item" onclick="openCart()">
-      <i class="fas fa-shopping-cart"></i>
-      <span>السلة</span>
-      <span class="cart-count" id="mobile-cart-count">0</span>
-    </a>
-  </nav>
   
   <!-- تحسينات شريط التنقل السفلي -->
 </body>

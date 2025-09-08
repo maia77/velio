@@ -1,6 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
 
+# إنشاء instance من SQLAlchemy
 db = SQLAlchemy()
 
 class Product(db.Model):

@@ -2,11 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no"/>
-  <meta name="format-detection" content="telephone=no">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#DCD5B9">
   <title id="page-title">تفاصيل المنتج - Velio</title>
   
@@ -17,7 +13,6 @@
   <!-- CSS -->
   <link rel="stylesheet" href="/static/style.css">
   <link rel="stylesheet" href="/static/css/translation.css">
-  <link rel="stylesheet" href="/static/css/responsive.css">
   
   <style>
     /* تصميم صفحة تفاصيل المنتج */
@@ -646,8 +641,8 @@
             
             <div class="product-actions">
               <button class="btn-primary" onclick="addToCart()">
-                <i class="fas fa-shopping-cart"></i>
-                أضف للسلة
+                <i class="fas fa-shopping-basket"></i>
+                🛒 أضف للسلة
               </button>
               <button class="btn-outline" onclick="toggleComments()" id="comments-btn">
                 <i class="fas fa-comments"></i>
@@ -806,10 +801,31 @@
     }
 
     // إضافة للسلة
-    function addToCart() {
+    async function addToCart() {
       if (currentProduct) {
-        // إضافة للسلة (يمكن تطويرها لاحقاً)
-        alert(`تم إضافة "${currentProduct.name_ar || currentProduct.name}" للسلة!`);
+        try {
+          const res = await fetch('/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: currentProduct.id, quantity: 1 })
+          });
+          const data = await res.json();
+          if (!data.success) throw new Error(data.error || 'فشل إضافة المنتج');
+          
+          // تحديث عداد السلة
+          const countResponse = await fetch('/api/cart/count');
+          const countData = await countResponse.json();
+          if (countData.success) {
+            const cartCountElements = document.querySelectorAll('.cart-count');
+            cartCountElements.forEach(el => {
+              if (el) el.textContent = countData.count;
+            });
+          }
+          
+          alert(`تم إضافة "${currentProduct.name_ar || currentProduct.name}" للسلة!`);
+        } catch (error) {
+          alert('تعذر إضافة المنتج للسلة: ' + error.message);
+        }
       }
     }
 
@@ -1145,31 +1161,5 @@
     }
   </script>
   
-  <!-- شريط التنقل السفلي للهواتف المحمولة -->
-  <nav class="mobile-bottom-nav">
-    <a href="/" class="nav-item">
-      <i class="fas fa-home"></i>
-      <span>الرئيسية</span>
-    </a>
-    <a href="/#products" class="nav-item">
-      <i class="fas fa-box"></i>
-      <span>المنتجات</span>
-    </a>
-    <a href="/#about" class="nav-item">
-      <i class="fas fa-info-circle"></i>
-      <span>من نحن</span>
-    </a>
-    <a href="/#contact" class="nav-item">
-      <i class="fas fa-envelope"></i>
-      <span>اتصل بنا</span>
-    </a>
-    <a href="#" class="nav-item" onclick="openCart()">
-      <i class="fas fa-shopping-cart"></i>
-      <span>السلة</span>
-      <span class="cart-count" id="mobile-cart-count">0</span>
-    </a>
-  </nav>
-  
-  <!-- تحسينات شريط التنقل السفلي -->
 </body>
 </html>

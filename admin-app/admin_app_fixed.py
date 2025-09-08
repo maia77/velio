@@ -13,7 +13,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from shared_database_config_fallback import get_database_config
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../web/static', static_url_path='/static')
 
 # إعداد مفتاح سري للجلسة (مطلوب لنظام السلة)
 app.secret_key = os.environ.get('SECRET_KEY', 'change-this-secret-key-in-production')

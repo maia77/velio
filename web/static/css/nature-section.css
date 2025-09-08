@@ -1,5 +1,416 @@
 /* تنسيقات قسم زينة الطبيعة - إصلاح شامل */
 
+/* تنسيق قسم وصل حديثاً - أفقي جنب جنب */
+#featured-products {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 20px !important;
+  overflow-x: auto !important;
+  padding: 20px 0 !important;
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin-top: 20px !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+}
+
+/* تنسيق بطاقات قسم وصل حديثاً */
+#featured-products .product-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px #ddd;
+  transition: all 0.3s ease;
+  position: relative;
+  flex: 0 0 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+  width: 300px !important;
+}
+
+/* تنسيق الصور في قسم وصل حديثاً */
+#featured-products .product-image {
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  object-position: center;
+  background: #f8f9fa;
+  transition: transform 0.3s ease;
+}
+
+#featured-products .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+#featured-products .product-info {
+  padding: 15px;
+}
+
+#featured-products .product-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+#featured-products .product-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+#featured-products .product-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #DCD5B9;
+  margin-bottom: 10px;
+}
+
+#featured-products .product-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+#featured-products .btn-primary {
+  background: linear-gradient(135deg, #DCD5B9, #CBBAB3);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+#featured-products .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px #DCD5B9;
+}
+
+/* تنسيق متجاوب لقسم وصل حديثاً - للهواتف */
+@media (max-width: 768px) {
+  #featured-products {
+    gap: 15px !important;
+    padding: 15px 0 !important;
+    margin: 0 -10px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  #featured-products .product-card {
+    flex: 0 0 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    width: 220px !important;
+  }
+
+  #featured-products .product-image {
+    height: 150px !important;
+  }
+
+  #featured-products .product-info {
+    padding: 12px !important;
+  }
+
+  #featured-products .product-name {
+    font-size: 1.1rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  #featured-products .product-description {
+    font-size: 0.85rem !important;
+    margin-bottom: 8px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  #featured-products .product-price {
+    font-size: 1.2rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  #featured-products .product-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  #featured-products .btn-primary {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* تنسيق متجاوب للشاشات الصغيرة جداً */
+@media (max-width: 480px) {
+  #featured-products {
+    gap: 12px !important;
+    padding: 10px 0 !important;
+    margin: 0 -8px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  #featured-products .product-card {
+    flex: 0 0 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    width: 180px !important;
+  }
+
+  #featured-products .product-image {
+    height: 120px !important;
+  }
+
+  #featured-products .product-info {
+    padding: 10px !important;
+  }
+
+  #featured-products .product-name {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  #featured-products .product-description {
+    font-size: 0.8rem !important;
+    margin-bottom: 6px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  #featured-products .product-price {
+    font-size: 1.1rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  #featured-products .btn-primary {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 32px !important;
+  }
+}
+
+/* تأثيرات التمرير لقسم وصل حديثاً */
+#featured-products::-webkit-scrollbar {
+  height: 8px;
+}
+
+#featured-products::-webkit-scrollbar-track {
+  background: rgba(220, 213, 185, 0.2);
+  border-radius: 4px;
+}
+
+#featured-products::-webkit-scrollbar-thumb {
+  background: #DCD5B9;
+  border-radius: 4px;
+}
+
+#featured-products::-webkit-scrollbar-thumb:hover {
+  background: #CBBAB3;
+}
+
+/* تأثيرات التلاشي في النهايات لقسم وصل حديثاً */
+#featured-products::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+#featured-products::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* تنسيق قسم كل ما يحتاجه منزلك - عمودي تحت بعض */
+#home-essentials-products {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 20px !important;
+  margin-top: 40px !important;
+  justify-content: center !important;
+  padding: 20px 0 !important;
+}
+
+/* تنسيق بطاقات قسم كل ما يحتاجه منزلك */
+#home-essentials-products .product-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px #ddd;
+  transition: all 0.3s ease;
+  position: relative;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* تنسيق الصور في قسم كل ما يحتاجه منزلك */
+#home-essentials-products .product-image {
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  object-position: center;
+  background: #f8f9fa;
+  transition: transform 0.3s ease;
+}
+
+#home-essentials-products .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+#home-essentials-products .product-info {
+  padding: 15px;
+}
+
+#home-essentials-products .product-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+#home-essentials-products .product-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+#home-essentials-products .product-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #DCD5B9;
+  margin-bottom: 10px;
+}
+
+#home-essentials-products .product-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+#home-essentials-products .btn-primary {
+  background: linear-gradient(135deg, #DCD5B9, #CBBAB3);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+#home-essentials-products .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px #DCD5B9;
+}
+
+/* تنسيق متجاوب لقسم كل ما يحتاجه منزلك - للهواتف */
+@media (max-width: 768px) {
+  #home-essentials-products {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 15px !important;
+    padding: 15px 0 !important;
+  }
+
+  #home-essentials-products .product-image {
+    height: 200px !important;
+  }
+
+  #home-essentials-products .product-info {
+    padding: 12px !important;
+  }
+
+  #home-essentials-products .product-name {
+    font-size: 1.1rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  #home-essentials-products .product-description {
+    font-size: 0.85rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  #home-essentials-products .product-price {
+    font-size: 1.2rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  #home-essentials-products .product-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  #home-essentials-products .btn-primary {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* تنسيق متجاوب للشاشات الصغيرة جداً - قسم كل ما يحتاجه منزلك */
+@media (max-width: 480px) {
+  #home-essentials-products {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 10px 0 !important;
+  }
+
+  #home-essentials-products .product-image {
+    height: 180px !important;
+  }
+
+  #home-essentials-products .product-info {
+    padding: 10px !important;
+  }
+
+  #home-essentials-products .product-name {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  #home-essentials-products .product-description {
+    font-size: 0.8rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  #home-essentials-products .product-price {
+    font-size: 1.1rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  #home-essentials-products .btn-primary {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 32px !important;
+  }
+}
+
 /* تنسيق قوي للجوال - إجبار تطبيق موضع الخلفية */
 @media screen and (max-width: 768px) {
   section.content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] {
@@ -20,89 +431,202 @@
   }
 }
 
-/* إعادة تعيين التنسيقات */
+/* إعادة تعيين التنسيقات - تنسيق أفقي جنب جنب */
 .nature-category-grid,
 .unique-category-grid,
 .details-category-grid,
 .heritage-category-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 15px;
-  overflow-x: auto;
-  padding: 10px 0;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 15px !important;
+  overflow-x: auto !important;
+  padding: 10px 0 !important;
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin-top: 20px !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
 }
 
-/* تنسيق البطاقات */
-.category-product-card {
+/* إجبار تطبيق التنسيق الأفقي على جميع الشاشات */
+.nature-category-grid,
+.unique-category-grid,
+.details-category-grid,
+.heritage-category-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 15px !important;
+  overflow-x: auto !important;
+  padding: 10px 0 !important;
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin-top: 20px !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+}
+
+/* تنسيق البطاقات - عرض أفقي جنب جنب */
+.category-product-card,
+.product-card {
   background: white;
   border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  flex: 0 0 280px;
-  min-width: 280px;
-  max-width: 280px;
-  position: relative;
-  overflow: visible;
-}
-
-/* حاوية الصورة الجديدة - تخطيط عمودي */
-.category-product-card .image-container {
-  width: 100%;
-  height: 200px; /* إرجاع الارتفاع الأصلي للعرض العمودي */
-  background-color: #f8f9fa;
-  border-radius: 15px 15px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  box-sizing: border-box;
   overflow: hidden;
+  box-shadow: 0 5px 20px #ddd;
+  transition: all 0.3s ease;
   position: relative;
+  flex: 0 0 280px !important;
+  min-width: 280px !important;
+  max-width: 280px !important;
+  width: 280px !important;
 }
 
-/* تنسيق الصور - عرض عمودي */
-.category-product-card .image-container img {
+/* إجبار تطبيق تنسيق البطاقات على جميع الشاشات */
+.nature-category-grid .category-product-card,
+.unique-category-grid .category-product-card,
+.details-category-grid .category-product-card,
+.heritage-category-grid .category-product-card {
+  flex: 0 0 280px !important;
+  min-width: 280px !important;
+  max-width: 280px !important;
+  width: 280px !important;
+}
+
+/* تنسيق الصور - استخدام نفس تنسيق product-image */
+.product-image {
   width: 100%;
-  height: 100%;
-  object-fit: contain; /* إرجاع إلى contain للعرض العمودي الأصلي */
+  height: 250px;
+  object-fit: contain;
   object-position: center;
-  display: block;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   background: #f8f9fa;
+  transition: transform 0.3s ease;
 }
 
-/* تنسيق متجاوب للهواتف */
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-info {
+  padding: 15px;
+}
+
+.product-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.product-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.product-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #DCD5B9;
+  margin-bottom: 10px;
+}
+
+.product-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #DCD5B9, #CBBAB3);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px #DCD5B9;
+}
+
+/* تنسيق متجاوب للهواتف - يبقى أفقي */
 @media (max-width: 768px) {
   .nature-category-grid,
   .unique-category-grid,
   .details-category-grid,
   .heritage-category-grid {
-    gap: 12px;
-    padding: 8px 0;
-    margin: 0 -10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    gap: 12px !important;
+    padding: 8px 0 !important;
+    margin: 0 -10px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
   }
 
-  .category-product-card {
-    flex: 0 0 200px;
-    min-width: 200px;
-    max-width: 200px;
-    margin-bottom: 15px;
+  .product-card {
+    flex: 0 0 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+    width: 200px !important;
   }
 
-  .category-product-card .image-container {
-    height: 100px !important; /* ارتفاع أقل للهواتف */
+  .nature-category-grid .category-product-card,
+  .unique-category-grid .category-product-card,
+  .details-category-grid .category-product-card,
+  .heritage-category-grid .category-product-card {
+    flex: 0 0 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+    width: 200px !important;
   }
-  
-  .category-product-card .image-container img {
-    height: 100% !important;
-    object-fit: contain !important;
-    background: #f8f9fa !important;
+
+  .product-image {
+    height: 120px !important;
+  }
+
+  .product-info {
+    padding: 10px !important;
+  }
+
+  .product-name {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .product-description {
+    font-size: 0.8rem !important;
+    margin-bottom: 6px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .product-price {
+    font-size: 1.1rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  .product-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .btn-primary {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
   }
 
   /* تنسيق خلفية قسم زينة الطبيعة للجوال */
@@ -119,34 +643,72 @@
   }
 }
 
-/* تنسيق متجاوب للشاشات الصغيرة جداً */
+/* تنسيق متجاوب للشاشات الصغيرة جداً - يبقى أفقي */
 @media (max-width: 480px) {
   .nature-category-grid,
   .unique-category-grid,
   .details-category-grid,
   .heritage-category-grid {
-    gap: 10px;
-    padding: 5px 0;
-    margin: 0 -8px;
-    padding-left: 8px;
-    padding-right: 8px;
+    gap: 10px !important;
+    padding: 5px 0 !important;
+    margin: 0 -8px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
   }
 
-  .category-product-card {
-    flex: 0 0 180px;
-    min-width: 180px;
-    max-width: 180px;
-    margin-bottom: 12px;
+  .product-card {
+    flex: 0 0 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    width: 180px !important;
   }
 
-  .category-product-card .image-container {
-    height: 80px !important; /* ارتفاع أقل للشاشات الصغيرة */
+  .nature-category-grid .category-product-card,
+  .unique-category-grid .category-product-card,
+  .details-category-grid .category-product-card,
+  .heritage-category-grid .category-product-card {
+    flex: 0 0 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    width: 180px !important;
   }
-  
-  .category-product-card .image-container img {
-    height: 100% !important;
-    object-fit: contain !important;
-    background: #f8f9fa !important;
+
+  .product-image {
+    height: 100px !important;
+  }
+
+  .product-info {
+    padding: 8px !important;
+  }
+
+  .product-name {
+    font-size: 0.9rem !important;
+    margin-bottom: 3px !important;
+  }
+
+  .product-description {
+    font-size: 0.75rem !important;
+    margin-bottom: 4px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .product-price {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .btn-primary {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 32px !important;
   }
 
   /* تنسيق خلفية قسم زينة الطبيعة للشاشات الصغيرة */
@@ -161,63 +723,41 @@
   }
 }
 
-/* تحسين التمرير الأفقي */
-.nature-category-grid::-webkit-scrollbar {
-  height: 6px;
-}
-
-.nature-category-grid::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-.nature-category-grid::-webkit-scrollbar-thumb {
-  background: #DCD5B9;
-  border-radius: 3px;
-}
-
-.nature-category-grid::-webkit-scrollbar-thumb:hover {
-  background: #CBBAB3;
-}
-
 /* تحسينات إضافية */
-.category-product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px #ccc;
 }
 
-.category-product-card .image-container img {
-  transition: transform 0.3s ease;
+/* تحسين شريط التمرير الأفقي */
+.nature-category-grid::-webkit-scrollbar,
+.unique-category-grid::-webkit-scrollbar,
+.details-category-grid::-webkit-scrollbar,
+.heritage-category-grid::-webkit-scrollbar {
+  height: 8px;
 }
 
-.category-product-card:hover .image-container img {
-  transform: scale(1.05);
+.nature-category-grid::-webkit-scrollbar-track,
+.unique-category-grid::-webkit-scrollbar-track,
+.details-category-grid::-webkit-scrollbar-track,
+.heritage-category-grid::-webkit-scrollbar-track {
+  background: rgba(220, 213, 185, 0.2);
+  border-radius: 4px;
 }
 
-/* إصلاح قسري للصور */
-.nature-category-grid .category-product-card,
-.unique-category-grid .category-product-card,
-.details-category-grid .category-product-card,
-.heritage-category-grid .category-product-card {
-  overflow: visible !important;
+.nature-category-grid::-webkit-scrollbar-thumb,
+.unique-category-grid::-webkit-scrollbar-thumb,
+.details-category-grid::-webkit-scrollbar-thumb,
+.heritage-category-grid::-webkit-scrollbar-thumb {
+  background: #DCD5B9;
+  border-radius: 4px;
 }
 
-.nature-category-grid .category-product-card .image-container,
-.unique-category-grid .category-product-card .image-container,
-.details-category-grid .category-product-card .image-container,
-.heritage-category-grid .category-product-card .image-container {
-  overflow: visible !important;
-}
-
-.nature-category-grid .category-product-card .image-container img,
-.unique-category-grid .category-product-card .image-container img,
-.details-category-grid .category-product-card .image-container img,
-.heritage-category-grid .category-product-card .image-container img {
-  object-fit: contain !important;
-  object-position: center !important;
-  width: 100% !important;
-  height: 100% !important;
-  background: #f8f9fa !important;
+.nature-category-grid::-webkit-scrollbar-thumb:hover,
+.unique-category-grid::-webkit-scrollbar-thumb:hover,
+.details-category-grid::-webkit-scrollbar-thumb:hover,
+.heritage-category-grid::-webkit-scrollbar-thumb:hover {
+  background: #CBBAB3;
 }
 
 /* تنسيقات إضافية لقسم زينة الطبيعة - تحسينات للجوال */
@@ -229,24 +769,6 @@
     background-repeat: no-repeat !important;
   }
 
-  /* تحسين التمرير الأفقي لقسم زينة الطبيعة */
-  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar {
-    height: 8px !important;
-  }
-
-  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar-track {
-    background: rgba(220, 213, 185, 0.2) !important;
-    border-radius: 4px !important;
-  }
-
-  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar-thumb {
-    background: #DCD5B9 !important;
-    border-radius: 4px !important;
-  }
-
-  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar-thumb:hover {
-    background: #CBBAB3 !important;
-  }
 }
 
 /* تنسيقات إضافية للشاشات الصغيرة جداً */
@@ -258,10 +780,6 @@
     background-repeat: no-repeat !important;
   }
 
-  /* تحسين التمرير الأفقي للشاشات الصغيرة */
-  .content-section[style*="background: linear-gradient(135deg, #f8f9fa, #e9ecef)"] .nature-category-grid::-webkit-scrollbar {
-    height: 6px !important;
-  }
 }
 
 /* تنسيقات إضافية للشاشات المتوسطة */
@@ -309,5 +827,158 @@
     background-size: 200% 100% !important;
     background-position: right center !important;
     background-repeat: no-repeat !important;
+  }
+
+  /* إجبار التنسيق الأفقي على الشاشات الصغيرة */
+  .nature-category-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* تنسيقات إضافية لضمان التطبيق الصحيح */
+.nature-category-grid,
+.unique-category-grid,
+.details-category-grid,
+.heritage-category-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+  position: relative !important;
+}
+
+/* تأثيرات التلاشي في النهايات */
+.nature-category-grid::after,
+.unique-category-grid::after,
+.details-category-grid::after,
+.heritage-category-grid::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.nature-category-grid::before,
+.unique-category-grid::before,
+.details-category-grid::before,
+.heritage-category-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.nature-category-grid .category-product-card,
+.unique-category-grid .category-product-card,
+.details-category-grid .category-product-card,
+.heritage-category-grid .category-product-card {
+  flex-shrink: 0 !important;
+}
+
+/* أسهم التمرير */
+.scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(220, 213, 185, 0.9);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.scroll-arrow:hover {
+  background: rgba(203, 186, 179, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.scroll-arrow-left {
+  left: 10px;
+}
+
+.scroll-arrow-right {
+  right: 10px;
+}
+
+.scroll-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* مؤشرات التمرير */
+.scroll-indicator {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+}
+
+.scroll-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(220, 213, 185, 0.3);
+  transition: all 0.3s ease;
+}
+
+.scroll-dot.active {
+  background: #DCD5B9;
+  transform: scale(1.2);
+}
+
+
+/* تنسيقات خاصة للهواتف */
+@media (max-width: 768px) {
+  .scroll-arrow {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .scroll-arrow-left {
+    left: 5px;
+  }
+  
+  .scroll-arrow-right {
+    right: 5px;
+  }
+  
+  
+  /* إخفاء النص التوضيحي في الشاشات الصغيرة جداً */
+  @media (max-width: 480px) {
+    
+    .scroll-arrow {
+      width: 30px;
+      height: 30px;
+      font-size: 14px;
+    }
   }
 }

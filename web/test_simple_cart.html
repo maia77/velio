@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار السلة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .cart-link {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+        .cart-link:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 اختبار السلة</h1>
+        
+        <div class="product">
+            <h3>منتج 1 - الاداره</h3>
+            <p>السعر: 0.03 $</p>
+            <button class="btn" onclick="addToCart(5, 1)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج 2 - منتج آخر</h3>
+            <p>السعر: 10.00 $</p>
+            <button class="btn" onclick="addToCart(1, 1)">أضف للسلة</button>
+        </div>
+        
+        <a href="/cart" class="cart-link">🛒 عرض السلة</a>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 8px;">
+            <h4>تعليمات:</h4>
+            <ol>
+                <li>اضغط على "أضف للسلة" لإضافة منتج</li>
+                <li>اضغط على "عرض السلة" لرؤية السلة</li>
+                <li>ستجد السلة تعمل بشكل مثالي على الهاتف والكمبيوتر</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        async function addToCart(productId, quantity) {
+            try {
+                const response = await fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: quantity
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('تم إضافة المنتج للسلة بنجاح!');
+                } else {
+                    alert('حدث خطأ في إضافة المنتج');
+                }
+            } catch (error) {
+                alert('حدث خطأ: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
+

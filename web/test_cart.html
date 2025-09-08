@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار السلة</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .product { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .btn { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+        .cart-info { background: #e9ecef; padding: 15px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 اختبار السلة</h1>
+        
+        <div class="cart-info">
+            <h3>معلومات السلة:</h3>
+            <p>عدد العناصر: <span id="cart-count">0</span></p>
+            <a href="/cart" class="btn">عرض السلة</a>
+        </div>
+        
+        <h2>المنتجات المتاحة:</h2>
+        
+        <div class="product">
+            <h3>منتج رقم 5</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(5)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 6</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(6)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 7</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(7)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 10</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(10)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 11</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(11)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 12</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(12)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 13</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(13)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 14</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(14)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 15</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(15)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 16</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(16)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 18</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(18)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 22</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(22)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 24</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(24)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 25</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(25)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 26</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(26)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 27</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(27)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 28</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(28)">أضف للسلة</button>
+        </div>
+        
+        <div class="product">
+            <h3>منتج رقم 29</h3>
+            <p>منتج تجريبي للاختبار</p>
+            <button class="btn" onclick="addToCart(29)">أضف للسلة</button>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="/" class="btn" style="background: #28a745;">العودة للصفحة الرئيسية</a>
+        </div>
+    </div>
+    
+    <script>
+        async function addToCart(productId) {
+            try {
+                const response = await fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: 1
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`تم إضافة المنتج ${productId} إلى السلة!`);
+                    updateCartCount();
+                } else {
+                    alert(`خطأ: ${data.error}`);
+                }
+            } catch (error) {
+                alert(`خطأ في الاتصال: ${error.message}`);
+            }
+        }
+        
+        async function updateCartCount() {
+            try {
+                const response = await fetch('/api/cart/count');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('cart-count').textContent = data.count;
+                }
+            } catch (error) {
+                console.log('Error updating cart count:', error);
+            }
+        }
+        
+        // تحديث عداد السلة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
