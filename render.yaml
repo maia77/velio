@@ -13,6 +13,19 @@ services:
         generateValue: true
       - key: PORT
         value: 10000
+      # إعدادات البريد الإلكتروني
+      - key: EMAIL_PROVIDER
+        value: yahoo
+      - key: SENDER_EMAIL
+        value: your-email@yahoo.com
+      - key: SENDER_PASSWORD
+        value: your-app-password
+      - key: RECEIVER_EMAIL
+        value: your-email@yahoo.com
+      - key: SMTP_SERVER
+        value: smtp.mail.yahoo.com
+      - key: SMTP_PORT
+        value: 587
     healthCheckPath: /
     plan: free
 
@@ -30,6 +43,19 @@ services:
         generateValue: true
       - key: PORT
         value: 10001
+      # إعدادات البريد الإلكتروني
+      - key: EMAIL_PROVIDER
+        value: yahoo
+      - key: SENDER_EMAIL
+        value: your-email@yahoo.com
+      - key: SENDER_PASSWORD
+        value: your-app-password
+      - key: RECEIVER_EMAIL
+        value: your-email@yahoo.com
+      - key: SMTP_SERVER
+        value: smtp.mail.yahoo.com
+      - key: SMTP_PORT
+        value: 587
     healthCheckPath: /admin
     plan: free
 
