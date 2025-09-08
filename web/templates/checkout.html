@@ -211,9 +211,9 @@
         return;
       }
 
-      // فحص السياق الآمن (HTTPS)
-      if (!window.isSecureContext && location.hostname !== 'localhost') {
-        console.log('⚠️ الموقع غير آمن - قد لا يعمل تحديد الموقع بشكل صحيح على بعض الهواتف');
+      // فحص السياق الآمن (HTTPS) - محسن للهواتف
+      if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        console.log('⚠️ الموقع غير آمن - قد لا يعمل تحديد الموقع بشكل صحيح على الهواتف');
         const statusDiv = document.getElementById('locationStatus');
         statusDiv.innerHTML = '⚠️ الموقع غير آمن - يرجى استخدام HTTPS أو كتابة العنوان يدوياً';
         statusDiv.style.color = '#856404';
@@ -223,13 +223,24 @@
       
       console.log('✅ بدء طلب إذن الموقع...');
 
+      // سؤال المستخدم إذا كان يريد فتح الخريطة
+      const userWantsMap = confirm('هل تريد فتح الخريطة لتحديد موقعك؟\n\nاضغط "موافق" للسماح بالوصول للموقع\nاضغط "إلغاء" لكتابة العنوان يدوياً');
+      
+      if (!userWantsMap) {
+        const statusDiv = document.getElementById('locationStatus');
+        statusDiv.innerHTML = 'تم إلغاء تحديد الموقع. يمكنك كتابة العنوان يدوياً.';
+        statusDiv.style.color = '#6c757d';
+        statusDiv.style.display = 'block';
+        return;
+      }
+
       // إظهار رسالة "جاري تحديد الموقع..."
       this.textContent = '📍 جاري التحديد...';
       this.disabled = true;
       
-      // إظهار حالة التحديد مع تعليمات محسنة للهواتف
+      // إظهار حالة التحديد
       const statusDiv = document.getElementById('locationStatus');
-      statusDiv.innerHTML = '🔄 جاري تحديد موقعك...<br><small>📱 تعليمات للهواتف:<br>• تأكد من تشغيل GPS<br>• اضغط "السماح" عند ظهور الإشعار<br>• إذا لم يظهر إشعار، ابحث عن أيقونة 🔒 في شريط العنوان</small>';
+      statusDiv.innerHTML = '🔄 جاري تحديد موقعك...';
       statusDiv.style.color = '#007bff';
       statusDiv.style.display = 'block';
       
@@ -242,6 +253,13 @@
       
         
         // طلب إذن الموقع - هذا سيظهر نافذة طلب الإذن
+        // إعدادات محسنة للهواتف
+        const options = {
+          enableHighAccuracy: true,
+          timeout: 30000,  // مهلة زمنية أطول للهواتف (30 ثانية)
+          maximumAge: 60000  // السماح بالاستخدام لمدة دقيقة واحدة فقط
+        };
+        
         // محاولة تحديد الموقع مع إعدادات محسنة للهواتف
         navigator.geolocation.getCurrentPosition(
           function(position) {
@@ -387,24 +405,20 @@
             
             switch(error.code) {
               case error.PERMISSION_DENIED:
-                statusDiv.innerHTML = '🚫 تم رفض إذن الموقع<br><small>📱 الحل السريع:<br>1️⃣ ابحث عن أيقونة 🔒 في شريط العنوان<br>2️⃣ اضغط عليها واختر "السماح"<br>3️⃣ أو اكتب العنوان يدوياً في الأسفل</small>';
+                statusDiv.innerHTML = 'تم رفض إذن الموقع. يرجى كتابة العنوان يدوياً.';
                 statusDiv.style.color = '#dc3545';
-                statusDiv.style.borderLeftColor = '#dc3545';
                 break;
               case error.POSITION_UNAVAILABLE:
-                statusDiv.innerHTML = '📡 GPS غير متاح<br><small>📱 تأكد من:<br>• تشغيل GPS في إعدادات الهاتف<br>• الاتصال بالإنترنت<br>• أو اكتب العنوان يدوياً</small>';
+                statusDiv.innerHTML = 'GPS غير متاح. يرجى كتابة العنوان يدوياً.';
                 statusDiv.style.color = '#fd7e14';
-                statusDiv.style.borderLeftColor = '#fd7e14';
                 break;
               case error.TIMEOUT:
-                statusDiv.innerHTML = '⏰ انتهت المهلة الزمنية<br><small>📱 جرب مرة أخرى أو اكتب العنوان يدوياً</small>';
+                statusDiv.innerHTML = 'انتهت المهلة الزمنية. يرجى كتابة العنوان يدوياً.';
                 statusDiv.style.color = '#ffc107';
-                statusDiv.style.borderLeftColor = '#ffc107';
                 break;
               default:
-                statusDiv.innerHTML = '❌ فشل في تحديد الموقع<br><small>📱 يرجى كتابة العنوان يدوياً في الخانة أدناه</small>';
+                statusDiv.innerHTML = 'فشل في تحديد الموقع. يرجى كتابة العنوان يدوياً.';
                 statusDiv.style.color = '#6c757d';
-                statusDiv.style.borderLeftColor = '#6c757d';
             }
             
             statusDiv.style.display = 'block';
@@ -413,11 +427,7 @@
             document.getElementById('gpsBtn').textContent = '📍 تحديد موقعي';
             document.getElementById('gpsBtn').disabled = false;
           },
-          {
-            enableHighAccuracy: true,
-            timeout: 20000,  // مهلة زمنية أطول للهواتف
-            maximumAge: 300000  // السماح بالاستخدام لمدة 5 دقائق
-          }
+          options
         );
     });
 

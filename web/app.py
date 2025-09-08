@@ -2844,19 +2844,49 @@ if __name__ == '__main__':
     
     # تحديد المنفذ من المعاملات أو متغير البيئة
     port = 5001  # المنفذ الافتراضي الجديد
-    if len(sys.argv) > 1 and '--port' in sys.argv:
-        port_index = sys.argv.index('--port')
-        if port_index + 1 < len(sys.argv):
-            port = int(sys.argv[port_index + 1])
+    use_ssl = False
+    
+    if len(sys.argv) > 1:
+        if '--port' in sys.argv:
+            port_index = sys.argv.index('--port')
+            if port_index + 1 < len(sys.argv):
+                port = int(sys.argv[port_index + 1])
+        if '--ssl' in sys.argv:
+            use_ssl = True
     else:
         port = int(os.environ.get('PORT', 5001))
+        use_ssl = os.environ.get('USE_SSL', 'false').lower() == 'true'
+    
+    # إعداد SSL إذا كان مطلوباً
+    ssl_context = None
+    if use_ssl:
+        try:
+            # محاولة إنشاء سياق SSL
+            sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+            from ssl_setup import create_ssl_context
+            ssl_context = create_ssl_context()
+            
+            if ssl_context:
+                print("🔐 تم تفعيل HTTPS بنجاح")
+            else:
+                print("⚠️  فشل في تفعيل HTTPS - سيتم التشغيل على HTTP")
+                use_ssl = False
+        except Exception as e:
+            print(f"⚠️  خطأ في إعداد SSL: {e}")
+            use_ssl = False
     
     print("تم إنشاء قاعدة البيانات بنجاح")
     print("بدء تشغيل سيرفر Flask مع دعم تعدد اللغات...")
     print("تم تفعيل خدمة GPS لتتبع المواقع")
     print("الموقع يدعم اللغتين العربية والإنجليزية")
-    print(f"السيرفر سيكون متاحًا على: http://127.0.0.1:{port}")
-    print(f"للوصول من الهاتف: http://192.168.0.240:{port}")
-    print(f"لوحة إدارة المنتجات: http://127.0.0.1:{port}/admin/products")
-    print(f"لوحة إدارة المنتجات (الهاتف): http://192.168.0.240:{port}/admin/products")
-    app.run(debug=True, host='0.0.0.0', port=port, use_reloader=False)
+    
+    protocol = "https" if use_ssl else "http"
+    print(f"السيرفر سيكون متاحًا على: {protocol}://127.0.0.1:{port}")
+    print(f"للوصول من الهاتف: {protocol}://192.168.0.240:{port}")
+    print(f"لوحة إدارة المنتجات: {protocol}://127.0.0.1:{port}/admin/products")
+    print(f"لوحة إدارة المنتجات (الهاتف): {protocol}://192.168.0.240:{port}/admin/products")
+    
+    if use_ssl:
+        print("🔐 تم تفعيل HTTPS - خدمة تحديد الموقع ستعمل بشكل أفضل على الهواتف")
+    
+    app.run(debug=True, host='0.0.0.0', port=port, use_reloader=False, ssl_context=ssl_context)

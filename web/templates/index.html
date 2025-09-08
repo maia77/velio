@@ -3369,30 +3369,73 @@
       openOrderModal();
     }
 
-    // وظيفة تحديد الموقع الحالي
+    // وظيفة تحديد الموقع الحالي - محسنة للهواتف
     function getCurrentLocation() {
+      console.log('🔍 بدء فحص تحديد الموقع...');
+      console.log('🌐 البروتوكول:', location.protocol);
+      console.log('🏠 المضيف:', location.hostname);
+      console.log('📍 دعم Geolocation:', !!navigator.geolocation);
+      console.log('📱 User Agent:', navigator.userAgent);
+      console.log('🔒 Secure Context:', window.isSecureContext);
+      
       // فحص دعم تحديد الموقع
       if (!navigator.geolocation) {
+        console.log('❌ المتصفح لا يدعم تحديد الموقع');
         showNotification('متصفحك لا يدعم تحديد الموقع. يرجى إدخال العنوان يدوياً.', 'error');
         return;
       }
 
-      // فحص السياق الآمن (HTTPS)
-      if (!window.isSecureContext && location.hostname !== 'localhost') {
-        showNotification('الموقع غير آمن. يرجى استخدام HTTPS أو إدخال العنوان يدوياً.', 'error');
+      // فحص السياق الآمن (HTTPS) - محسن للهواتف
+      if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        console.log('⚠️ الموقع غير آمن - قد لا يعمل تحديد الموقع بشكل صحيح على الهواتف');
+        showNotification('⚠️ الموقع غير آمن. يرجى استخدام HTTPS أو إدخال العنوان يدوياً.', 'error');
         return;
       }
 
-      showNotification('جاري تحديد موقعك... اضغط "السماح" عند ظهور الإشعار', 'success');
+      console.log('✅ بدء طلب إذن الموقع...');
+      
+      // سؤال المستخدم إذا كان يريد فتح الخريطة
+      const userWantsMap = confirm('هل تريد فتح الخريطة لتحديد موقعك؟\n\nاضغط "موافق" للسماح بالوصول للموقع\nاضغط "إلغاء" لكتابة العنوان يدوياً');
+      
+      if (!userWantsMap) {
+        showNotification('تم إلغاء تحديد الموقع. يمكنك كتابة العنوان يدوياً.', 'info');
+        return;
+      }
+      
+      showNotification('🔄 جاري تحديد موقعك...', 'success');
+      
+      // إعدادات محسنة للهواتف
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 30000,  // مهلة زمنية أطول للهواتف (30 ثانية)
+        maximumAge: 60000  // السماح بالاستخدام لمدة دقيقة واحدة فقط
+      };
       
       navigator.geolocation.getCurrentPosition(
         function(position) {
+          console.log('✅ تم تحديد الموقع بنجاح:', position);
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
+          const accuracy = position.coords.accuracy;
           
           // محاكاة الحصول على العنوان من الإحداثيات
-          const address = `العنوان التقريبي: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+          const address = `الموقع: ${lat.toFixed(6)}, ${lng.toFixed(6)} (دقة: ${Math.round(accuracy)}م)`;
           document.getElementById('orderAddress').value = address;
+          
+          showNotification('✅ تم تحديد موقعك بنجاح!', 'success');
+          
+          // محاولة الحصول على عنوان أكثر تفصيلاً من خدمة Geocoding
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=ar&zoom=18`)
+            .then(response => response.json())
+            .then(data => {
+              if (data && data.display_name) {
+                document.getElementById('orderAddress').value = data.display_name;
+                showNotification('✅ تم تحديد الموقع مع العنوان المفصل!', 'success');
+              }
+            })
+            .catch(error => {
+              console.log('⚠️ لم يتم الحصول على العنوان المفصل:', error);
+            });
           
           // إرسال الموقع إلى الخادم
           fetch('/api/gps/location', {
@@ -3403,6 +3446,7 @@
             body: JSON.stringify({
               latitude: lat,
               longitude: lng,
+              accuracy: accuracy,
               source: 'order',
               timestamp: new Date().toISOString()
             })
@@ -3431,28 +3475,27 @@
           });
         },
         function(error) {
-          console.error('خطأ في تحديد الموقع:', error);
+          console.error('❌ خطأ في تحديد الموقع:', error);
           let errorMessage = 'لم نتمكن من تحديد موقعك. يرجى إدخال العنوان يدوياً.';
           
           switch(error.code) {
             case error.PERMISSION_DENIED:
-              errorMessage = 'تم رفض إذن الموقع. ابحث عن أيقونة 🔒 في شريط العنوان واختر "السماح" أو اكتب العنوان يدوياً.';
+              errorMessage = 'تم رفض إذن الموقع. يرجى كتابة العنوان يدوياً.';
               break;
             case error.POSITION_UNAVAILABLE:
-              errorMessage = 'GPS غير متاح. تأكد من تشغيل GPS في إعدادات الهاتف أو اكتب العنوان يدوياً.';
+              errorMessage = 'GPS غير متاح. يرجى كتابة العنوان يدوياً.';
               break;
             case error.TIMEOUT:
-              errorMessage = 'انتهت المهلة الزمنية. جرب مرة أخرى أو اكتب العنوان يدوياً.';
+              errorMessage = 'انتهت المهلة الزمنية. يرجى كتابة العنوان يدوياً.';
+              break;
+            default:
+              errorMessage = 'فشل في تحديد الموقع. يرجى كتابة العنوان يدوياً.';
               break;
           }
           
           showNotification(errorMessage, 'error');
         },
-        {
-          enableHighAccuracy: true,
-          timeout: 20000,  // مهلة زمنية أطول للهواتف
-          maximumAge: 300000  // السماح بالاستخدام لمدة 5 دقائق
-        }
+        options
       );
     }
 
